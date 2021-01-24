@@ -61,7 +61,7 @@ class DestroyRequest extends ClassGenerator {
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Http\Requests\Admin\\'.$this->modelWithNamespaceFromDefault;
+        return $rootNamespace.'\Http\Requests\\'.$this->modelWithNamespaceFromDefault;
     }
 
 }

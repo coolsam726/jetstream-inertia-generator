@@ -100,7 +100,7 @@ class UpdateRequest extends ClassGenerator {
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Http\Requests\Api\\'.$this->modelWithNamespaceFromDefault;
+        return $rootNamespace.'\Http\Requests\\'.$this->modelWithNamespaceFromDefault;
     }
 
 }

@@ -23,11 +23,11 @@ class JetstreamInertiaGenerator extends Command
         $withoutBulkOptions = $this->option('without-bulk');
         $force = $this->option('force');
 
-        $this->call('jig:generate:model', [
+        /*$this->call('jig:generate:model', [
             'table_name' => $tableNameArgument,
             'class_name' => $modelOption,
             '--force' => $force,
-        ]);
+        ]);*/
 
         /*$this->call('jig:generate:factory', [
             'table_name' => $tableNameArgument,
@@ -35,6 +35,29 @@ class JetstreamInertiaGenerator extends Command
             '--seed' => $this->option('seed'),
         ]);*/
 
+        $this->call('jig:generate:request:index', [
+            'table_name' => $tableNameArgument,
+            '--model-name' => $modelOption,
+            '--force' => $force,
+        ]);
+
+        $this->call('jig:generate:request:store', [
+            'table_name' => $tableNameArgument,
+            '--model-name' => $modelOption,
+            '--force' => $force,
+        ]);
+
+        $this->call('jig:generate:request:update', [
+            'table_name' => $tableNameArgument,
+            '--model-name' => $modelOption,
+            '--force' => $force,
+        ]);
+
+        $this->call('jig:generate:request:destroy', [
+            'table_name' => $tableNameArgument,
+            '--model-name' => $modelOption,
+            '--force' => $force,
+        ]);
 
         /*$this->call('jig:generate:controller', [
             'table_name' => $tableNameArgument,
@@ -53,49 +76,15 @@ class JetstreamInertiaGenerator extends Command
             '--without-bulk' => $withoutBulkOptions,
         ]);*/
 
-
-        /*$this->call('jig:generate:request:index', [
-            'table_name' => $tableNameArgument,
-            '--model-name' => $modelOption,
-            '--force' => $force,
-        ]);*/
-
-        /*$this->call('jig:generate:request:store', [
-            'table_name' => $tableNameArgument,
-            '--model-name' => $modelOption,
-            '--force' => $force,
-        ]);*/
-
-        /*$this->call('jig:generate:request:update', [
-            'table_name' => $tableNameArgument,
-            '--model-name' => $modelOption,
-            '--force' => $force,
-        ]);*/
-
         /**
-        $this->call('jig:generate:request:destroy', [
-        'table_name' => $tableNameArgument,
-        '--model-name' => $modelOption,
-        '--force' => $force,
-        ]);
-
-        if(!$withoutBulkOptions) {
-        $this->call('jig:generate:request:bulk-destroy', [
-        'table_name' => $tableNameArgument,
-        '--model-name' => $modelOption,
-        '--force' => $force,
-        ]);
-        }
-         */
-
-
-        /*$this->call('jig:generate:routes', [
+         $this->call('jig:generate:routes', [
             'table_name' => $tableNameArgument,
             '--model-name' => $modelOption,
             '--controller-name' => $controllerOption,
             '--with-export' => $exportOption,
             '--without-bulk' => $withoutBulkOptions,
-        ]);*/
+        ]);
+         */
 
         /*$this->call('jig:generate:api:routes', [
             'table_name' => $tableNameArgument,

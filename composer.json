@@ -17,9 +17,10 @@
     ],
     "require": {
         "php": "^7.4",
-        "doctrine/dbal": "^2.3",
+        "doctrine/dbal": "^3.0",
         "illuminate/support": "^6.0|^7.0|^8.0",
         "inertiajs/inertia-laravel": "^v0.3.6",
+        "laravel/helpers": "^1.4",
         "laravel/jetstream": "^2.1",
         "savannabits/laravel-pagetables": "^1.0.0",
         "spatie/laravel-permission": "^3.18.0"

@@ -2,7 +2,7 @@
 @endphp
 
 
-namespace App\Http\Requests\Api\{{ $modelWithNamespaceFromDefault }};
+namespace App\Http\Requests\{{ $modelWithNamespaceFromDefault }};
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;

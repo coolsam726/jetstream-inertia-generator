@@ -2,7 +2,7 @@
 @endphp
 
 
-namespace App\Http\Requests\Api\{{ $modelWithNamespaceFromDefault }};
+namespace App\Http\Requests\{{ $modelWithNamespaceFromDefault }};
 @php
     $standardColumns = $columns->reject(function($column) use ($relatable) {
         return in_array($column['name'], $relatable->pluck('name')->toArray())|| $column["name"]=='slug';

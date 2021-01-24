@@ -67,14 +67,23 @@ class JetstreamInertiaGenerator extends Command
             '--with-export' => $exportOption,
             '--without-bulk' => $withoutBulkOptions,
         ]);*/
-        /*$this->call('jig:generate:api:controller', [
+        $this->call('jig:generate:repository', [
             'table_name' => $tableNameArgument,
             'class_name' => $controllerOption,
             '--model-name' => $modelOption,
             '--force' => $force,
             '--with-export' => $exportOption,
             '--without-bulk' => $withoutBulkOptions,
-        ]);*/
+        ]);
+
+        $this->call('jig:generate:api:controller', [
+            'table_name' => $tableNameArgument,
+            'class_name' => $controllerOption,
+            '--model-name' => $modelOption,
+            '--force' => $force,
+            '--with-export' => $exportOption,
+            '--without-bulk' => $withoutBulkOptions,
+        ]);
 
         /**
          $this->call('jig:generate:routes', [

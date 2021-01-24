@@ -7,24 +7,24 @@ use App\Exports\{{$exportBaseName}};
 use Maatwebsite\Excel\Excel
 @endif
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\{{ $modelWithNamespaceFromDefault }}\Index{{ $modelBaseName }};
-use App\Http\Requests\Api\{{ $modelWithNamespaceFromDefault }}\Store{{ $modelBaseName }};
-use App\Http\Requests\Api\{{ $modelWithNamespaceFromDefault }}\Update{{ $modelBaseName }};
+use App\Http\Requests\{{ $modelWithNamespaceFromDefault }}\Index{{ $modelBaseName }};
+use App\Http\Requests\{{ $modelWithNamespaceFromDefault }}\Store{{ $modelBaseName }};
+use App\Http\Requests\{{ $modelWithNamespaceFromDefault }}\Update{{ $modelBaseName }};
+use App\Http\Requests\{{ $modelWithNamespaceFromDefault }}\Destroy{{ $modelBaseName }};
 use {{$modelFullName}};
-use Illuminate\Database\Eloquent\Builder;
+use {{$repoFullName}};
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Savannabits\Savadmin\Helpers\ApiResponse;
-use Savannabits\Savadmin\Helpers\SavbitsHelper;
-use Yajra\DataTables\Facades\DataTables;
+use Savannabits\JetstreamInertiaGenerator\Helpers\ApiResponse;
+use Savannabits\Pagetables\Column;
+use Savannabits\Pagetables\Pagetables;
 
 class {{ $controllerBaseName }}  extends Controller
 {
-    private $api, $helper;
-    public function __construct(ApiResponse $apiResponse, SavbitsHelper $helper)
+    private $api;
+    public function __construct(ApiResponse $apiResponse, {{$repoBaseName}} $repo)
     {
         $this->api = $apiResponse;
-        $this->helper = $helper;
+        $this->repo = $repo;
     }
 
     /**
@@ -34,24 +34,14 @@ class {{ $controllerBaseName }}  extends Controller
      */
     public function index(Index{{ $modelBaseName }} $request)
     {
-        $data = $this->helper::listing({{$modelBaseName}}::class, $request)->customQuery(function ($builder) use($request) {
-        /**@var {{$modelBaseName}}|Builder $builder*/
-        // Add custom queries here
-        })->process();
+        $query = {{$modelBaseName}}::query(); // You can extend this however you want.
+        $cols = [
+            @foreach($columnsToQuery as $col)Column::name('{{$col}}')->title('{{str_replace('_',' ',Str::title($col))}}')->sort()->searchable(),
+            @endforeach
+            Column::name('actions')->title('')->raw()
+        ];
+        $data = Pagetables::of($query)->columns($cols)->make(true);
         return $this->api->success()->message("List of {{$modelPlural}}")->payload($data)->send();
-    }
-
-    public function dt(Request $request) {
-        return DataTables::of({{$modelBaseName}}::query())
-            ->addColumn("actions",function($model) {
-                $actions = '';
-                if (\Auth::user()->can('{{$modelRouteAndViewName}}.show')) $actions .= '<button class="btn btn-outline-primary btn-square action-button mr-2" title="View Details" data-action="show-{{Str::singular($modelRouteAndViewName)}}" data-tag="button" data-id="'.$model->id.'"><i class="mdi mdi-eye"></i></button>';
-                if (\Auth::user()->can('{{$modelRouteAndViewName}}.edit')) $actions .= '<button class="btn btn-outline-warning btn-square action-button mr-2" title="Edit Item" data-action="edit-{{Str::singular($modelRouteAndViewName)}}" data-tag="button" data-id="'.$model->id.'"><i class="mdi mdi-pencil"></i></button>';
-                if (\Auth::user()->can('{{$modelRouteAndViewName}}.delete')) $actions .= '<button class="btn btn-outline-danger btn-square action-button mr-2" title="Delete Item" data-action="delete-{{Str::singular($modelRouteAndViewName)}}" data-tag="button" data-id="'.$model->id.'"><i class="mdi mdi-delete"></i></button>';
-                return $actions;
-            })
-            ->rawColumns(['actions'])
-            ->make();
     }
 
     /**
@@ -63,29 +53,8 @@ class {{ $controllerBaseName }}  extends Controller
     public function store(Store{{$modelBaseName}} $request)
     {
         try {
-            $array = $request->sanitizedArray();
-            ${{$modelVariableName}} = new {{$modelBaseName}}($array);
-            @if(in_array("slug",$columns->pluck('name')->toArray()) && in_array("name",$columns->pluck('name')->toArray()))
-${{$modelVariableName}}->slug = Str::slug(${{$modelVariableName}}->name);
-            @elseif(in_array("slug",$columns->pluck('name')->toArray()) && in_array("display_name",$columns->pluck('name')->toArray()))
-${{$modelVariableName}}->slug = Str::slug(${{$modelVariableName}}->name);
-            @elseif(in_array("slug",$columns->pluck('name')->toArray()) && in_array("title",$columns->pluck('name')->toArray()))
-${{$modelVariableName}}->slug = Str::slug(${{$modelVariableName}}->title);
-            @endif
-
-            // Save Relationships
-            @if (count($relations))
-$object = $request->sanitizedObject();
-            @if (isset($relations['belongsTo']) && count($relations['belongsTo']))
-@foreach($relations["belongsTo"] as $relation)
-if (isset($object->{{$relation["relationship_variable"]}})) {
-                ${{$modelVariableName}}->{{$relation['function_name']}}()
-                    ->associate($object->{{$relation["relationship_variable"]}}->{{$relation['owner_key']}});
-            }
-@endforeach
-            @endif
-            @endif{{PHP_EOL}}
-            ${{$modelVariableName}}->saveOrFail();
+            $data = $request->sanitizedObject();
+            ${{$modelVariableName}} = $this->repo::store($data);
             return $this->api->success()->message('{{$modelTitle}} Created')->payload(${{$modelVariableName}})->send();
         } catch (\Throwable $exception) {
             \Log::error($exception);
@@ -130,30 +99,9 @@ return $this->api->success()->message("{{$modelTitle}} ${{$modelVariableName}}->
     public function update(Update{{$modelBaseName}} $request, {{$modelBaseName}} ${{$modelVariableName}})
     {
         try {
-            $data = $request->sanitizedArray();
-            ${{$modelVariableName}}->update($data);
-            @if(in_array("slug",$columns->pluck('name')->toArray()) && in_array("name",$columns->pluck('name')->toArray()))
-${{$modelVariableName}}->slug = Str::slug(${{$modelVariableName}}->name);
-            @elseif(in_array("slug",$columns->pluck('name')->toArray()) && in_array("display_name",$columns->pluck('name')->toArray()))
-${{$modelVariableName}}->slug = Str::slug(${{$modelVariableName}}->display_name);
-            @elseif(in_array("slug",$columns->pluck('name')->toArray()) && in_array("title",$columns->pluck('name')->toArray()))
-${{$modelVariableName}}->slug = Str::slug(${{$modelVariableName}}->title);
-            @endif
-
-            // Save Relationships
-            @if (count($relations))
-    $object = $request->sanitizedObject();
-    @if (isset($relations['belongsTo']) && count($relations['belongsTo']))
-        @foreach($relations["belongsTo"] as $relation)
-if (isset($object->{{$relation["relationship_variable"]}})) {
-                ${{$modelVariableName}}->{{$relation['function_name']}}()
-                    ->associate($object->{{$relation["relationship_variable"]}}->{{$relation['owner_key']}});
-            }
-        @endforeach
-    @endif
-            @endif{{PHP_EOL}}
-            ${{$modelVariableName}}->saveOrFail();
-            return $this->api->success()->message("{{$modelTitle}} has been updated")->payload(${{$modelVariableName}})->code(200)->send();
+            $data = $request->sanitizedObject();
+            $res = $this->repo::init(${{$modelVariableName}})->update($data);
+            return $this->api->success()->message("{{$modelTitle}} has been updated")->payload($res)->code(200)->send();
         } catch (\Throwable $exception) {
             \Log::error($exception);
             return $this->api->failed()->code(400)->message($exception->getMessage())->send();
@@ -167,10 +115,10 @@ if (isset($object->{{$relation["relationship_variable"]}})) {
      * {{"@"}}return \Illuminate\Http\JsonResponse
      * {{"@"}}throws \Exception
      */
-    public function destroy({{$modelBaseName}} ${{$modelVariableName}})
+    public function destroy(Destroy{{$modelBaseName}} $request, {{$modelBaseName}} ${{$modelVariableName}})
     {
-        ${{$modelVariableName}}->delete();
-        return $this->api->success()->message("{{$modelTitle}} has been deleted")->payload(${{$modelVariableName}})->code(200)->send();
+        $res = $this->repo::init(${{$modelVariableName}})->destroy();
+        return $this->api->success()->message("{{$modelTitle}} has been deleted")->payload($res)->code(200)->send();
     }
 
 @if($export)

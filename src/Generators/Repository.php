@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Symfony\Component\Console\Input\InputOption;
 
-class ApiController extends ClassGenerator {
+class Repository extends ClassGenerator {
 
     use FileManipulations;
 
@@ -15,21 +15,21 @@ class ApiController extends ClassGenerator {
      *
      * @var string
      */
-    protected $name = 'jig:generate:api:controller';
+    protected $name = 'jig:generate:repository';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Generate an API controller class';
+    protected $description = 'Generate an Repository class';
 
     /**
      * Path for view
      *
      * @var string
      */
-    protected $view = 'api-controller';
+    protected $view = 'repository';
 
     /**
      * Controller has also export method
@@ -56,14 +56,6 @@ class ApiController extends ClassGenerator {
         if($this->option('without-bulk')){
             $this->withoutBulk = true;
         }
-        // TODO test the case, if someone passes a class_name outside Laravel's default App\Http\Controllers folder, if it's going to work
-
-        //TODO check if exists
-        //TODO make global for all generator
-        //TODO also with prefix
-        if(!empty($template = $this->option('template'))) {
-            $this->view = 'templates.'.$template.'.controller';
-        }
 
         if(!empty($belongsToMany = $this->option('belongs-to-many'))) {
             $this->setBelongToManyRelation($belongsToMany);
@@ -80,11 +72,10 @@ class ApiController extends ClassGenerator {
 
         //Set belongsTo Relations
         $this->setBelongsToRelations();
+
         return view('jig::'.$this->view, [
-            'controllerBaseName' => $this->classBaseName,
-            'controllerNamespace' => $this->classNamespace,
-            'repoBaseName' => $this->getRepositoryBaseName(),
-            "repoFullName" => $this->getRepoNamespace($this->rootNamespace()).'\\'.$this->getRepositoryBaseName(),
+            'repoBaseName' => $this->classBaseName,
+            'repoNamespace' => $this->classNamespace,
             'modelBaseName' => $this->modelBaseName,
             'modelFullName' => $this->modelFullName,
             'modelPlural' => $this->modelPlural,
@@ -99,11 +90,7 @@ class ApiController extends ClassGenerator {
             'withoutBulk' => $this->withoutBulk,
             'exportBaseName' => $this->exportBaseName,
             'resource' => $this->resource,
-            'containsPublishedAtColumn' => in_array("published_at", array_column($this->readColumnsFromTable($this->tableName)->toArray(), 'name')),
             // index
-            'columnsToQuery' => $this->readColumnsFromTable($this->tableName)->filter(function($column) {
-                return !($column['type'] == 'text' || $column['name'] == "password" || $column['name'] == "remember_token" || $column['name'] == "slug" || $column['name'] == "created_at" || $column['name'] == "deleted_at"||Str::contains($column['name'],"_id"));
-            })->pluck('name')->toArray(),
             'columnsToSearchIn' => $this->readColumnsFromTable($this->tableName)->filter(function($column) {
                 return ($column['type'] == 'json' || $column['type'] == 'text' || $column['type'] == 'string' || $column['name'] == "id") && !($column['name'] == "password" || $column['name'] == "remember_token");
             })->pluck('name')->toArray(),
@@ -132,7 +119,7 @@ class ApiController extends ClassGenerator {
     }
 
     public function generateClassNameFromTable($tableName) {
-        return Str::studly(Str::singular($tableName)).'Controller';
+        return Str::studly(Str::plural($tableName));
     }
 
     /**
@@ -143,12 +130,6 @@ class ApiController extends ClassGenerator {
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Http\Controllers\API';
-    }
-    protected function getRepoNamespace($rootNamespace) {
-        return $rootNamespace.'Repositories';
-    }
-    protected function getRepositoryBaseName() {
-        return Str::studly(Str::plural($this->tableName));
+        return $rootNamespace.'\Repositories';
     }
 }

@@ -31,8 +31,6 @@ class ViewIndex extends ViewGenerator {
      *
      * @var string
      */
-    protected $viewJs = 'listing-js';
-
     /**
      * Index view has also export button
      *
@@ -59,17 +57,7 @@ class ViewIndex extends ViewGenerator {
             $this->withoutBulk = true;
         }
 
-        //TODO check if exists
-        //TODO make global for all generator
-        //TODO also with prefix
-        if(!empty($template = $this->option('template'))) {
-            $this->view = 'templates.'.$template.'.index';
-            $this->viewJs = 'templates.'.$template.'.listing-js';
-        }
-
-        $viewPath = resource_path('views/backend/'.$this->modelViewsDirectory.'/index.blade.php');
-        $listingJsPath = resource_path('js/backend/'.$this->modelJSName.'.js');
-        $indexJsPath = resource_path('js/backend/index.js');
+        $viewPath = resource_path('js/Pages/'.$this->modelPlural.'/Index.vue');
 
         if ($this->alreadyExists($viewPath) && !$force) {
             $this->error('File '.$viewPath.' already exists!');
@@ -85,29 +73,6 @@ class ViewIndex extends ViewGenerator {
 
             $this->info('Generating '.$viewPath.' finished');
         }
-
-
-        /*if ($this->alreadyExists($listingJsPath) && !$force) {
-            $this->error('File '.$listingJsPath.' already exists!');
-        } else {
-            if ($this->alreadyExists($listingJsPath) && $force) {
-                $this->warn('File '.$listingJsPath.' already exists! File will be deleted.');
-                $this->files->delete($listingJsPath);
-            }
-
-            $this->makeDirectory($listingJsPath);
-
-            $this->files->put($listingJsPath, $this->buildListingJs());
-            $this->info('Generating '.$listingJsPath.' finished');
-        }*/
-
-
-//		if ($this->appendIfNotAlreadyAppended($indexJsPath, "Vue.component('".$this->modelJSName."-component', () => import(/*webpackChunkName: 'js/".$this->modelJSName."-component'*/'./".$this->modelJSName."'));".PHP_EOL)){
-//			$this->info('Appending index component to '.$indexJsPath.' finished');
-//		}
-		/*if ($this->appendIfNotAlreadyAppended($bootstrapJsPath, "import './". $this->modelJSName ."';".PHP_EOL)){
-			$this->info('Appending '.$this->modelJSName.'/index.js to '.$bootstrapJsPath.' finished');
-		};*/
     }
 
     protected function buildView() {
@@ -127,7 +92,9 @@ class ViewIndex extends ViewGenerator {
             'export' => $this->export,
             'containsPublishedAtColumn' => in_array("published_at", array_column($this->readColumnsFromTable($this->tableName)->toArray(), 'name')),
             'withoutBulk' => $this->withoutBulk,
-
+            'columnsToQuery' => $this->readColumnsFromTable($this->tableName)->filter(function($column) {
+                return !($column['type'] == 'text' || $column['name'] == "password" || $column['name'] == "remember_token" || $column['name'] == "slug" || $column['name'] == "created_at" || $column['name'] == "deleted_at"||Str::contains($column['name'],"_id"));
+            })->pluck('name')->toArray(),
             'columns' => $this->readColumnsFromTable($this->tableName)->reject(function($column) {
                     return ($column['type'] == 'text'
                         || in_array($column['name'], ["password", "remember_token", "slug", "created_at", "updated_at", "deleted_at"])
@@ -153,13 +120,6 @@ class ViewIndex extends ViewGenerator {
 //            'filters' => $this->readColumnsFromTable($tableName)->filter(function($column) {
 //                return $column['type'] == 'boolean' || $column['type'] == 'date';
 //            }),
-        ])->render();
-    }
-
-    protected function buildListingJs() {
-        return view('jig::'.$this->viewJs, [
-            'modelViewsDirectory' => $this->modelViewsDirectory,
-            'modelJSName' => $this->modelJSName,
         ])->render();
     }
 

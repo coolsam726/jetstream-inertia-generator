@@ -38,6 +38,7 @@ class {{ $controllerBaseName }}  extends Controller
         $cols = [
             @foreach($columnsToQuery as $col)Column::name('{{$col}}')->title('{{str_replace('_',' ',Str::title($col))}}')->sort()->searchable(),
             @endforeach
+
             Column::name('actions')->title('')->raw()
         ];
         $data = Pagetables::of($query)->columns($cols)->make(true);

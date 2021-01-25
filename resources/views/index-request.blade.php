@@ -6,7 +6,7 @@ namespace App\Http\Requests\{{ $modelWithNamespaceFromDefault }};
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
-
+use {{$modelFullName}};
 class Index{{ $modelBaseName }} extends FormRequest
 {
     /**
@@ -16,7 +16,7 @@ class Index{{ $modelBaseName }} extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('{{ str_plural($modelDotNotation) }}.index');
+        return Gate::allows('viewAny',{{$modelBaseName}}::class);
     }
 
     /**

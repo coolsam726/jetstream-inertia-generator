@@ -2,40 +2,182 @@
 @endphp
 
 namespace {{ $controllerNamespace }};
-use Illuminate\Http\Request;
+@if($export)
+    use App\Exports\{{$exportBaseName}};
+    use Maatwebsite\Excel\Excel
+@endif
 use App\Http\Controllers\Controller;
+use App\Http\Requests\{{ $modelWithNamespaceFromDefault }}\Index{{ $modelBaseName }};
+use App\Http\Requests\{{ $modelWithNamespaceFromDefault }}\Store{{ $modelBaseName }};
+use App\Http\Requests\{{ $modelWithNamespaceFromDefault }}\Update{{ $modelBaseName }};
+use App\Http\Requests\{{ $modelWithNamespaceFromDefault }}\Destroy{{ $modelBaseName }};
+use {{$modelFullName}};
+use {{$repoFullName}};
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-class {{ $controllerBaseName }} extends Controller
+use Inertia\Inertia;
+
+class {{ $controllerBaseName }}  extends Controller
 {
+    private {{$repoBaseName}} $repo;
+    public function __construct({{$repoBaseName}} $repo)
+    {
+        $this->repo = $repo;
+    }
+
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
+    * Display a listing of the resource.
+    *
+    * @return \Inertia\Response
+    */
     public function index(Request $request)
     {
-        $this->authorize('{{str_plural($modelRouteAndViewName)}}.index');
-        $columns = [
-            @foreach($columnsToQuery as $col)
-[
-                "data" => "{{$col}}",
-                "name" => "{{$col}}",
-                "title" => "{{ str_replace("_", " ", Str::title($col)) }}"
-            ],
-            @endforeach
-];
-
-        return view('backend.{{str_plural($modelRouteAndViewName)}}.index', compact('columns'));
+        $this->authorize('viewAny', {{$modelBaseName}}::class);
+        return Inertia::render('{{$modelPlural}}/Index',[
+            "can" => [
+                "viewAny" => $this->authorize('viewAny', {{$modelBaseName}}::class),
+                "create" => $this->authorize('create', {{$modelBaseName}}::class),
+            ]
+        ]);
     }
-@if($export)
 
     /**
-     * Export entities
-     *
-     * {{'@'}}return BinaryFileResponse|null
-     */
-    public function export(): ?BinaryFileResponse
+    * Show the form for creating a new resource.
+    *
+    * @return \Inertia\Response
+    */
+    public function create()
     {
-        return Excel::download(app({{ $exportBaseName }}::class), '{{ str_plural($modelVariableName) }}.xlsx');
+        $this->authorize('create', {{$modelBaseName}}::class);
+        return Inertia::render("{{$modelPlural}}/Create",[
+            "can" => [
+            "viewAny" => $this->authorize('viewAny', {{$modelBaseName}}::class),
+            "create" => $this->authorize('create', {{$modelBaseName}}::class),
+            ]
+        ]);
     }
-@endif}
+
+    /**
+    * Store a newly created resource in storage.
+    *
+    * {{"@"}}param Store{{$modelBaseName}} $request
+    * {{"@"}}return \Illuminate\Http\RedirectResponse
+    */
+    public function store(Store{{$modelBaseName}} $request)
+    {
+        try {
+            $data = $request->sanitizedObject();
+            ${{$modelVariableName}} = $this->repo::store($data);
+            return \Redirect::route('admin.{{$modelRouteAndViewName}}.index')->with(['success' => "The {{$modelBaseName}} was created succesfully."]);
+        } catch (\Throwable $exception) {
+            \Log::error($exception);
+            return back()->with([
+                'error' => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+    * Display the specified resource.
+    *
+    * {{"@"}}param Request $request
+    * {{"@"}}param {{$modelBaseName}} ${{$modelVariableName}}
+    * {{"@"}}return \Inertia\Response|\Illuminate\Http\RedirectResponse
+    */
+    public function show(Request $request, {{$modelBaseName}} ${{$modelVariableName}})
+    {
+        try {
+            $this->authorize('view', ${{$modelVariableName}});
+            //Fetch relationships
+            @if (count($relations)){{PHP_EOL}}
+                @if (isset($relations['belongsTo']) && count($relations['belongsTo'])){{PHP_EOL}}
+                    @php $parents = $relations['belongsTo']->pluck("function_name")->toArray(); @endphp
+                    ${{$modelVariableName}}->load([
+
+                    @foreach($parents as $parent)
+                        '{{$parent}}',
+                    @endforeach
+
+                    ]);
+                @endif
+            @endif
+            return Inertia::render("{{$modelPlural}}/Show", ["model" => ${{$modelVariableName}}]);
+        } catch (\Throwable $exception) {
+            \Log::error($exception);
+            return back()->with([
+                'error' => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+    * Show Edit Form for the specified resource.
+    *
+    * {{"@"}}param Request $request
+    * {{"@"}}param {{$modelBaseName}} ${{$modelVariableName}}
+    * {{"@"}}return \Inertia\Response|\Illuminate\Http\RedirectResponse
+    */
+    public function edit(Request $request, {{$modelBaseName}} ${{$modelVariableName}})
+    {
+        try {
+            $this->authorize('update', ${{$modelVariableName}});
+            //Fetch relationships
+            @if (count($relations)){{ PHP_EOL }}
+                @if (isset($relations['belongsTo']) && count($relations['belongsTo'])){{PHP_EOL}}
+                    @php $parents = $relations['belongsTo']->pluck("function_name")->toArray(); @endphp
+                    ${{$modelVariableName}}->load([
+
+                    @foreach($parents as $parent)
+                        '{{$parent}}',
+                    @endforeach
+
+                    ]);
+                @endif
+            @endif
+            return Inertia::render("{{$modelPlural}}/Edit", ["model" => ${{$modelVariableName}}]);
+        } catch (\Throwable $exception) {
+            \Log::error($exception);
+            return back()->with([
+                'error' => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+    * Update the specified resource in storage.
+    *
+    * {{"@"}}param Update{{$modelBaseName}} $request
+    * {{"@"}}param {$modelBaseName} ${{$modelVariableName}}
+    * {{"@"}}return \Illuminate\Http\RedirectResponse
+    */
+    public function update(Update{{$modelBaseName}} $request, {{$modelBaseName}} ${{$modelVariableName}})
+    {
+        try {
+            $data = $request->sanitizedObject();
+            $res = $this->repo::init(${{$modelVariableName}})->update($data);
+            return \Redirect::route('admin.{{$modelRouteAndViewName}}.index')->with(['success' => "The {{$modelBaseName}} was updated succesfully."]);
+        } catch (\Throwable $exception) {
+            \Log::error($exception);
+            return back()->with([
+                'error' => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+    * Remove the specified resource from storage.
+    *
+    * {{"@"}}param {{$modelBaseName}} ${{$modelVariableName}}
+    * {{"@"}}return \Illuminate\Http\RedirectResponse
+    */
+    public function destroy(Destroy{{$modelBaseName}} $request, {{$modelBaseName}} ${{$modelVariableName}})
+    {
+        $res = $this->repo::init(${{$modelVariableName}})->destroy();
+        if ($res) {
+            return \Redirect::route('admin.{{$modelRouteAndViewName}}.index')->with(['success' => "The {{$modelBaseName}} was deleted succesfully."]);
+        }
+        else {
+            return \Redirect::route('admin.{{$modelRouteAndViewName}}.index')->with(['error' => "The {{$modelBaseName}} could not be deleted."]);
+        }
+    }
+}

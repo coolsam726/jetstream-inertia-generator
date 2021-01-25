@@ -74,21 +74,26 @@ class Controller extends ClassGenerator {
 
             $this->info('Generating '.$this->classFullName.' finished');
 
-            $icon = "fa fa-sticky-note-o";
-            if (config('savadmin.tenancy.use_tenancy')) {
-                $ifExistsReg = '|{{route\("\$adminPrefix.'.str_plural($this->modelRouteAndViewName).'.index",\["tenant" =>tenant\("id"\)\]\)}}|';
-                $route = '{{route("$adminPrefix.'.str_plural($this->modelRouteAndViewName).'.index",["tenant" =>tenant("id")])}}';
+            $icon = "far fa-clone";
+            $path = resource_path("js/Layouts/Jig/Menu.json");
+            if (file_exists($path)) {
+                $menu = collect(json_decode(file_get_contents($path)));
             } else {
-                $ifExistsReg = '|{{route\("\$adminPrefix.'.str_plural($this->modelRouteAndViewName).'.index"\)}}|';
-                $route = '{{route("$adminPrefix.'.str_plural($this->modelRouteAndViewName).'.index")}}';
+                $menu = collect([]);
             }
-            if ($this->strReplaceInFile(
-                resource_path("views/layouts/backend/sidebar.blade.php"),
-                $ifExistsReg,
-                "{{--DO NOT REMOVE ME!--}}",
-                '@can("'.$this->modelRouteAndViewName.'")<li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href='.$route.'><i class="c-sidebar-nav-icon fa fa-sticky-note-o"></i> '.$this->modelTitle.'</a></li>@endcan'.PHP_EOL."{{--DO NOT REMOVE ME!--}}"
-            )) {
-                $this->info('Updating sidebar');
+            if (!$menu->has($this->modelRouteAndViewName)) {
+                $item = [
+                   "route" => "admin.$this->modelRouteAndViewName.index",
+                    "title" => $this->titlePlural,
+                    "faIcon" => $icon,
+                    "isTitle" => false,
+                    "isParent" => false,
+                    "children" => []
+                ];
+                $menu[$this->modelRouteAndViewName] = $item;
+                if (file_put_contents($path,json_encode($menu->toArray(), JSON_PRETTY_PRINT))) {
+                    $this->info("Updating Sidebar Menu");
+                };
             }
         }
 
@@ -97,24 +102,16 @@ class Controller extends ClassGenerator {
     protected function buildClass() {
 
         //Set belongsTo Relations
-        $this->relations["belongsTo"] = collect(\Schema::getConnection()->getDoctrineSchemaManager()->listTableForeignKeys($this->tableName))->map(function($fk) {
-            /**@var ForeignKeyConstraint $fk*/
-            return [
-                "function_name" => Str::camel(Str::singular($fk->getForeignTableName())),
-                "related_table" => $fk->getForeignTableName(),
-                "related_model" => "\\$this->modelNamespace\\". Str::studly(Str::singular($fk->getForeignTableName())).'::class',
-                "foreign_key" => collect($fk->getColumns())->first(),
-                "owner_key" => collect($fk->getForeignColumns())->first(),
-            ];
-        })->keyBy('related_table');
-        $this->modelTitle = str_replace("_"," ", Str::title($this->tableName));
+        $this->setBelongsToRelations();
         return view('jig::'.$this->view, [
             'controllerBaseName' => $this->classBaseName,
             'controllerNamespace' => $this->classNamespace,
+            'repoBaseName' => $this->getRepositoryBaseName(),
+            "repoFullName" => $this->getRepoNamespace($this->rootNamespace()).'\\'.$this->getRepositoryBaseName(),
             'modelBaseName' => $this->modelBaseName,
             'modelFullName' => $this->modelFullName,
             'modelPlural' => $this->modelPlural,
-            'modelTitle' => $this->modelTitle,
+            'modelTitle' => $this->titleSingular,
             'modelVariableName' => $this->modelVariableName,
             'modelRouteAndViewName' => $this->modelRouteAndViewName,
             'modelViewsDirectory' => $this->modelViewsDirectory,
@@ -127,13 +124,6 @@ class Controller extends ClassGenerator {
             'containsPublishedAtColumn' => in_array("published_at", array_column($this->readColumnsFromTable($this->tableName)->toArray(), 'name')),
             // index
             'columnsToQuery' => $this->readColumnsFromTable($this->tableName)->filter(function($column) {
-                if($this->readColumnsFromTable($this->tableName)->contains('name', 'created_by_admin_user_id')){
-                    return !($column['type'] == 'text' || $column['name'] == "password" || $column['name'] == "remember_token" || $column['name'] == "slug" || $column['name'] == "updated_at" || $column['name'] == "deleted_at");
-                } else if($this->readColumnsFromTable($this->tableName)->contains('name', 'updated_by_admin_user_id')) {
-                    return !($column['type'] == 'text' || $column['name'] == "password" || $column['name'] == "remember_token" || $column['name'] == "slug" || $column['name'] == "created_at" ||  $column['name'] == "deleted_at");
-                } else if($this->readColumnsFromTable($this->tableName)->contains('name', 'created_by_admin_user_id') && $this->readColumnsFromTable($this->tableName)->contains('name', 'updated_by_admin_user_id')) {
-                    return !($column['type'] == 'text' || $column['name'] == "password" || $column['name'] == "remember_token" || $column['name'] == "slug" || $column['name'] == "deleted_at");
-                }
                 return !($column['type'] == 'text' || $column['name'] == "password" || $column['name'] == "remember_token" || $column['name'] == "slug" || $column['name'] == "created_at" || $column['name'] == "deleted_at"||Str::contains($column['name'],"_id"));
             })->pluck('name')->toArray(),
             'columnsToSearchIn' => $this->readColumnsFromTable($this->tableName)->filter(function($column) {
@@ -176,5 +166,11 @@ class Controller extends ClassGenerator {
     protected function getDefaultNamespace($rootNamespace)
     {
         return $rootNamespace.'\Http\Controllers\Admin';
+    }
+    protected function getRepoNamespace($rootNamespace) {
+        return $rootNamespace.'Repositories';
+    }
+    protected function getRepositoryBaseName() {
+        return Str::studly(Str::plural($this->tableName));
     }
 }

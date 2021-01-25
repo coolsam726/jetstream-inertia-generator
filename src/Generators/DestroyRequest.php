@@ -36,6 +36,7 @@ class DestroyRequest extends ClassGenerator {
 
         return view('jig::destroy-request', [
             'modelBaseName' => $this->modelBaseName,
+            'modelFullName'                 => $this->modelFullName,
             'modelDotNotation' => $this->modelDotNotation,
             'modelWithNamespaceFromDefault' => $this->modelWithNamespaceFromDefault,
             'modelVariableName' => $this->modelVariableName,

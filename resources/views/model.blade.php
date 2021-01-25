@@ -77,13 +77,23 @@ class {{ $modelBaseName }} extends Model
 @if (!$timestamps)public $timestamps = false;
     @endif
 
-    protected $appends = ["api_route"];
+    protected $appends = ["api_route", "can"];
 
     /* ************************ ACCESSOR ************************* */
 
     public function getApiRouteAttribute() {
         return route("api.{{ $routeBaseName }}.index");
     }
+    public function getCanAttribute() {
+        return [
+            "view" => \Auth::user()->can("view", $this),
+            "update" => \Auth::user()->can("update", $this),
+            "delete" => \Auth::user()->can("delete", $this),
+            "restore" => \Auth::user()->can("restore", $this),
+            "forceDelete" => \Auth::user()->can("forceDelete", $this),
+        ];
+    }
+
     protected function serializeDate(DateTimeInterface $date) {
         return $date->format('Y-m-d H:i:s');
     }

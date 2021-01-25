@@ -1,0 +1,28 @@
+{
+    
+    "dashboard": {
+        "route"     :   "admin.dashboard",
+        "title"     :   "Dashboard",
+        "faIcon"    :   "fas fa-tv",
+        "isTitle"   :   false,
+        "isParent"  :   false,
+        "children"  :   []
+    },
+    
+    "roles": {
+        "route"     :   "admin.roles.index",
+        "title"     :   "Roles",
+        "faIcon"    :   "fas fa-lock",
+        "isTitle"   :   false,
+        "isParent"  :   false,
+        "children"  :   []
+    },
+    "users": {
+        "route"     :   "admin.users.index",
+        "title"     :   "Users",
+        "faIcon"    :   "fas fa-user-circle",
+        "isTitle"   :   false,
+        "isParent"  :   false,
+        "children"  :   []
+    }
+}

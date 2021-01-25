@@ -14,7 +14,7 @@ namespace App\Http\Requests\{{ $modelWithNamespaceFromDefault }};
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
-
+use {{$modelFullName}};
 class Store{{ $modelBaseName }} extends FormRequest
 {
     /**
@@ -24,7 +24,7 @@ class Store{{ $modelBaseName }} extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('{{ str_plural($modelDotNotation) }}.create');
+        return Gate::allows('create',{{$modelBaseName}}::class);
     }
 
     /**

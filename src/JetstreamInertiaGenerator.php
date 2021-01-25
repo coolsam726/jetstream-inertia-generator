@@ -23,11 +23,11 @@ class JetstreamInertiaGenerator extends Command
         $withoutBulkOptions = $this->option('without-bulk');
         $force = $this->option('force');
 
-        /*$this->call('jig:generate:model', [
+        $this->call('jig:generate:model', [
             'table_name' => $tableNameArgument,
             'class_name' => $modelOption,
             '--force' => $force,
-        ]);*/
+        ]);
 
         /*$this->call('jig:generate:factory', [
             'table_name' => $tableNameArgument,
@@ -59,14 +59,6 @@ class JetstreamInertiaGenerator extends Command
             '--force' => $force,
         ]);
 
-        /*$this->call('jig:generate:controller', [
-            'table_name' => $tableNameArgument,
-            'class_name' => $controllerOption,
-            '--model-name' => $modelOption,
-            '--force' => $force,
-            '--with-export' => $exportOption,
-            '--without-bulk' => $withoutBulkOptions,
-        ]);*/
         $this->call('jig:generate:repository', [
             'table_name' => $tableNameArgument,
             'class_name' => $controllerOption,
@@ -84,8 +76,16 @@ class JetstreamInertiaGenerator extends Command
             '--with-export' => $exportOption,
             '--without-bulk' => $withoutBulkOptions,
         ]);
+        $this->call('jig:generate:controller', [
+            'table_name' => $tableNameArgument,
+            'class_name' => $controllerOption,
+            '--model-name' => $modelOption,
+            '--force' => $force,
+            '--with-export' => $exportOption,
+            '--without-bulk' => $withoutBulkOptions,
+        ]);
 
-        /**
+
          $this->call('jig:generate:routes', [
             'table_name' => $tableNameArgument,
             '--model-name' => $modelOption,
@@ -93,23 +93,23 @@ class JetstreamInertiaGenerator extends Command
             '--with-export' => $exportOption,
             '--without-bulk' => $withoutBulkOptions,
         ]);
-         */
 
-        /*$this->call('jig:generate:api:routes', [
+
+        $this->call('jig:generate:api:routes', [
             'table_name' => $tableNameArgument,
             '--model-name' => $modelOption,
             '--controller-name' => $controllerOption,
             '--with-export' => $exportOption,
             '--without-bulk' => $withoutBulkOptions,
-        ]);*/
+        ]);
 
-        /*$this->call('jig:generate:index', [
+        $this->call('jig:generate:index', [
             'table_name' => $tableNameArgument,
             '--model-name' => $modelOption,
             '--force' => $force,
             '--with-export' => $exportOption,
             '--without-bulk' => $withoutBulkOptions,
-        ]);*/
+        ]);
 
 
         /*$this->call('jig:generate:form', [

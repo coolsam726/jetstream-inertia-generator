@@ -49,7 +49,12 @@ class Model extends ClassGenerator {
             $this->info('Generating '.$this->classFullName.' finished');
         }
 
-        // TODO think if we should use ide-helper:models ?
+        /*Generate a Policy Skeleton for the model*/
+        $this->call('make:policy', [
+            "name" => $this->modelBaseName."Policy",
+            '--model' => $this->modelBaseName,
+        ]);
+        $this->info('Generating '.$this->modelBaseName."Policy".' finished');
     }
 
     protected function buildClass() {

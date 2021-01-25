@@ -47,9 +47,9 @@ class JetstreamInertiaGeneratorServiceProvider extends ServiceProvider
             ], 'config');
 
             // Publishing the views.
-            /*$this->publishes([
-                __DIR__.'/../resources/views' => resource_path('views/vendor/jetstream-inertia-generator'),
-            ], 'views');*/
+            $this->publishes([
+                __DIR__.'/../resources/js' => resource_path('js'),
+            ], 'jig-views');
 
             // Publishing assets.
             /*$this->publishes([

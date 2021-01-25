@@ -29,7 +29,7 @@ class Update{{ $modelBaseName }} extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('{{ str_plural($modelDotNotation) }}.edit', $this->{{ $modelVariableName }});
+        return Gate::allows('update', $this->{{ $modelVariableName }});
     }
 
     /**

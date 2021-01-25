@@ -39,7 +39,7 @@ class IndexRequest extends ClassGenerator {
             'modelDotNotation'              => $this->modelDotNotation,
             'modelWithNamespaceFromDefault' => $this->modelWithNamespaceFromDefault,
             'modelVariableName'             => $this->modelVariableName,
-
+            'modelFullName'                 => $this->modelFullName,
             'columnsToQuery' => $this->readColumnsFromTable($this->tableName)->filter(function($column) {
                 return !($column['type'] == 'text' || $column['name'] == "password" || $column['name'] == "remember_token" || $column['name'] == "slug" || $column['name'] == "created_at" || $column['name'] == "updated_at" || $column['name'] == "deleted_at");
             })->pluck('name')->toArray(),

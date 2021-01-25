@@ -42,20 +42,6 @@ class ViewForm extends ViewGenerator {
     protected $form = 'form';
 
     /**
-     * Path for form right view
-     *
-     * @var string
-     */
-    protected $formRight = 'form-right';
-
-    /**
-     * Path for js view
-     *
-     * @var string
-     */
-    protected $formJs = 'form-js';
-
-    /**
      * Execute the console command.
      *
      * @return mixed
@@ -67,19 +53,19 @@ class ViewForm extends ViewGenerator {
         //TODO check if exists
         //TODO make global for all generator
         //TODO also with prefix
-        if(!empty($template = $this->option('template'))) {
+        /*if(!empty($template = $this->option('template'))) {
             $this->create = 'templates.'.$template.'.create';
             $this->edit = 'templates.'.$template.'.edit';
             $this->form = 'templates.'.$template.'.form';
             $this->formRight = 'templates.'.$template.'form-right';
             $this->formJs = 'templates.'.$template.'.form-js';
-        }
+        }*/
 
         if(!empty($belongsToMany = $this->option('belongs-to-many'))) {
             $this->setBelongToManyRelation($belongsToMany);
         }
-
-        $viewPath = resource_path('views/backend/'.$this->modelViewsDirectory.'/form.blade.php');
+        /*Make Create Form*/
+        $viewPath = resource_path('js/Pages/'.$this->modelPlural.'/Create.vue');
         if ($this->alreadyExists($viewPath) && !$force) {
             $this->error('File '.$viewPath.' already exists!');
         } else {
@@ -87,15 +73,12 @@ class ViewForm extends ViewGenerator {
                 $this->warn('File '.$viewPath.' already exists! File will be deleted.');
                 $this->files->delete($viewPath);
             }
-
             $this->makeDirectory($viewPath);
-
-            $this->files->put($viewPath, $this->buildForm());
-
+            $this->files->put($viewPath, $this->buildForm("create"));
             $this->info('Generating '.$viewPath.' finished');
         }
-
-        $viewPath = resource_path('views/backend/'.$this->modelViewsDirectory.'/show.blade.php');
+        //Make edit form
+        /*$viewPath = resource_path('js/Pages/'.$this->modelPlural.'/Edit.vue');
         if ($this->alreadyExists($viewPath) && !$force) {
             $this->error('File '.$viewPath.' already exists!');
         } else {
@@ -103,42 +86,17 @@ class ViewForm extends ViewGenerator {
                 $this->warn('File '.$viewPath.' already exists! File will be deleted.');
                 $this->files->delete($viewPath);
             }
-
             $this->makeDirectory($viewPath);
-
-            $this->files->put($viewPath, $this->buildShow());
-
+            $this->files->put($viewPath, $this->buildForm("edit"));
             $this->info('Generating '.$viewPath.' finished');
-        }
-
-        $formJsPath = resource_path('js/backend/'.$this->modelJSName.'.js');
-
-        if ($this->alreadyExists($formJsPath) && !$force) {
-            $this->error('File '.$formJsPath.' already exists!');
-        } else {
-            if ($this->alreadyExists($formJsPath) && $force) {
-                $this->warn('File '.$formJsPath.' already exists! File will be deleted.');
-                $this->files->delete($formJsPath);
-            }
-
-            $this->makeDirectory($formJsPath);
-
-            $this->files->put($formJsPath, $this->buildFormJs());
-            $this->info('Generating '.$formJsPath.' finished');
-        }
-
-		$indexJsPath = resource_path('js/backend/index.js');
-
-		if ($this->appendIfNotAlreadyAppended($indexJsPath, "Vue.component('".$this->modelJSName."-component', () => import(/*webpackChunkName: 'js/".$this->modelJSName."-component'*/'./".$this->modelJSName."'));".PHP_EOL)){
-			$this->info('Appending Form to '.$indexJsPath.' finished');
-		};
+        }*/
     }
 
     protected function isUsedTwoColumnsLayout() : bool {
         return false;
     }
 
-    protected function buildForm() {
+    protected function buildForm($type=null) {
         $belongsTos = $this->setBelongsToRelations();
         $relatables = $this->getVisibleColumns($this->tableName, $this->modelVariableName)->filter(function($column) use($belongsTos) {
             return in_array($column['name'],$belongsTos->pluck('foreign_key')->toArray());
@@ -149,11 +107,11 @@ class ViewForm extends ViewGenerator {
             $column["label"] = str_replace("_"," ",Str::title($column['name']));
             return $column;
         })->keyBy('name');
-
-        return view('jig::'.$this->form, [
+        return view('jig::'.$type."-form", [
             'modelBaseName' => $this->modelBaseName,
             'modelRouteAndViewName' => $this->modelRouteAndViewName,
             'modelPlural' => $this->modelPlural,
+            'modelTitle' => $this->titleSingular,
             'modelDotNotation' => $this->modelDotNotation,
             'modelLangFormat' => $this->modelLangFormat,
             'columns' => $columns,
@@ -199,27 +157,6 @@ class ViewForm extends ViewGenerator {
             'hasTranslatable' => $this->readColumnsFromTable($this->tableName)->filter(function($column) {
                 return $column['type'] == "json";
             })->count() > 0,
-        ])->render();
-    }
-
-    protected function buildFormJs() {
-        $belongsTos = $this->setBelongsToRelations();
-        $relatables = $this->getVisibleColumns($this->tableName, $this->modelVariableName)->filter(function($column) use($belongsTos) {
-            return in_array($column['name'],$belongsTos->pluck('foreign_key')->toArray());
-        })->keyBy('name');
-        $columns = $this->getVisibleColumns($this->tableName, $this->modelVariableName)->reject(function($column) use($belongsTos) {
-            return in_array($column['name'],$belongsTos->pluck('foreign_key')->toArray())|| $column["name"] ==='slug';
-        })->map(function($column) {
-            $column["label"] = str_replace("_"," ",Str::title($column['name']));
-            return $column;
-        })->keyBy('name');
-        return view('jig::'.$this->formJs, [
-            'modelViewsDirectory' => $this->modelViewsDirectory,
-            'modelJSName' => $this->modelJSName,
-
-            'columns' => $columns,
-            "relatables" => $relatables,
-            "relations" => $this->relations
         ])->render();
     }
 

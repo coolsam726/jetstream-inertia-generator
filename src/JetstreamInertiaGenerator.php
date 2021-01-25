@@ -112,11 +112,11 @@ class JetstreamInertiaGenerator extends Command
         ]);
 
 
-        /*$this->call('jig:generate:form', [
+        $this->call('jig:generate:form', [
             'table_name' => $tableNameArgument,
             '--model-name' => $modelOption,
             '--force' => $force,
-        ]);*/
+        ]);
 
         /*
         $this->call('jig:generate:lang', [

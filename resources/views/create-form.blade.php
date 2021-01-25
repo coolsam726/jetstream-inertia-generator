@@ -20,7 +20,7 @@
                             @php $hasInput = true; @endphp
                             <div class=" sm:col-span-4">
                                 <jet-label for="{{$col['name']}}" value="{{$col['label']}}" />
-                                <jet-input type="date" id="{{$col['name']}}" name="{{$col['name']}}" v-model="form.{{$col['name']}}"
+                                <jet-input class="w-full" type="date" id="{{$col['name']}}" name="{{$col['name']}}" v-model="form.{{$col['name']}}"
                                            :class="{'border-red-500 sm:focus:border-red-300 sm:focus:ring-red-100': form.errors.{{$col['name']}}}"
                                 ></jet-input>
                                 <jet-input-error :message="form.errors.{{$col['name']}}" class="mt-2" />
@@ -29,7 +29,7 @@
                         @php $hasInput = true; @endphp
                         <div class=" sm:col-span-4">
                             <jet-label for="{{$col['name']}}" value="{{$col['label']}}" />
-                            <jet-input type="time" id="{{$col['name']}}" name="{{$col['name']}}" v-model="form.{{$col['name']}}"
+                            <jet-input class="w-full" type="time" id="{{$col['name']}}" name="{{$col['name']}}" v-model="form.{{$col['name']}}"
                                        :class="{'border-red-500 sm:focus:border-red-300 sm:focus:ring-red-100': form.errors.{{$col['name']}}}"
                             ></jet-input>
                             <jet-input-error :message="form.errors.{{$col['name']}}" class="mt-2" />
@@ -38,7 +38,7 @@
                             @php $hasInput = true; @endphp
                             <div class=" sm:col-span-4">
                                 <jet-label for="{{$col['name']}}" value="{{$col['label']}}" />
-                                <jet-input type="datetime-local" id="{{$col['name']}}" name="{{$col['name']}}" v-model="form.{{$col['name']}}"
+                                <jet-input class="w-full" type="datetime-local" id="{{$col['name']}}" name="{{$col['name']}}" v-model="form.{{$col['name']}}"
                                            :class="{'border-red-500 sm:focus:border-red-300 sm:focus:ring-red-100': form.errors.{{$col['name']}}}"
                                 ></jet-input>
                                 <jet-input-error :message="form.errors.{{$col['name']}}" class="mt-2" />
@@ -65,7 +65,7 @@
                             @php $hasInput = true; @endphp
                             <div class=" sm:col-span-4">
                                 <jet-label for="{{$col['name']}}" value="{{$col['label']}}" />
-                                <jet-input type="number" id="{{$col['name']}}" name="{{$col['name']}}" v-model="form.{{$col['name']}}"
+                                <jet-input class="w-full" type="number" id="{{$col['name']}}" name="{{$col['name']}}" v-model="form.{{$col['name']}}"
                                            :class="{'border-red-500 sm:focus:border-red-300 sm:focus:ring-red-100': form.errors.{{$col['name']}}}"
                                 ></jet-input>
                                 <jet-input-error :message="form.errors.{{$col['name']}}" class="mt-2" />
@@ -74,14 +74,14 @@
                             @php $hasInput = true; @endphp
                             <div class=" sm:col-span-4">
                                 <jet-label for="{{$col['name']}}" value="{{$col['label']}}" />
-                                <jet-input type="time" id="{{$col['name']}}" name="{{$col['name']}}" v-model="form.{{$col['name']}}"
+                                <jet-input class="w-full" type="password" id="{{$col['name']}}" name="{{$col['name']}}" v-model="form.{{$col['name']}}"
                                            :class="{'border-red-500 sm:focus:border-red-300 sm:focus:ring-red-100': form.errors.{{$col['name']}}}"
                                 ></jet-input>
                                 <jet-input-error :message="form.errors.{{$col['name']}}" class="mt-2" />
                             </div>
                             <div class=" sm:col-span-4">
                                 <jet-label for="{{$col['name']}}_confirmation" value="Repeat {{$col['label']}}" />
-                                <jet-input type="time" id="{{$col['name']}}_confirmation" name="{{$col['name']}}_confirmation" v-model="form.{{$col['name']}}_confirmation"
+                                <jet-input class="w-full" type="password" id="{{$col['name']}}_confirmation" name="{{$col['name']}}_confirmation" v-model="form.{{$col['name']}}_confirmation"
                                            :class="{'border-red-500 sm:focus:border-red-300 sm:focus:ring-red-100': form.errors.{{$col['name']}}_confirmation}"
                                 ></jet-input>
                             </div>
@@ -89,7 +89,7 @@
                             @php $hasInput = true; @endphp
                             <div class=" sm:col-span-4">
                                 <jet-label for="{{$col['name']}}" value="{{$col['label']}}" />
-                                <jet-input type="text" id="{{$col['name']}}" name="{{$col['name']}}" v-model="form.{{$col['name']}}"
+                                <jet-input class="w-full" type="text" id="{{$col['name']}}" name="{{$col['name']}}" v-model="form.{{$col['name']}}"
                                            :class="{'border-red-500 sm:focus:border-red-300 sm:focus:ring-red-100': form.errors.{{$col['name']}}}"
                                 ></jet-input>
                                 <jet-input-error :message="form.errors.{{$col['name']}}" class="mt-2" />
@@ -102,7 +102,7 @@
                                 @php $hasSelect = true; @endphp
                                 <div class=" sm:col-span-4">
                                     <jet-label for="{{$belongsTo['relationship_variable']}}" value="{{$belongsTo['related_model_title']}}" />
-                                    <infinite-select :per-page="15" :api-url="route('api.{{$belongsTo['related_route_name']}}.index')"
+                                    <infinite-select class="w-full" :per-page="15" :api-url="route('api.{{$belongsTo['related_route_name']}}.index')"
                                                      id="{{$belongsTo['relationship_variable']}}" name="{{$belongsTo['relationship_variable']}}"
                                                      v-model="form.{{$belongsTo['relationship_variable']}}" label="{{$belongsTo["label_column"]}}"
                                                      :class="{'border-red-500 sm:focus:border-red-300 sm:focus:ring-red-100': form.errors.{{$belongsTo['relationship_variable']}}}"
@@ -152,7 +152,7 @@
             return {
                 form: this.$inertia.form({
                     @foreach($columns as $col)
-                    "{{$col}}": null,
+                    "{{$col['name']}}": null,
                     @endforeach
                         @if (count($relations))
                         @if(isset($relations['belongsTo']) && count($relations['belongsTo']))

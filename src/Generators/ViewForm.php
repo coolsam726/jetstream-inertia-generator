@@ -78,7 +78,7 @@ class ViewForm extends ViewGenerator {
             $this->info('Generating '.$viewPath.' finished');
         }
         //Make edit form
-        /*$viewPath = resource_path('js/Pages/'.$this->modelPlural.'/Edit.vue');
+        $viewPath = resource_path('js/Pages/'.$this->modelPlural.'/Edit.vue');
         if ($this->alreadyExists($viewPath) && !$force) {
             $this->error('File '.$viewPath.' already exists!');
         } else {
@@ -89,7 +89,7 @@ class ViewForm extends ViewGenerator {
             $this->makeDirectory($viewPath);
             $this->files->put($viewPath, $this->buildForm("edit"));
             $this->info('Generating '.$viewPath.' finished');
-        }*/
+        }
     }
 
     protected function isUsedTwoColumnsLayout() : bool {

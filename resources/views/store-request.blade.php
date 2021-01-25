@@ -24,7 +24,7 @@ class Store{{ $modelBaseName }} extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('create',{{$modelBaseName}}::class);
+        return $this->user()->can('create',{{$modelBaseName}}::class);
     }
 
     /**

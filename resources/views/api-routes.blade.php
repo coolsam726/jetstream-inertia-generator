@@ -1,2 +1,4 @@
 /* Auto-generated {{$modelRouteName}} api routes */
-Route::middleware('auth:sanctum')->apiResource('/{{$modelRouteName}}', \App\Http\Controllers\API\{{$controllerClassName}}::class);
+Route::group(["middleware"=>['auth:sanctum', 'verified']], function () {
+    Route::apiResource('/{{$modelRouteName}}', \App\Http\Controllers\API\{{$controllerClassName}}::class)->parameters(["{{$modelRouteName}}" => "{{$modelVariableName}}"]);
+});

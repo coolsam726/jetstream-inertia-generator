@@ -29,7 +29,7 @@ class Update{{ $modelBaseName }} extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('update', $this->{{ $modelVariableName }});
+        return $this->user()->can('update', $this->{{ $modelVariableName }});
     }
 
     /**

@@ -85,6 +85,10 @@ class Permissions extends ClassGenerator {
 
         return view('jig::permissions', [
             'modelBaseName' => $this->modelBaseName,
+            'modelPlural' => $this->modelPlural,
+            'titlePlural' => $this->titlePlural,
+            'titleSingular' => $this->titleSingular,
+            'modelPermissionName' => $this->modelRouteAndViewName,
             'modelDotNotation' => $this->modelDotNotation,
             'className' => $this->generateClassNameFromTable($this->tableName),
             'withoutBulk' => $this->withoutBulk,

@@ -54,7 +54,7 @@
             },
             async deleteModel(model) {
                 const vm = this;
-                this.$inertia.delete(route('admin.church-types.destroy', model)).then(() => {
+                this.$inertia.delete(route('admin.{{$modelRouteAndViewName}}.destroy', model)).then(() => {
                     vm.getDatatable(vm.tableParams);
                 });
             }

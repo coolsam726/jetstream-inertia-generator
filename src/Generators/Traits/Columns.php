@@ -37,6 +37,7 @@ trait Columns {
             return [
                 'name' => $columnName,
                 'primary' => $columnPrimaryIndex->count() > 0,
+                'label' => Str::title(str_replace("-"," ",Str::slug($columnName))),
                 'type' => Schema::getColumnType($tableName, $columnName),
                 'required' => boolval(Schema::getConnection()->getDoctrineColumn($tableName, $columnName)->getNotnull()),
                 'unique' => $columnUniqueIndexes->count() > 0,

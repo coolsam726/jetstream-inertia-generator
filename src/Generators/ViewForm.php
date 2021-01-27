@@ -90,6 +90,20 @@ class ViewForm extends ViewGenerator {
             $this->files->put($viewPath, $this->buildForm("edit"));
             $this->info('Generating '.$viewPath.' finished');
         }
+
+        // Make Show Form
+        $viewPath = resource_path('js/Pages/'.$this->modelPlural.'/Show.vue');
+        if ($this->alreadyExists($viewPath) && !$force) {
+            $this->error('File '.$viewPath.' already exists!');
+        } else {
+            if ($this->alreadyExists($viewPath) && $force) {
+                $this->warn('File '.$viewPath.' already exists! File will be deleted.');
+                $this->files->delete($viewPath);
+            }
+            $this->makeDirectory($viewPath);
+            $this->files->put($viewPath, $this->buildShow());
+            $this->info('Generating '.$viewPath.' finished');
+        }
     }
 
     protected function isUsedTwoColumnsLayout() : bool {
@@ -130,8 +144,8 @@ class ViewForm extends ViewGenerator {
         $relatables = $this->getVisibleColumns($this->tableName, $this->modelVariableName)->filter(function($column) use($belongsTos) {
             return in_array($column['name'],$belongsTos->pluck('foreign_key')->toArray());
         })->keyBy('name');
-        $columns = $this->getVisibleColumns($this->tableName, $this->modelVariableName)->reject(function($column) use($belongsTos) {
-            return in_array($column['name'],$belongsTos->pluck('foreign_key')->toArray()) || $column["name"] ==='slug';
+        $columns = $this->readColumnsFromTable($this->tableName)->reject(function($column) use($belongsTos) {
+            return in_array($column['name'],$belongsTos->pluck('foreign_key')->toArray());
         })->map(function($column) {
             $column["label"] = str_replace("_"," ",Str::title($column['name']));
             return $column;
@@ -141,6 +155,7 @@ class ViewForm extends ViewGenerator {
             'modelRouteAndViewName' => $this->modelRouteAndViewName,
             'modelVariableName' => $this->modelVariableName,
             'modelPlural' => $this->modelPlural,
+            'modelTitleSingular' => $this->titleSingular,
             'modelViewsDirectory' => $this->modelViewsDirectory,
             'modelDotNotation' => $this->modelDotNotation,
             'modelJSName' => $this->modelJSName,

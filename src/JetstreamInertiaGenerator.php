@@ -135,7 +135,7 @@ class JetstreamInertiaGenerator extends Command
 
         */
 
-        /*if ($this->shouldGeneratePermissionsMigration()) {
+        if ($this->shouldGeneratePermissionsMigration()) {
             $this->call('jig:generate:permissions', [
                 'table_name' => $tableNameArgument,
                 '--model-name' => $modelOption,
@@ -146,7 +146,7 @@ class JetstreamInertiaGenerator extends Command
             if ($this->option('no-interaction') || $this->confirm('Do you want to attach generated permissions to the default role now?', true)) {
                 $this->call('migrate');
             }
-        }*/
+        }
 
         $this->info('Generating whole admin CRUD module finished');
     }

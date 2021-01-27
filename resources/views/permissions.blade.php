@@ -30,18 +30,19 @@ class {{ $className }} extends Migration
         $this->guardName = "web";
 
         $permissions = collect([
-            '{{ $modelDotNotation }}',
-            '{{ $modelDotNotation }}.index',
-            '{{ $modelDotNotation }}.create',
-            '{{ $modelDotNotation }}.show',
-            '{{ $modelDotNotation }}.edit',
-            '{{ $modelDotNotation }}.delete',
+            '{{$titlePlural}} Module' => '{{ $modelDotNotation }}',
+            'List All {{$titlePlural}}' => '{{ $modelDotNotation }}.index',
+            'Create New {{$titlePlural}}' => '{{ $modelDotNotation }}.create',
+            'View Any {{$titleSingular}}' => '{{ $modelDotNotation }}.show',
+            'Edit or Update a Single {{$titleSingular}}' => '{{ $modelDotNotation }}.edit',
+            'Delete {{$titlePlural}}' => '{{ $modelDotNotation }}.delete',
         ]);
 
         //Add New permissions
-        $this->permissions = $permissions->map(function ($permission) {
+        $this->permissions = $permissions->map(function ($permission, $title) {
             return [
                 'name' => $permission,
+                'title' => $title,
                 'guard_name' => $this->guardName,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -51,7 +52,7 @@ class {{ $className }} extends Migration
         //Role should already exists
         $this->roles = [
             [
-                'slug' => 'administrator',
+                'name' => 'administrator',
                 'guard_name' => $this->guardName,
                 'permissions' => $permissions,
             ],
@@ -89,7 +90,7 @@ class {{ $className }} extends Migration
                 unset($role['permissions']);
 
                 $roleItem = DB::table($tableNames['roles'])->where([
-                    'slug' => $role['slug'],
+                    'name' => $role['name'],
                     'guard_name' => $role['guard_name']
                 ])->first();
                 if ($roleItem !== null) {

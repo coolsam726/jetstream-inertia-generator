@@ -148,6 +148,9 @@
                 @if($hasSelect) InfiniteSelect,{{"\r"}}@endif
                 JigLayout,
         },
+        props: {
+            can: Object,
+        },
         data() {
             return {
                 form: this.$inertia.form({

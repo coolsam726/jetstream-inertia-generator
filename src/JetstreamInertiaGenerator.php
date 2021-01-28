@@ -19,6 +19,8 @@ class JetstreamInertiaGenerator extends Command
         $tableNameArgument = $this->argument('table_name');
         $modelOption = $this->option('model-name');
         $controllerOption = $this->option('controller-name');
+        $repositoryOption = $this->option('repository-name');
+        $policyOption = $this->option('policy-name');
         $exportOption = $this->option('with-export');
         $withoutBulkOptions = $this->option('without-bulk');
         $force = $this->option('force');
@@ -61,7 +63,7 @@ class JetstreamInertiaGenerator extends Command
 
         $this->call('jig:generate:repository', [
             'table_name' => $tableNameArgument,
-            'class_name' => $controllerOption,
+            'class_name' => $repositoryOption,
             '--model-name' => $modelOption,
             '--force' => $force,
             '--with-export' => $exportOption,
@@ -111,7 +113,6 @@ class JetstreamInertiaGenerator extends Command
             '--without-bulk' => $withoutBulkOptions,
         ]);
 
-
         $this->call('jig:generate:form', [
             'table_name' => $tableNameArgument,
             '--model-name' => $modelOption,
@@ -134,6 +135,14 @@ class JetstreamInertiaGenerator extends Command
         }
 
         */
+        $this->call('jig:generate:policy', [
+            'table_name' => $tableNameArgument,
+            'class_name' => $policyOption,
+            '--model-name' => $modelOption,
+            '--force' => $force,
+            '--with-export' => false,
+            '--without-bulk' => false,
+        ]);
 
         if ($this->shouldGeneratePermissionsMigration()) {
             $this->call('jig:generate:permissions', [
@@ -161,6 +170,8 @@ class JetstreamInertiaGenerator extends Command
         return [
             ['model-name', 'm', InputOption::VALUE_OPTIONAL, 'Specify custom model name'],
             ['controller-name', 'c', InputOption::VALUE_OPTIONAL, 'Specify custom controller name'],
+            ['repository-name', 'r', InputOption::VALUE_OPTIONAL, 'Specify custom repository class name'],
+            ['policy-name', 'p', InputOption::VALUE_OPTIONAL, 'Specify custom Policy class name'],
             ['seed', 's', InputOption::VALUE_NONE, 'Seeds the table with fake data'],
             ['force', 'f', InputOption::VALUE_NONE, 'Force will delete files before regenerating admin'],
             ['with-export', 'e', InputOption::VALUE_NONE, 'Generate an option to Export as Excel'],

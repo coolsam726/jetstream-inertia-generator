@@ -35,8 +35,8 @@ class {{ $controllerBaseName }}  extends Controller
         $this->authorize('viewAny', {{$modelBaseName}}::class);
         return Inertia::render('{{$modelPlural}}/Index',[
             "can" => [
-                "viewAny" => $this->authorize('viewAny', {{$modelBaseName}}::class),
-                "create" => $this->authorize('create', {{$modelBaseName}}::class),
+                "viewAny" => \Auth::user()->can('viewAny', {{$modelBaseName}}::class),
+                "create" => \Auth::user()->can('create', {{$modelBaseName}}::class),
             ]
         ]);
     }
@@ -51,8 +51,8 @@ class {{ $controllerBaseName }}  extends Controller
         $this->authorize('create', {{$modelBaseName}}::class);
         return Inertia::render("{{$modelPlural}}/Create",[
             "can" => [
-            "viewAny" => $this->authorize('viewAny', {{$modelBaseName}}::class),
-            "create" => $this->authorize('create', {{$modelBaseName}}::class),
+            "viewAny" => \Auth::user()->can('viewAny', {{$modelBaseName}}::class),
+            "create" => \Auth::user()->can('create', {{$modelBaseName}}::class),
             ]
         ]);
     }

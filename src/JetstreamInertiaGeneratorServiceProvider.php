@@ -14,6 +14,7 @@ class JetstreamInertiaGeneratorServiceProvider extends ServiceProvider
         $this->commands([
             JetstreamInertiaGenerator::class,
             Generators\Model::class,
+            Generators\Policy::class,
             Generators\Repository::class,
             Generators\ApiController::class,
             Generators\Controller::class,

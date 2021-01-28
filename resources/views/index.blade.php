@@ -3,11 +3,11 @@
         <template {{'#'}}header>
             <div class="flex flex-wrap items-center justify-between w-full px-4">
                 <inertia-link :href="route('admin.dashboard')" class="text-xl font-black text-white"><i class="fas fa-arrow-left"></i> Back</inertia-link>
-                <inertia-button :href="route('admin.{{$modelRouteAndViewName}}.create')" classes="bg-green-100 hover:bg-green-200 text-green-500"><i class="fas fa-plus"></i> New
+                <inertia-button v-if="can.create" :href="route('admin.{{$modelRouteAndViewName}}.create')" classes="bg-green-100 hover:bg-green-200 text-green-500"><i class="fas fa-plus"></i> New
                     {{$modelTitle}}</inertia-button>
             </div>
         </template>
-        <div class="flex flex-wrap px-4">
+        <div v-if="can.viewAny" class="flex flex-wrap px-4">
             <div v-if="datatable" class="z-10 flex-auto p-4 bg-white md:rounded-md md:shadow-md">
                 <pagetables table-classes="table table-fixed w-full" :columns="datatable.columns" :rows="datatable"
                             {{'@'}}paginate="getDatatable" {{'@'}}search="getDatatable">
@@ -23,6 +23,9 @@
                 </pagetables>
             </div>
         </div>
+        <div v-else class="p-4 rounded-md shadow-md bg-red-100 text-red-500 font-bold ">
+            You are not authorized to view a list of {{$modelTitlePlural}}
+        </div>
     </jig-layout>
 </template>
 
@@ -34,6 +37,9 @@
     export default {
         name: "Index",
         components: {InertiaButton, JetButton, JigLayout, Pagetables},
+        props: {
+            can: Object,
+        },
         data() {
             return {
                 tableParams: null,

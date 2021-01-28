@@ -28,7 +28,7 @@
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.9",
         "orchestra/testbench": "^v6.0.0",
-        "phpunit/phpunit": "^9.5.1"
+        "phpunit/phpunit": "^8.0|^9.5.1"
     },
     "autoload": {
         "psr-4": {

@@ -1,9 +1,9 @@
 # Very short description of the package
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/savannabits/jetstream-inertia-generator.svg?style=flat-square)](https://packagist.org/packages/savannabits/jetstream-inertia-generator)
-[![Build Status](https://img.shields.io/travis/coolsam726/jetstream-inertia-generator/master.svg?style=flat-square)](https://travis-ci.org/savannabits/jetstream-inertia-generator)
-[![Quality Score](https://img.shields.io/scrutinizer/g/coolsam726/jetstream-inertia-generator.svg?style=flat-square)](https://scrutinizer-ci.com/g/savannabits/jetstream-inertia-generator)
-[![Total Downloads](https://img.shields.io/packagist/dt/coolsam726/jetstream-inertia-generator.svg?style=flat-square)](https://packagist.org/packages/savannabits/jetstream-inertia-generator)
+[![Build Status](https://img.shields.io/travis/coolsam726/jetstream-inertia-generator/master.svg?style=flat-square)](https://travis-ci.com/coolsam726/jetstream-inertia-generator)
+[![Quality Score](https://img.shields.io/scrutinizer/g/coolsam726/jetstream-inertia-generator.svg?style=flat-square)](https://scrutinizer-ci.com/g/coolsam726/jetstream-inertia-generator)
+[![Total Downloads](https://img.shields.io/packagist/dt/savannabits/jetstream-inertia-generator.svg?style=flat-square)](https://packagist.org/packages/savannabits/jetstream-inertia-generator)
 
 This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
 

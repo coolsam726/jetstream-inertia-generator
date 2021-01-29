@@ -2,15 +2,17 @@
 
 namespace Savannabits\JetstreamInertiaGenerator;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Route;
 
-class JetstreamInertiaGeneratorServiceProvider extends ServiceProvider
+class JetstreamInertiaGeneratorServiceProvider extends RouteServiceProvider
 {
     /**
      * Bootstrap the application services.
      */
     public function boot()
     {
+        parent::boot();
         $this->commands([
             JetstreamInertiaGenerator::class,
             Generators\Model::class,
@@ -40,17 +42,34 @@ class JetstreamInertiaGeneratorServiceProvider extends ServiceProvider
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'jetstream-inertia-generator');
          $this->loadViewsFrom(__DIR__.'/../resources/views', 'jig');
         // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        // $this->loadRoutesFrom(__DIR__.'/routes.php');
+         if (file_exists(base_path('routes/jig.php'))) {
+             $this->routes(function() {
+                 Route::middleware('web')
+                     ->namespace($this->namespace)
+                     ->group(base_path('routes/jig.php'));
+             });
+         } else {
+             $this->loadRoutesFrom(__DIR__.'/routes.php');
+         }
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/config.php' => config_path('jig.php'),
-            ], 'config');
+            ], 'jig-config');
 
             // Publishing the views.
             $this->publishes([
+                __DIR__.'/../resources/published-views' => resource_path('views'),
+            ], 'jig-blade-templates');
+
+            $this->publishes([
                 __DIR__.'/../resources/js' => resource_path('js'),
             ], 'jig-views');
+
+            $this->publishes([
+                __DIR__.'/routes.php' => base_path('routes/jig.php'),
+            ], 'jig-routes');
+
 
             // Publishing assets.
             /*$this->publishes([
@@ -72,9 +91,9 @@ class JetstreamInertiaGeneratorServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        parent::register();
         // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'jig');
-
         // Register the main class to use with the facade
         $this->app->singleton('jetstream-inertia-generator', function () {
             return new JetstreamInertiaGenerator;

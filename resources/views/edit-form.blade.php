@@ -3,6 +3,7 @@
     $hasSelect = false;
     $hasTextArea = false;
     $hasInput = false;
+    $hasPassword = false;
 @endphp
 <template>
     <jig-layout>
@@ -64,7 +65,7 @@
                         ></jet-input>
                         <jet-input-error :message="form.errors.{{$col['name']}}" class="mt-2" />
                     </div>
-                        @elseif($col['name'] === 'password') @php $hasInput = true; echo "\r";@endphp
+                        @elseif($col['name'] === 'password') @php $hasInput = true; $hasPassword = true; echo "\r";@endphp
                     <div class=" sm:col-span-4">
                         <jet-label for="{{$col['name']}}" value="{{$col['label']}}" />
                         <jet-input class="w-full" type="password" id="{{$col['name']}}" name="{{$col['name']}}" v-model="form.{{$col['name']}}"
@@ -152,7 +153,10 @@
         data() {
             return {
                 form: this.$inertia.form({
-                    ...this.model
+                    ...this.model,
+@if($hasPassword)
+                    "password_confirmation": null,
+@endif
                 }),
             }
         },

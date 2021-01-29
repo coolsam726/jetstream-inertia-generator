@@ -1,9 +1,12 @@
 @php echo "<?php\n";
+if ($modelVariableName === 'user') $modelVariableName = 'model';
 @endphp
 namespace {{$policyNamespace}};
 
 use {{$modelFullName}};
+@if ($modelVariableName!=='model')
 use App\Models\User;
+@endif
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class {{$policyBaseName}}

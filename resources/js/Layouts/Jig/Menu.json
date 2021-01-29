@@ -2,6 +2,8 @@
 
     "dashboard": {
         "route"     :   "admin.dashboard",
+        "routePattern"     :   "admin.dashboard",
+        "permissionName": "dashboard",
         "title"     :   "Dashboard",
         "faIcon"    :   "fas fa-tv",
         "isTitle"   :   false,

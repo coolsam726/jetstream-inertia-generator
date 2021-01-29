@@ -3,6 +3,7 @@
     $hasSelect = false;
     $hasTextArea = false;
     $hasInput = false;
+    $hasPassword = false;
 @endphp
 <template>
     <jig-layout>
@@ -64,7 +65,7 @@
                         ></jet-input>
                         <jet-input-error :message="form.errors.{{$col['name']}}" class="mt-2" />
                     </div>
-                        @elseif($col['name'] === 'password')@php $hasInput = true; echo "\r";@endphp
+                        @elseif($col['name'] === 'password')@php $hasInput = true; $hasPassword=true; echo "\r";@endphp
                     <div class=" sm:col-span-4">
                         <jet-label for="{{$col['name']}}" value="{{$col['label']}}" />
                         <jet-input class="w-full" type="password" id="{{$col['name']}}" name="{{$col['name']}}" v-model="form.{{$col['name']}}"
@@ -150,16 +151,19 @@
         data() {
             return {
                 form: this.$inertia.form({
-                    @foreach($columns as $col)
+@foreach($columns as $col)
                     "{{$col['name']}}": null,
-                    @endforeach
-                        @if (count($relations))
-                        @if(isset($relations['belongsTo']) && count($relations['belongsTo']))
-                        @foreach($relations['belongsTo'] as $belongsTo)
+@endforeach
+@if($hasPassword)
+                    "password_confirmation": null,
+@endif
+@if (count($relations))
+@if(isset($relations['belongsTo']) && count($relations['belongsTo']))
+@foreach($relations['belongsTo'] as $belongsTo)
                     "{{$belongsTo["relationship_variable"]}}": null,
-                    @endforeach
-                    @endif
-                    @endif
+@endforeach
+@endif
+@endif
                 }),
             }
         },
@@ -167,13 +171,7 @@
         },
         methods: {
             async storeModel() {
-                return new Promise((resolve, reject) => {
-                    this.form.post(this.route('admin.{{$modelRouteAndViewName}}.store')).then((res) => {
-                        resolve("Success");
-                    }).catch(err => {
-                        reject(err);
-                    })
-                })
+                this.form.post(this.route('admin.{{$modelRouteAndViewName}}.store'));
             }
         }
     }

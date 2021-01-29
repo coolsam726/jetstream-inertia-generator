@@ -3,7 +3,9 @@
 namespace Savannabits\JetstreamInertiaGenerator;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
+use Savannabits\JetstreamInertiaGenerator\Middleware\JigMiddleware;
 
 class JetstreamInertiaGeneratorServiceProvider extends RouteServiceProvider
 {
@@ -42,9 +44,15 @@ class JetstreamInertiaGeneratorServiceProvider extends RouteServiceProvider
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'jetstream-inertia-generator');
          $this->loadViewsFrom(__DIR__.'/../resources/views', 'jig');
         // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        /**
+         * @var Router $router
+         */
+        $router = $this->app->make(Router::class);
+        $router->aliasMiddleware('jig',JigMiddleware::class);
          if (file_exists(base_path('routes/jig.php'))) {
+
              $this->routes(function() {
-                 Route::middleware('web')
+                 Route::middleware(['web','jig'])
                      ->namespace($this->namespace)
                      ->group(base_path('routes/jig.php'));
              });

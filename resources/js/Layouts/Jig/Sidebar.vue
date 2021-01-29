@@ -1,17 +1,22 @@
 <template>
     <nav
-        class="relative z-10 flex flex-wrap items-center justify-between px-6 py-4 bg-white shadow-xl md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-no-wrap md:overflow-hidden md:w-64"
+        class="relative z-10 flex flex-wrap items-center justify-between px-0 py-4 bg-gray-700 shadow-xl md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-no-wrap md:overflow-hidden md:w-64"
     >
         <div
             class="flex flex-wrap items-center justify-between w-full px-0 mx-auto md:flex-col md:items-stretch md:min-h-full md:flex-no-wrap"
         >
             <!-- Toggler -->
             <button
-                class="px-3 py-1 text-xl leading-none text-black bg-transparent border border-transparent border-solid rounded opacity-50 cursor-pointer md:hidden"
+                class="px-3 py-1 text-xl leading-none text-gray-100 border border-transparent border-solid rounded opacity-50 cursor-pointer md:hidden"
                 type="button"
                 v-on:click="toggleCollapseShow('bg-white m-2 py-3 px-6')"
             >
-                <i class="fas fa-bars"></i>
+                <svg viewBox="0 0 100 80" width="40" height="40">
+                    <rect fill="white" width="100" height="5"></rect>
+                    <rect fill="white" y="20" width="80" height="5"></rect>
+                    <rect fill="white" y="40" width="70" height="5"></rect>
+                    <rect fill="white" y="60" width="90" height="5"></rect>
+                </svg>
             </button>
             <!-- Brand -->
             <a

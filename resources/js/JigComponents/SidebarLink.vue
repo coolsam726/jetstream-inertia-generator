@@ -11,8 +11,8 @@
         computed: {
             classes() {
                 return this.active
-                            ? 'text-primary-500 hover:text-primary-600 text-xs uppercase py-3 font-bold block'
-                            : 'text-gray-800 hover:text-gray-600 text-xs uppercase py-3 font-bold block'
+                            ? 'text-indigo-500 hover:text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border-l-4 border-indigo-500 text-md py-3 font-bold block'
+                            : 'text-gray-800 hover:text-gray-600 hover:bg-indigo-100 py-3 font-bold block'
             }
         }
     }

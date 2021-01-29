@@ -124,19 +124,20 @@
 
 <script>
     import JigLayout from "@/Layouts/JigLayout";
-        @if($hasCheckbox)
+    import JetLabel from "@/Jetstream/Label";
+    import JetButton from "@/Jetstream/Button";
+    @if($hasCheckbox)
     import JetCheckbox from "@/Jetstream/Checkbox";
-        @endif
-        @if($hasInput)
+@endif
+    @if($hasInput)
     import JetInput from "@/Jetstream/Input";
-        @endif
-        @if($hasTextArea)
+@endif
+    @if($hasTextArea)
     import JigTextarea from "@/JigComponents/JigTextarea";
-        @endif
-
-        @if($hasSelect)
+@endif
+    @if($hasSelect)
     import InfiniteSelect from '@/JigComponents/InfiniteSelect.vue';
-        @endif
+@endif
     import InertiaButton from "@/JigComponents/InertiaButton";
     export default {
         name: "Edit",
@@ -145,11 +146,13 @@
         },
         components: {
             InertiaButton,
-            @if($hasInput) JetInput,{{"\r"}}@endif
-                @if($hasCheckbox) JetCheckbox,{{"\r"}}@endif
-                @if($hasTextArea) JigTextarea,{{"\r"}}@endif
-                @if($hasSelect) InfiniteSelect,{{"\r"}}@endif
-                JigLayout,
+            JetLabel,
+            JetButton,
+            JigLayout,
+            @if($hasInput)JetInput,@endif{{"\r"}}
+            @if($hasCheckbox)JetCheckbox,@endif{{"\r"}}
+            @if($hasTextArea)JigTextarea,@endif{{"\r"}}
+            @if($hasSelect)InfiniteSelect,@endif{{'\r'}}
         },
         data() {
             return {

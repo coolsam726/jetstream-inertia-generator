@@ -115,6 +115,11 @@ module.exports = {
 ```
 ## Usage
 The hard part is over. This is the easy part.
+##Prepare:
+- This library uses font awesome. Ensure you add a css link to the header of `resources/views/app.blade.php`
+```html
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+```
 ### General Steps:
 1. Publish the Package's assets and views. This is necessary for you to get the admin layout and all the vue components used in the generated code:
 ```shell

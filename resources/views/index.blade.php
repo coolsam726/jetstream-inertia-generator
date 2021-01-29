@@ -9,18 +9,29 @@
         </template>
         <div v-if="can.viewAny" class="flex flex-wrap px-4">
             <div v-if="datatable" class="z-10 flex-auto p-4 bg-white md:rounded-md md:shadow-md">
-                <pagetables table-classes="table table-fixed w-full" :columns="datatable.columns" :rows="datatable"
+                <pagetables table-classes="table w-full" :columns="datatable.columns" :rows="datatable"
                             {{'@'}}paginate="getDatatable" {{'@'}}search="getDatatable">
                     <template v-slot:row="{row}">
                         @foreach($columnsToQuery as $col)<td class="p-2">{{'{{'}}row.{{$col}} }}</td>
                         @endforeach{{"\r"}}
-                        <td class="p-2 text-right">
-                            <inertia-button aria-label="Show Church Type" title="Show {{$modelTitle}}" v-if="row.can.view" :href="route('admin.{{$modelRouteAndViewName}}.show',row)" class="mx-1 bg-gray-500"><i class="text-white fas fa-eye"></i></inertia-button>
-                            <inertia-button v-if="row.can.update" :href="route('admin.{{$modelRouteAndViewName}}.edit',row)" class="mx-1 bg-indigo-500"><i class="text-white fas fa-edit"></i></inertia-button>
-                            <jet-button v-if="row.can.delete" @click.native.prevent="deleteModel(row)" class="mx-1 my-0 bg-red-500 shadow-md sm:py-3"><i class="text-white shadow-md fas fa-trash"></i></jet-button>
+                        <td class="">
+                            <div class="flex flex-wrap justify-end">
+                                <inertia-button square aria-label="Show {{$modelTitle}}" title="Show {{$modelTitle}}" v-if="row.can.view" :href="route('admin.{{$modelRouteAndViewName}}.show',row)" classes="px-3 bg-gray-400"><i class="text-white fas fa-eye"></i></inertia-button>
+                                <inertia-button square aria-label="Edit {{$modelTitle}}" title="Edit {{$modelTitle}}" v-if="row.can.update" :href="route('admin.{{$modelRouteAndViewName}}.edit',row)" class="px-3 bg-indigo-500"><i class="text-white fas fa-edit"></i></inertia-button>
+                                <inertia-button square aria-label="Delete {{$modelTitle}}" as="button" title="Delete {{$modelTitle}}" v-if="row.can.delete" @click.native.prevent="confirmDeletion(row)" class="px-3 bg-red-500"><i class="text-white fas fa-times"></i></inertia-button>
+                            </div>
                         </td>
                     </template>
                 </pagetables>
+                <jet-confirmation-modal title="Confirm Deletion" :show="confirmDelete">
+                    <div slot="content">
+                        Are you sure you want to delete this record?
+                    </div>
+                    <div class="text-right" slot="footer">
+                        <inertia-button as="button" type="button" @click.native.stop="cancelDelete" class="bg-red-500">Cancel</inertia-button>
+                        <inertia-button as="button" type="button" @click.native.prevent="deleteModel" class="bg-green-500">Yes, Delete</inertia-button>
+                    </div>
+                </jet-confirmation-modal>
             </div>
         </div>
         <div v-else class="p-4 rounded-md shadow-md bg-red-100 text-red-500 font-bold ">
@@ -32,11 +43,11 @@
 <script>
     import JigLayout from "@/Layouts/JigLayout";
     import { Pagetables } from "pagetables";
-    import JetButton from "@/Jetstream/Button";
+    import JetConfirmationModal from "@/Jetstream/ConfirmationModal";
     import InertiaButton from "@/JigComponents/InertiaButton";
     export default {
         name: "Index",
-        components: {InertiaButton, JetButton, JigLayout, Pagetables},
+        components: {InertiaButton, JetConfirmationModal, JigLayout, Pagetables},
         props: {
             can: Object,
         },
@@ -44,6 +55,8 @@
             return {
                 tableParams: null,
                 datatable: null,
+                confirmDelete: false,
+                currentModel: null,
             }
         },
         mounted() {
@@ -58,11 +71,22 @@
                     //TODO: Implement error catching
                 })
             },
-            async deleteModel(model) {
+            confirmDeletion(model) {
+                this.currentModel = model;
+                this.confirmDelete = true;
+            },
+            cancelDelete() {
+                this.currentModel = false;
+                this.confirmDelete = false;
+            },
+            async deleteModel() {
                 const vm = this;
-                this.$inertia.delete(route('admin.{{$modelRouteAndViewName}}.destroy', model)).then(() => {
-                    vm.getDatatable(vm.tableParams);
-                });
+                this.confirmDelete = false;
+                if (this.currentModel) {
+                    this.$inertia.delete(route('admin.{{$modelRouteAndViewName}}.destroy', vm.currentModel)).then(() => {
+                        vm.getDatatable(vm.tableParams);
+                    });
+                }
             }
         }
     }

@@ -1,6 +1,6 @@
 <template>
     <nav
-        class="relative z-10 flex flex-wrap items-center justify-between px-0 py-4 bg-gray-700 shadow-xl md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-no-wrap md:overflow-hidden md:w-64"
+        class="relative z-40 flex flex-wrap items-center justify-between px-0 py-4 bg-gray-700 shadow-xl md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-no-wrap md:overflow-hidden md:w-64"
     >
         <div
             class="flex flex-wrap items-center justify-between w-full px-0 mx-auto md:flex-col md:items-stretch md:min-h-full md:flex-no-wrap"
@@ -20,7 +20,7 @@
             </button>
             <!-- Brand -->
             <a
-                class="inline-block p-4 px-0 mr-0 text-sm font-bold text-left text-gray-700 uppercase whitespace-no-wrap md:block md:sticky md:pb-2"
+                class="inline-block p-4 px-2 mr-0 text-sm font-bold text-left text-gray-100 uppercase whitespace-no-wrap md:block md:sticky md:pb-2"
                 href="javascript:void(0)"
             >
                 {{ $page.props.app.name }}
@@ -36,7 +36,7 @@
             </ul>
             <!-- Collapse -->
             <div
-                class="absolute top-0 left-0 right-0 z-40 items-center flex-1 h-auto overflow-x-hidden overflow-y-auto rounded shadow md:flex md:flex-col md:items-stretch md:opacity-100 md:relative md:mt-4 md:shadow-none"
+                class="absolute top-0 left-0 right-0 z-40 items-center bg-white flex-1 h-auto overflow-x-hidden overflow-y-auto shadow md:flex md:flex-col md:items-stretch md:opacity-100 md:relative md:mt-4 md:shadow-none"
                 v-bind:class="collapseShow"
             >
                 <!-- Collapse header -->
@@ -80,7 +80,7 @@
                             :href="route(menuItem.route)"
                             :active="route().current(menuItem.route)"
                             ><i
-                                :class="`mr-2 text-sm text-gray-500 ${menuItem.faIcon}`"
+                                :class="`mr-2 pl-4 text-sm text-gray-500 ${menuItem.faIcon}`"
                             ></i>
                             {{menuItem.title}}</sidebar-link
                         >

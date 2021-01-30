@@ -85,6 +85,7 @@ class Controller extends ClassGenerator {
                 $item = [
                    "route" => "admin.$this->modelRouteAndViewName.index",
                     "title" => $this->titlePlural,
+                    "routePattern" => "admin.$this->modelRouteAndViewName.*",
                     "faIcon" => $icon,
                     "isTitle" => false,
                     "isParent" => false,

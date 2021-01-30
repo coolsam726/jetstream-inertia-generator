@@ -57,7 +57,7 @@ class Routes extends FileAppender {
             $this->view = 'templates.'.$template.'.routes';
         }
 
-        if ($this->appendIfNotAlreadyAppended(base_path('routes/web.php'), PHP_EOL.PHP_EOL.$this->buildClass())){
+        if ($this->appendIfNotAlreadyAppended(base_path('routes/jig.php'), PHP_EOL.PHP_EOL.$this->buildClass())){
             $this->info('Appending routes finished');
         }
     }

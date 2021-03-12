@@ -31,36 +31,16 @@ What more could you ask for? Cut a day's work down to less than 3 minutes.
 
 ## Dependencies
 If you have followed the [Jetstream - Inertia - Vue.js Installation](https://jetstream.laravel.com/2.x/stacks/inertia.html) instructions, then the project will work with minimal configuration.
-### Composer dependencies:
-```json
-{
-        "php": "^7.4",
-        "doctrine/dbal": "^3.0",
-        "illuminate/support": "^8.0",
-        "inertiajs/inertia-laravel": "^v0.3.6",
-        "laravel/helpers": "^1.4",
-        "laravel/jetstream": "^2.1",
-        "savannabits/laravel-pagetables": "^1.0.0",
-        "spatie/laravel-permission": "^3.18.0"
-}
-```
-These will be installed automatically when installing the package, but if you want additional configuration steps, be sure to check out their installation and configuration instructions
-### NPM Dependencies
-You need to install the following if you haven't using either `yarn` or `npm` in order for the generated code to compile without hickups.
-__NB__ Again, if you followed Jetstream's installation instructions, most of these dependencies are already installed. Install only the missing ones.
-```shell
-yarn add -D popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import sass sass-loader vt-notifications vue-flatpickr-component  vue-numerals vue-pdf vue-select
-```
-## Installation
 
+## Installation
 1. You can install the package via composer:
 ```bash
 composer require savannabits/jetstream-inertia-generator
 ```
 2. Install the yarn dependencies listed above by adding them as `devDependencies` in `packages.json` and running `yarn install` or `npm install`, or simply run the following command
-   ```shell
-    yarn add -D popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo sass sass-loader vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-pdf vue-select
-   ```
+```shell
+yarn add -D popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo sass sass-loader vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-pdf vue-select
+```
 3. Ensure your webpack mix is properly configured to support [code splitting](https://inertiajs.com/client-side-setup). Check that the webpack.config.js file matches the following content:
 ```js
 const path = require('path');
@@ -175,6 +155,24 @@ The command above will generate a number of files and add routes to both your `a
 The generated vue files are placed under the Pages/Books folder in the js folder.
 
 * Finally, run `yarn watch, yarn dev or yarn prod` to compile the assets. There you have your CRUD.
+## Roles, permissions and Sidebar Menu:
+* By Default, generation of a module generates the following permissions:
+    - index
+    - create
+    - show
+    - edit
+    - delete
+    
+* The naming convention for permissions is ${module-name}.${perm} e.g payments.index, users.create etc.
+* This package manages access control using policies. Each generated module generates a policy with the default laravel actions:
+    - viewAny, view, store, update, delete, restore, forceDelete
+  The permissions generated above are checked in these policies. If you need to modify any of the access permissions, policies is where to look.
+      
+* Special permissions MUST also be generated to control access to the sidebar menus. These permissions SHOULD NOT contain two parts separated with a dot, but only one part.
+* Menus are configured in a json file published at `./resources/js/Layouts/Jig/Menu.json`. 
+    - For all menu items, the json key MUST match the permision that controls that menu. A permission without any verb is generated when generating each module for this very purpose. For example, generating a `payments` module will generate a `payments` permission.
+      Then the menu for payments must have `payments` as the json key.
+    - For parent menus and any other menus which may not match any module, you have to create a permission with the key name to control its access. For example, if you have a parent menu called `master-data` you have to generate a permission with the same name.
 
 ### Testing
 

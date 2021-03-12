@@ -7,6 +7,8 @@
         :options="paginatedObject.data"
         :filterable="false"
         :clear-on-select="true"
+        :reduce="reduce"
+        :placeholder="placeholder"
         :label="label"
         @open="onOpen"
         @close="onClose"
@@ -58,7 +60,11 @@
             "label": {
                 required: true,
                 type: String,
-            }
+            },
+            "reduce": {
+                type: Function,
+            },
+            "placeholder": String,
         },
         data: () => ({
             observer: null,

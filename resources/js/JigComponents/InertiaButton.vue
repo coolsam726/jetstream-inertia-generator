@@ -1,8 +1,12 @@
 <template>
-    <inertia-link v-if="href" :href="href" :class="`p-2 shadow-md ${shapeClass} ${classes}`">
+    <inertia-link v-if="href && !fullReload" :href="href" :class="`p-2 shadow-md focus:outline-none focus:ring-0 ${shapeClass} ${classes}`">
         <slot></slot>
     </inertia-link>
-    <button v-else :class="`p-2 shadow-md ${shapeClass} ${classes}`">
+    <a v-else-if="href && fullReload" :href="href" :class="`p-2 shadow-md focus:outline-none focus:ring-0 ${shapeClass} ${classes}`">
+        <slot></slot>
+    </a>
+
+    <button v-else :class="`p-2 focus:outline-none focus:ring-0  shadow-md ${shapeClass} ${classes}`">
         <slot></slot>
     </button>
 
@@ -20,6 +24,11 @@ export default {
             type: String,
             required: false,
             default: "a",
+        },
+        fullReload: {
+          required: false,
+          type: Boolean,
+          default: false,
         },
         classes: {
             required: false,

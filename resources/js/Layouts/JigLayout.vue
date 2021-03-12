@@ -1,11 +1,31 @@
 <template>
     <div class="bg-gray-200">
-        <sidebar-component></sidebar-component>
-        <div class="relative flex flex-col min-h-screen bg-gray-200 md:ml-64">
-            <navbar-component class="fixed flex-initial"></navbar-component>
+        <sidebar-component class="z-40" v-if="withSidebar && !fullScreenBody"></sidebar-component>
+        <div class="relative flex flex-col min-h-screen bg-gray-200" :class="{'md:ml-64': withSidebar}">
+            <navbar-component v-if="!fullScreenBody">
+                    <slot name="navbar-menu">
+                        <jet-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
+                            Home
+                        </jet-nav-link>
+                        <jet-nav-link v-if="$page.props.menu_permissions.backend" :href="route('admin.dashboard')" :active="route().current('admin.*')">
+                            Backend
+                        </jet-nav-link>
+                        <jet-nav-link v-if="$page.props.menu_permissions.backend" :href="route('teller.index')" :active="route().current('pos.*') || route().current('teller.*')">
+                            Cashier POS
+                        </jet-nav-link>
+                        <jet-nav-link v-if="$page.props.menu_permissions['consume-mpesa-transactions']" :href="route('mpesa-transactions.unconsumed')" :active="route().current('pos.*') || route().current('mpesa-transactions.*')">
+                            Unconsumed Transactions
+                        </jet-nav-link>
+                    </slot>
+            </navbar-component>
             <!-- Header -->
-            <div class="relative pt-12 pb-32 bg-indigo-400 md:pt-20">
-                <div class="w-full px-1 mx-auto md:px-10">
+            <jig-notifications/>
+            <div v-if="!fullScreenBody" class="relative max-w-full pt-12 pb-32 bg-primary lg:pt-20">
+<!--                <inertia-button v-if="withSidebar" @click.native.prevent="toggleSidebarMin" pill style="z-index: 100"
+                                class="absolute bg-gray-800 h-11 w-11 text-white -top-2 -left-3 md:-top-1 md:-left-8 focus:outline-none focus:ring-0">
+                    <i class="fas" :class="{'fa-angle-left': !minSidebar,'fa-angle-right': minSidebar}"></i>
+                </inertia-button>-->
+                <div class="w-full px-1 mx-auto lg:px-10">
                     <div>
                         <!-- Card stats -->
                         <div class="flex flex-wrap">
@@ -221,8 +241,8 @@
                     </div>
                 </div>
             </div>
-            <div class="flex flex-col justify-between flex-1 w-full px-1 mx-auto -mt-24 bg-gray-200 md:px-10">
-                <div class="flex-auto">
+            <div class="flex flex-col justify-between flex-1 w-full px-1 mx-auto bg-gray-200 lg:px-10" :class="{'-mt-24': !fullScreenBody,'pt-4 bg-gray-500': fullScreenBody}">
+                <div class="relative flex-auto">
                     <slot/>
                 </div>
                 <footer class="flex-initial py-4">
@@ -277,17 +297,45 @@
 <script>
 import NavbarComponent from "@/Layouts/Jig/Navbar.vue";
 import SidebarComponent from "@/Layouts/Jig/Sidebar.vue";
+import JigNotifications from "@/Components/JigNotifications";
+import JetNavLink from "@/Jetstream/NavLink"
+import InertiaButton from "@/JigComponents/InertiaButton";
+import ApplicationMark from "@/Jetstream/ApplicationMark";
 
 export default {
     name: "JigLayout",
     components: {
+        ApplicationMark,
+        InertiaButton,
+        JigNotifications,
         NavbarComponent,
-        SidebarComponent
+        SidebarComponent,
+        JetNavLink
+    },
+    props: {
+      withSidebar: {
+        default: true
+      },
+      fullScreenBody: {
+        default: false
+      },
     },
     data() {
         return {
-            date: new Date().getFullYear()
+            date: new Date().getFullYear(),
+            minSidebar: false,
         };
+    },
+    mounted() {
+        this.minSidebar = !this.withSidebar;
+        console.log('new page! Setting body overflow to auto');
+        document.body.style.overflow = 'auto';
+    },
+    methods: {
+        toggleSidebarMin() {
+            this.minSidebar = !this.minSidebar;
+            localStorage.setItem('minSidebar',this.minSidebar)
+        }
     }
 };
 </script>

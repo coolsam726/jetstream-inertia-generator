@@ -6,7 +6,7 @@
             <div class="flex justify-between h-16">
                 <div class="flex">
                     <!-- Logo -->
-                    <jet-application-logo/>
+                    <jet-application-logo class="h-full"/>
                     <!-- Navigation Links -->
                     <div class="hidden sm:-my-px sm:ml-10 sm:flex">
                         <slot>
@@ -34,7 +34,7 @@
                             <template #content>
                                 <div class="w-60">
                                     <!-- Team Management -->
-                                    <template v-if="$page.props.jetstream.hasTeamFeatures">
+                                    <div v-if="$page.props.jetstream.hasTeamFeatures">
                                         <div class="block px-4 py-2 text-xs text-gray-400">
                                             Manage Team
                                         </div>
@@ -55,7 +55,7 @@
                                             Switch Teams
                                         </div>
 
-                                        <template v-for="team in $page.props.user.all_teams">
+                                        <div v-for="team in $page.props.user.all_teams">
                                             <form @submit.prevent="switchToTeam(team)" :key="team.id">
                                                 <jet-dropdown-link as="button">
                                                     <div class="flex items-center">
@@ -64,8 +64,8 @@
                                                     </div>
                                                 </jet-dropdown-link>
                                             </form>
-                                        </template>
-                                    </template>
+                                        </div>
+                                    </div>
                                 </div>
                             </template>
                         </jet-dropdown>
@@ -175,7 +175,7 @@
                     </form>
 
                     <!-- Team Management -->
-                    <template v-if="$page.props.jetstream.hasTeamFeatures">
+                    <div v-if="$page.props.jetstream.hasTeamFeatures">
                         <div class="border-t border-gray-200"></div>
 
                         <div class="block px-4 py-2 text-xs text-gray-400">
@@ -198,7 +198,7 @@
                             Switch Teams
                         </div>
 
-                        <template v-for="team in $page.props.user.all_teams">
+                        <div v-for="team in $page.props.user.all_teams">
                             <form @submit.prevent="switchToTeam(team)" :key="team.id">
                                 <jet-responsive-nav-link as="button">
                                     <div class="flex items-center">
@@ -207,8 +207,8 @@
                                     </div>
                                 </jet-responsive-nav-link>
                             </form>
-                        </template>
-                    </template>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -221,10 +221,10 @@ import JetApplicationMark from "@/Jetstream/ApplicationMark"
 import JetNavLink from "@/Jetstream/NavLink"
 import JetDropdown from "@/Jetstream/Dropdown"
 import JetDropdownLink from "@/Jetstream/DropdownLink"
-import ResponsiveNavLink from "@/Components/ResponsiveNavLink"
+import ResponsiveNavLink from "@/JigComponents/ResponsiveNavLink"
 import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink"
 import JetApplicationLogo from "@/Jetstream/ApplicationLogo"
-import SystemNotificationsDropdown from "@/Components/SystemNotificationsDropdown";
+import SystemNotificationsDropdown from "@/JigComponents/SystemNotificationsDropdown";
 export default {
     components: {
         SystemNotificationsDropdown,

@@ -297,7 +297,7 @@
 <script>
 import NavbarComponent from "@/Layouts/Jig/Navbar.vue";
 import SidebarComponent from "@/Layouts/Jig/Sidebar.vue";
-import JigNotifications from "@/Components/JigNotifications";
+import JigNotifications from "@/JigComponents/JigNotifications";
 import JetNavLink from "@/Jetstream/NavLink"
 import InertiaButton from "@/JigComponents/InertiaButton";
 import ApplicationMark from "@/Jetstream/ApplicationMark";

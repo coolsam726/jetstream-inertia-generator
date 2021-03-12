@@ -24,17 +24,17 @@
                 class="inline-block p-2 my-0 mr-0 text-sm border-b border-secondary-600 font-bold text-left text-gray-100 uppercase whitespace-no-wrap"
                 href="javascript:void(0)"
             >
-                <application-mark class="h-full text-4xl p-1 flex items-center justify-center"/>
+                <application-mark class="h-12 w-12 text-4xl p-1 flex items-center justify-center"/>
             </a>
             <!-- User -->
-<!--            <ul class="flex flex-wrap items-center list-none md:hidden">
-                <li class="relative inline-block">
-                    <notification-dropdown-component></notification-dropdown-component>
-                </li>
-                <li class="relative inline-block">
-                    <user-dropdown-component></user-dropdown-component>
-                </li>
-            </ul>-->
+            <!--            <ul class="flex flex-wrap items-center list-none md:hidden">
+                            <li class="relative inline-block">
+                                <notification-dropdown-component></notification-dropdown-component>
+                            </li>
+                            <li class="relative inline-block">
+                                <user-dropdown-component></user-dropdown-component>
+                            </li>
+                        </ul>-->
             <!-- Collapse -->
             <div
                 class="absolute top-0 left-0 right-0 z-40 items-center bg-white flex-1 h-auto overflow-x-hidden overflow-y-auto
@@ -82,9 +82,9 @@
                             v-if="!menuItem.isParent && $page.props.menu_permissions[idx]"
                             :href="route(menuItem.route)"
                             :active="route().current(menuItem.route)"
-                            ><i
-                                :class="`mr-2 pl-4 text-sm text-gray-500 ${menuItem.faIcon}`"
-                            ></i>
+                        ><i
+                            :class="`mr-2 pl-4 text-sm text-gray-500 ${menuItem.faIcon}`"
+                        ></i>
                             <span class="hover:visible">{{menuItem.title}}</span></sidebar-link
                         >
                         <jig-sidebar-link
@@ -119,11 +119,11 @@
                 <!-- Divider -->
                 <hr class="my-4 md:min-w-full" />
                 <!-- Heading -->
-<!--                <h6
-                    class="block pt-1 pb-4 text-xs font-bold text-gray-600 no-underline uppercase md:min-w-full"
-                >
-                    Client Menu
-                </h6>-->
+                <!--                <h6
+                                    class="block pt-1 pb-4 text-xs font-bold text-gray-600 no-underline uppercase md:min-w-full"
+                                >
+                                    Client Menu
+                                </h6>-->
             </div>
         </div>
     </nav>
@@ -133,7 +133,7 @@ import NotificationDropdownComponent from "./NotificationDropdown.vue";
 import UserDropdownComponent from "./UserDropdown.vue";
 import SidebarLink from "@/JigComponents/SidebarLink";
 import menu from "./Menu.json"
-import JigSidebarLink from "@/Components/JigSidebarLink";
+import JigSidebarLink from "@/JigComponents/JigSidebarLink";
 import ApplicationMark from "@/Jetstream/ApplicationMark";
 import ApplicationLogo from "@/Jetstream/ApplicationLogo";
 import InertiaButton from "@/JigComponents/InertiaButton";
@@ -196,13 +196,13 @@ export default {
 };
 </script>
 <style scoped>
-    /* Chrome, Safari and Opera */
-    .no-scrollbar::-webkit-scrollbar {
-        display: none;
-    }
+/* Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
 
-    .no-scrollbar {
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
-    }
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
 </style>

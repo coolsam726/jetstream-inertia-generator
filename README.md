@@ -48,28 +48,8 @@ These will be installed automatically when installing the package, but if you wa
 ### NPM Dependencies
 You need to install the following if you haven't using either `yarn` or `npm` in order for the generated code to compile without hickups.
 __NB__ Again, if you followed Jetstream's installation instructions, most of these dependencies are already installed. Install only the missing ones.
-```json
-{
-        "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-        "@inertiajs/inertia": "^0.8.2",
-        "@inertiajs/inertia-vue": "^0.5.4",
-        "@tailwindcss/forms": "^0.2.1",
-        "@tailwindcss/typography": "^0.3.0",
-        "autoprefixer": "^10.0.2",
-        "axios": "^0.21",
-        "laravel-mix": "^6.0.6",
-        "lodash": "^4.17.19",
-        "pagetables": "^0.0.3",
-        "popper.js": "^1.16.1",
-        "portal-vue": "^2.1.7",
-        "postcss": "^8.1.14",
-        "postcss-import": "^12.0.1",
-        "tailwindcss": "^2.0.1",
-        "vue": "^2.5.17",
-        "vue-loader": "^15.9.6",
-        "vue-select": "^3.11.2",
-        "vue-template-compiler": "^2.6.10"
-    }
+```shell
+yarn add -D popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import sass sass-loader vt-notifications vue-flatpickr-component  vue-numerals vue-pdf vue-select
 ```
 ## Installation
 
@@ -77,19 +57,43 @@ __NB__ Again, if you followed Jetstream's installation instructions, most of the
 ```bash
 composer require savannabits/jetstream-inertia-generator
 ```
-2. Install the yarn dependencies listed above by adding them as `devDependencies` in `packages.json` and running `yarn install` or `npm install`,
-3. Ensure your webpack mix is properly configured to support [code splitting](https://inertiajs.com/client-side-setup).
+2. Install the yarn dependencies listed above by adding them as `devDependencies` in `packages.json` and running `yarn install` or `npm install`, or simply run the following command
+   ```shell
+    yarn add -D popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo sass sass-loader vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-pdf vue-select
+   ```
+3. Ensure your webpack mix is properly configured to support [code splitting](https://inertiajs.com/client-side-setup). Check that the webpack.config.js file matches the following content:
+```js
+const path = require('path');
+require('dotenv').config();
+
+module.exports = {
+    resolve: {
+        alias: {
+            '@': path.resolve('resources/js'),
+        },
+    },
+    output: {
+        chunkFilename: `js/chunks/[name].js?id=[chunkhash]`,
+        filename: "[name].js?id=[chunkhash]",
+        publicPath: `/${process.env.MIX_APP_URI ? process.env.MIX_APP_URI+'/' : ''}`
+    }
+};
+
+```
+
 4.Ensure tailwind.config.js is present and has the correct configuration, including the @tailwindcss/forms plugin, and all the necessary paths for purge. Here is my recommendation:
    
-```js
+```javascript
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
     purge: [
+        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './vendor/laravel/jetstream/**/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         './resources/js/**/*.vue',
+        './node_modules/pagetables/**/*.vue',
     ],
 
     theme: {
@@ -98,32 +102,53 @@ module.exports = {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
             colors: {
-                primary: {...defaultTheme.colors.indigo,default: defaultTheme.colors.indigo["500"]}
+                info: defaultTheme.colors.blue["300"],
+                primary: {...defaultTheme.colors.indigo,DEFAULT: defaultTheme.indigo["500"]},//Your colors here...
+                secondary: {...defaultTheme.gray,DEFAULT: defaultTheme.gray["500"]}
+                },
+                warning: {
+                    ...defaultTheme.orange,
+                    DEFAULT: defaultTHeme.orange["500"]
+                },
+                danger: {
+                    ...defaultTheme.colors.red,
+                    DEFAULT: defaultTheme.colors.red[500]
+                },
+                success: {
+                    ...defaultTheme.colors.green,
+                    DEFAULT: defaultTheme.colors.green["500"]
+                },
             }
         },
     },
-
-    variants: {
+    variants
+{
         extend: {
             opacity: ['disabled'],
-        },
-    },
-
-    plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
+            width: ["responsive", "hover", "focus"],
+            height: ["responsive", "hover", "focus"],
+            objectFit: ["responsive", "hover", "focus"],
+            borderRadius: ["hover","focus"]
+        }
+    }
+    plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')]
 };
 
 ```
 ## Usage
 The hard part is over. This is the easy part.
 ##Prepare:
-- This library uses font awesome. Ensure you add a css link to the header of `resources/views/app.blade.php`
-```html
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
-```
 ### General Steps:
 1. Publish the Package's assets and views. This is necessary for you to get the admin layout and all the vue components used in the generated code:
 ```shell
+php artisan vendor:publish --tag=jig-blade-templates
+php artisan vendor:publish --tag=jig-config
+php artisan vendor:publish --tag=jig-routes
 php artisan vendor:publish --tag=jig-views
+```
+Then finish installation steps for spatie/laravel-permission by publishing its migration
+```shell
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
 ```
 2. Generate and write a migration for your table with `php artisan make:migration` command.
 3. Run the migration to the database with `php artisan migrate` command

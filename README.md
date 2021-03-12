@@ -41,7 +41,7 @@ composer require savannabits/jetstream-inertia-generator
 ```shell
 yarn add -D popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo sass sass-loader vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-pdf vue-select
 ```
-3. Ensure your webpack mix is properly configured to support [code splitting](https://inertiajs.com/client-side-setup). Check that the webpack.config.js file matches the following content:
+3. Ensure your webpack mix is properly configured to support [code splitting](https://inertiajs.com/client-side-setup). Check that the `webpack.config.js` file matches or is close to the following:
 ```js
 const path = require('path');
 require('dotenv').config();
@@ -113,8 +113,8 @@ module.exports = {
     }
     plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')]
 };
-
 ```
+Feel free to configure the color palette to your own preference, but for uniformity be sure to include `primary`,`secondary`, `success` and `danger` variants since they are used in the jig template.
 ## Usage
 The hard part is over. This is the easy part.
 ##Prepare:

@@ -86,11 +86,11 @@ class {{ $modelBaseName }} extends Model
     }
     public function getCanAttribute() {
         return [
-            "view" => \Auth::user()->can("view", $this),
-            "update" => \Auth::user()->can("update", $this),
-            "delete" => \Auth::user()->can("delete", $this),
-            "restore" => \Auth::user()->can("restore", $this),
-            "forceDelete" => \Auth::user()->can("forceDelete", $this),
+            "view" => \Auth::check() ? \Auth::user()->can("view", $this) : false,
+            "update" => \Auth::check() ? \Auth::user()->can("update", $this) : false,
+            "delete" => \Auth::check() ? \Auth::user()->can("delete", $this) : false,
+            "restore" => \Auth::check() ? \Auth::user()->can("restore", $this) : false,
+            "forceDelete" => \Auth::check() ? \Auth::user()->can("forceDelete", $this) : false,
         ];
     }
 

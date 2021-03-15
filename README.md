@@ -21,7 +21,7 @@ DONE! In about **2 and a half minutes**, you get a fully working module consisti
 - An Authorization Policy - viewAny, view, create, update, delete, restore, forceDelete
 - Generated Permissions for [spatie/laravel-permissions](https://spatie.be/docs/laravel-permission/v4/introduction) - articles, articles.index, articles.create, articles.show, articles.edit, articles.delete
 - Frontend Menu entry
-- Frontend Datatable with Actions thanks to [savannabits/pagetables](https://github.com/savannabits/pagetables)
+- Frontend Datatable with Actions thanks to Using Yajra Datatables and datatables.net
 - Tailwindcss-powered CREATE and EDIT forms,
 - Tailwindcss - powered SHOW view.
 - web and API routes

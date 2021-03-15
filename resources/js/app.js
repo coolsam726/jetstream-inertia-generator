@@ -10,6 +10,8 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime"
 import advancedFormat from "dayjs/plugin/advancedFormat"
 import 'flatpickr/dist/flatpickr.css';
+import {emitter} from "./JigComponents/eventHub";
+
 dayjs.extend(relativeTime);
 dayjs.extend(advancedFormat)
 
@@ -28,7 +30,7 @@ createApp({
     .use(VueNumerals)
     .component('datepicker',() => import('vue-flatpickr-component'))
     .provide("$refreshDt",function(tableId) {
-        this.$root.$emit('refresh-dt',{tableId: tableId});
+        emitter.emit('refresh-dt',{tableId: tableId});
     })
     .provide("$dayjs",dayjs)
     .mount(el);

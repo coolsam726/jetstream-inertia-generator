@@ -1,10 +1,10 @@
 <template>
     <table v-cloak v-show="table_ready" :id="tableId" class="nowrap stripe hover text-left" :class="tableClasses" width="100%">
-        <slot>
-        </slot>
+        <slot></slot>
     </table>
 </template>
 <script>
+import {emitter} from "./eventHub"
     export default {
         name: "DtComponent",
         props: {
@@ -81,23 +81,6 @@
             let vm = this;
             let columns = [
                 ...vm.columns,
-                /*{
-                    data: "manage",
-                    name: 'manage',
-                    searchable: false,
-                    className: 'text-right',
-                    orderable: false,
-                    render: function(data, type, row) {
-                        return vm.makeActionColumn(row)
-                    }
-                },*/
-                /*{
-                    data: 'actions',
-                    name: 'actions',
-                    className: 'text-right',
-                    orderable: false,
-                    searchable: false
-                }*/
             ];
             vm.allColumns = columns;
             let colDefs = columns.map((col, idx) => {return {responsivePriority: col.responsivePriority || -1,targets: idx}});
@@ -107,9 +90,6 @@
                     processing: true,
                     serverSide: true,
                     stateSave: true,
-                    buttons: [
-                        'print'
-                    ],
                     responsive: {
                         breakpoints: [
                             { name: 'tv',  width: Infinity },
@@ -147,15 +127,13 @@
                         vm.$emit(`${ev.data('action')}`, {
                             id: ev.data('id'),
                         });
-                        vm.$root.$emit(`${ev.data('action')}`,{
-                            id: ev.data('id'),
-                        });
                     }
                 });
                 vm.table_ready = true;
 
             })
-            vm.$root.$on("refresh-dt", function(e) {
+            emitter.on("refresh-dt", function(e) {
+                console.log(`refreshing ${e.tableId}`)
                 if (e.tableId === vm.tableId) {
                     //Refresh Table here
                     if (vm.table) {
@@ -165,9 +143,6 @@
             })
         },
         methods: {
-            emitActionEvent(e) {
-                console.log("We are emitting an event now");
-            },
             makeActionColumn(payload) {
                 let vm = this;
                 let actions = ``;

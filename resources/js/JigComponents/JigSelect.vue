@@ -1,8 +1,7 @@
 <template>
     <v-select
         class="px-2 py-1 border rounded-md shadow-sm"
-        :value="value"
-        @input="onSelect"
+        v-model="value"
         :multiple="multiple"
         :options="options"
         :label="label"

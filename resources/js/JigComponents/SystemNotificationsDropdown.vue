@@ -13,7 +13,10 @@
 
         <div v-show="open" class="absolute right-0 mt-2 bg-white rounded-md shadow-lg overflow-hidden z-20" style="width:20rem;">
             <div class="py-2 mb-2" v-if="notifications.filter(n => !n.read_at).length">
-                <button v-for="(noti, index) of notifications" v-if="!noti.read_at" :key="index"  @click="viewNotification(noti)"
+                <template v-for="(noti, index) of notifications"  :key="index">
+
+                </template>
+                <button v-if="!noti.read_at"  @click="viewNotification(noti)"
                         class="flex items-center px-4 py-3 border-b hover:bg-gray-100 -mx-2"
                 >
                     <svg class="w-10 p-2 bg-gray-200 rounded-full text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -33,18 +36,18 @@
             <inertia-button :href="route('dashboard')" class="block bg-gray-800 text-white rounded-t-none text-center font-bold py-2">See all notifications</inertia-button>
         </div>
         <jet-dialog-modal max-width="lg" :show="notiModal" @close="closeNotification" v-if="currentNotification">
-            <h3 slot="title" class="font-black text-lg">{{currentNotification.data.title}}</h3>
-            <div class="text-sm" slot="content">
+            <template #title class="font-black text-lg">{{currentNotification.data.title}}</template>
+            <template class="text-sm" #content>
                 <div class="font-semibold text-gray-600 border-b py-2 mb-2">
                     {{$dayjs(currentNotification.created_at)}}
                 </div>
                 {{currentNotification.data.body}}
-            </div>
-            <div slot="footer" class="inline-block text-right gap-x-2">
+            </template>
+            <template #footer class="inline-block text-right gap-x-2">
                 <inertia-button @click.native.prevent="closeNotification" class="bg-gray-300">Close</inertia-button>
                 <a target="_blank" v-if="currentNotification.data.load_separately" :href="currentNotification.data.action" class="rounded-lg text-gray-50 bg-primary focus:outline-none p-2 px-3">{{currentNotification.data.action_title}}</a>
                 <inertia-button v-else :href="currentNotification.data.action" class="bg-primary text-gray-50">{{currentNotification.data.action_title}}</inertia-button>
-            </div>
+            </template>
         </jet-dialog-modal>
     </div>
 </template>

@@ -16,6 +16,7 @@ use {{$repoFullName}};
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Yajra\DataTables\Html\Column;
 
 class {{ $controllerBaseName }}  extends Controller
 {
@@ -33,11 +34,21 @@ class {{ $controllerBaseName }}  extends Controller
     public function index(Request $request)
     {
         $this->authorize('viewAny', {{$modelBaseName}}::class);
+
+        $columns = [
+        @foreach($columnsToQuery as $col)
+@if($col ==='id')Column::make('id')->className('all text-right'),
+@else Column::make("{{$col}}")->className('min-desktop-lg'),
+@endif
+@endforeach
+        Column::make('actions')->className('min-desktop text-right')->orderable(false)->searchable(false),
+        ];
         return Inertia::render('{{$modelPlural}}/Index',[
             "can" => [
                 "viewAny" => \Auth::user()->can('viewAny', {{$modelBaseName}}::class),
                 "create" => \Auth::user()->can('create', {{$modelBaseName}}::class),
-            ]
+            ],
+            "columns" => $columns,
         ]);
     }
 

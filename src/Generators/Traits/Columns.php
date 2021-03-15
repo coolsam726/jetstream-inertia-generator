@@ -268,7 +268,7 @@ trait Columns {
             if (!$labelColumn) $labelColumn = "id";
             $functionName = collect($fk->getColumns())->first();
             if (str_contains($functionName,"_id")) {$functionName = Str::singular(str_replace("_id","",$functionName));} else {
-                $functionName =Str::singlular($functionName)."_model";
+                $functionName =Str::singular($functionName)."_model";
             }
             $functionName = Str::camel($functionName);
             $relatedTitle = Str::title(str_replace("_"," ",Str::snake(Str::studly($functionName))));

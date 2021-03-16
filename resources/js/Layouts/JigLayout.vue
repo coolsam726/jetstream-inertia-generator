@@ -10,12 +10,6 @@
                         <jet-nav-link v-if="$page.props.menu_permissions.backend" :href="route('admin.dashboard')" :active="route().current('admin.*')">
                             Backend
                         </jet-nav-link>
-                        <jet-nav-link v-if="$page.props.menu_permissions.backend" :href="route('teller.index')" :active="route().current('pos.*') || route().current('teller.*')">
-                            Cashier POS
-                        </jet-nav-link>
-                        <jet-nav-link v-if="$page.props.menu_permissions['consume-mpesa-transactions']" :href="route('mpesa-transactions.unconsumed')" :active="route().current('pos.*') || route().current('mpesa-transactions.*')">
-                            Unconsumed Transactions
-                        </jet-nav-link>
                     </slot>
             </navbar-component>
             <!-- Header -->

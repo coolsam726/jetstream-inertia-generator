@@ -32,7 +32,7 @@ What more could you ask for? Cut a day's work down to less than 3 minutes.
 ## Dependencies
 If you have followed the [Jetstream - Inertia - Vue.js Installation](https://jetstream.laravel.com/2.x/stacks/inertia.html) instructions, then the project will work with minimal configuration.
 Other Important dependencies that you MUST configure include:
-1. [Spatie Laravel Permissions](https://spatie.be/docs/laravel-permission/v4/introduction) - This is used to manage roles and permissions. Ensure your user model is configured to include the HasRoles trait
+1. [Spatie Laravel Permissions](https://spatie.be/docs/laravel-permission/v4/introduction) - This is used to manage roles and permissions. Its migrations will be published during asset publishing, after which you can go ahead and configure the user trait.
 2. [Laravel Sanctum](https://laravel.com/docs/8.x/sanctum) - Used to manage both API and stateful authentication. Since the whole app will be a Single Page Application, make sure you configure the middleware sanctum middleware in `app/Http/Kernel.php` as follows:
 ```php
 'api' => [
@@ -124,21 +124,33 @@ module.exports = {
 };
 ```
 Feel free to configure the color palette to your own preference, but for uniformity be sure to include `primary`,`secondary`, `success` and `danger` variants since they are used in the jig template.
+5. Publish the Package's assets and views. This is necessary for you to get the admin layout and all the vue components used in the generated code:
+```shell
+php artisan vendor:publish --tag=jig-blade-templates --force #Publishes resources/views/app.blade.php. If it already exists, use --force to replace it
+php artisan vendor:publish --tag=jig-config #Publishes the config file
+php artisan vendor:publish --tag=jig-routes #Publishes routes/jig.php to hold routes for generated modules.
+php artisan vendor:publish --tag=jig-views #publishes Vue Components and Layout files
+php artisan vendor:publish --tag=jig-assets #publishes logos and other assets
+```
+
+6. Then finish installation steps for spatie/laravel-permission by publishing its migrations.
+```shell
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+```
+NB: If you had already separately published laravel-permission's migrations, then you need to modify the `roles` table and add a nullable `title` field
+
+7. Add the `JigMiddleware` to the Global middleware group in `app/Http/Kernel.php`:
+    ```php
+    protected $middleware = [
+        ...,
+        \Savannabits\JetstreamInertiaGenerator\Middleware\JigMiddleware::class,
+    ];
+    ```
 ## Usage
 The hard part is over. This is the easy part.
 ##Prepare:
 ### General Steps:
-1. Publish the Package's assets and views. This is necessary for you to get the admin layout and all the vue components used in the generated code:
-```shell
-php artisan vendor:publish --tag=jig-blade-templates
-php artisan vendor:publish --tag=jig-config
-php artisan vendor:publish --tag=jig-routes
-php artisan vendor:publish --tag=jig-views
-```
-Then finish installation steps for spatie/laravel-permission by publishing its migration
-```shell
-php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
-```
+
 2. Generate and write a migration for your table with `php artisan make:migration` command.
 3. Run the migration to the database with `php artisan migrate` command
 4. Generate the Whole Admin Scaffold for the module with `php artisan jig:generate` command

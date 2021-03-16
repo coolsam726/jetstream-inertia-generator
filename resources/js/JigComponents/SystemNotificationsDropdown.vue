@@ -1,17 +1,17 @@
 <template>
     <!-- component -->
-    <div class="relative">
-        <slot name="trigger">
-            <button title="Notifications" @click="$emit('opened',!open)" class="relative z-10 block rounded-md p-2 focus:outline-none">
-                <span v-if="notifications.filter(n=>!n.read_at).length" style="font-weight: 900" class="absolute z-20 bg-danger p-0.5 rounded -bottom-0.5 -right-1 px-2 font-black text-sm text-white">{{notifications.filter(n=>!n.read_at).length}}</span>
-                <svg class="w-10 p-2 bg-gray-100 rounded-full text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-                </svg>
-            </button>
-        </slot>
-        <div v-show="open" @click="$emit('opened',false)" class="fixed inset-0 h-full w-full z-10"></div>
-
-        <div v-show="open" class="absolute right-0 mt-2 bg-white rounded-md shadow-lg overflow-hidden z-20" style="width:20rem;">
+    <jet-dropdown align="right" content-classes="p-0 bg-white w-full">
+        <template #trigger>
+            <slot name="trigger">
+                <button title="Notifications" class="relative z-10 block rounded-md p-2 focus:outline-none">
+                    <span v-if="notifications.filter(n=>!n.read_at).length" style="font-weight: 900" class="absolute z-20 bg-danger p-0.5 rounded -bottom-0.5 -right-1 px-2 font-black text-sm text-white">{{notifications.filter(n=>!n.read_at).length}}</span>
+                    <svg class="w-10 p-2 bg-gray-100 rounded-full text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                    </svg>
+                </button>
+            </slot>
+        </template>
+        <template #content>
             <div class="py-2 mb-2" v-if="notifications.filter(n => !n.read_at).length">
                 <template v-for="(noti, index) of notifications"  :key="index">
 
@@ -33,8 +33,11 @@
             <div v-else class="text-center py-5 mb-2">
                 You have no unread notifications
             </div>
-            <inertia-button :href="route('dashboard')" class="block bg-gray-800 text-white rounded-t-none text-center font-bold py-2">See all notifications</inertia-button>
-        </div>
+            <inertia-button :href="route('dashboard')" class="block bg-green-500 text-white rounded-t-none text-center font-bold py-2">See all notifications</inertia-button>
+        </template>
+<!--        <div v-show="open" @click="$emit('opened',false)" class="fixed inset-0 h-full w-full z-10"></div>-->
+
+
         <jet-dialog-modal max-width="lg" :show="notiModal" @close="closeNotification" v-if="currentNotification">
             <template #title class="font-black text-lg">{{currentNotification.data.title}}</template>
             <template class="text-sm" #content>
@@ -49,20 +52,23 @@
                 <inertia-button v-else :href="currentNotification.data.action" class="bg-primary text-gray-50">{{currentNotification.data.action_title}}</inertia-button>
             </template>
         </jet-dialog-modal>
-    </div>
+    </jet-dropdown>
 </template>
 
 <script>
 import InertiaButton from "@/JigComponents/InertiaButton";
 import JetDialogModal from "@/Jetstream/DialogModal"
 import DisplayMixin from "@/Mixins/DisplayMixin";
+import JetDropdown from "@/Jetstream/Dropdown";
 
 export default {
     name: "SystemNotificationsDropdown",
     components: {
         InertiaButton,
-        JetDialogModal
+        JetDialogModal,
+        JetDropdown,
     },
+    emits: ["opened"],
     model: {
         prop: 'open',
         event: 'opened'
@@ -115,6 +121,9 @@ export default {
         closeNotification() {
             this.notiModal = false;
             this.currentNotification = null;
+        },
+        toggleDrawer() {
+            this.$emit('opened',!this.open)
         }
     },
     watch: {

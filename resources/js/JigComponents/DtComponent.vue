@@ -4,6 +4,7 @@
     </table>
 </template>
 <script>
+import { onMounted } from 'vue'
 import {emitter} from "./eventHub"
     export default {
         name: "DtComponent",
@@ -78,10 +79,9 @@ import {emitter} from "./eventHub"
             }
         },
         mounted() {
-            let vm = this;
-            let columns = [
-                ...vm.columns,
-            ];
+            const vm  = this;
+            let columns = vm.columns;
+            console.log(columns);
             vm.allColumns = columns;
             let colDefs = columns.map((col, idx) => {return {responsivePriority: col.responsivePriority || -1,targets: idx}});
             console.log(colDefs);
@@ -133,7 +133,6 @@ import {emitter} from "./eventHub"
 
             })
             emitter.on("refresh-dt", function(e) {
-                console.log(`refreshing ${e.tableId}`)
                 if (e.tableId === vm.tableId) {
                     //Refresh Table here
                     if (vm.table) {

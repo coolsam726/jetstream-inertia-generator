@@ -80,9 +80,9 @@ class JetstreamInertiaGeneratorServiceProvider extends RouteServiceProvider
 
 
             // Publishing assets.
-            /*$this->publishes([
-                __DIR__.'/../resources/assets' => public_path('vendor/jetstream-inertia-generator'),
-            ], 'assets');*/
+            $this->publishes([
+                __DIR__.'/../resources/assets' => public_path('vendor/jig'),
+            ], 'jig-assets');
 
             // Publishing the translation files.
             /*$this->publishes([

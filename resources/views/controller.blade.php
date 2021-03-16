@@ -29,19 +29,27 @@ class {{ $controllerBaseName }}  extends Controller
     /**
     * Display a listing of the resource.
     *
-    * @return \Inertia\Response
+    * @param Request $request
+    * @return  \Inertia\Response
+    * @throws \Illuminate\Auth\Access\AuthorizationException
     */
-    public function index(Request $request)
+    public function index(Request $request): \Inertia\Response
     {
         $this->authorize('viewAny', {{$modelBaseName}}::class);
 
         $columns = [
         @foreach($columnsToQuery as $col)
-@if($col ==='id')Column::make('id')->className('all text-right'),
-@else Column::make("{{$col}}")->className('min-desktop-lg'),
+@if($col ==='id')
+    Column::make('{{$col}}')->title('ID')->className('all text-right'),
+@elseif($col==='name'||$col==='title')
+    Column::make("{{$col}}")->className('all'),
+@elseif($col==='created_at'|| $col==='updated_at')
+    Column::make("{{$col}}")->className('min-tv'),
+@else
+    Column::make("{{$col}}")->className('min-desktop-lg'),
 @endif
-@endforeach
-        Column::make('actions')->className('min-desktop text-right')->orderable(false)->searchable(false),
+        @endforeach
+    Column::make('actions')->className('min-desktop text-right')->orderable(false)->searchable(false),
         ];
         return Inertia::render('{{$modelPlural}}/Index',[
             "can" => [

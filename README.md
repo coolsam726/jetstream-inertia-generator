@@ -48,7 +48,7 @@ composer require savannabits/jetstream-inertia-generator
 ```
 2. Install the yarn dependencies listed above by adding them as `devDependencies` in `packages.json` and running `yarn install` or `npm install`, or simply run the following command
 ```shell
-yarn add -D pagetables popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo sass sass-loader vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-pdf mitt
+yarn add -D pagetables popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo sass sass-loader vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-select vue-pdf mitt
 ```
 3. Ensure your webpack mix is properly configured to support [code splitting](https://inertiajs.com/client-side-setup). Check that the `webpack.config.js` file matches or is close to the following:
 ```js

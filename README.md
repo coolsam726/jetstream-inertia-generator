@@ -5,7 +5,8 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/coolsam726/jetstream-inertia-generator.svg?style=flat-square)](https://scrutinizer-ci.com/g/coolsam726/jetstream-inertia-generator)
 [![Total Downloads](https://img.shields.io/packagist/dt/savannabits/jetstream-inertia-generator.svg?style=flat-square)](https://packagist.org/packages/savannabits/jetstream-inertia-generator)
 
-**Jetstream Inertia Generator** a.k.a **jig** allows you to generate code for simple Admin CRUDs (Create, Read, UPdate, Delete) which are fully compatible with a Laravel Project powered by the [Jetstream - Inertia - Vue.js](https://jetstream.laravel.com/2.x/stacks/inertia.html) Stack. 
+**Jetstream Inertia Generator** a.k.a **jig** allows you to generate code for simple Admin CRUDs (Create, Read, UPdate, Delete) which are fully compatible with a Laravel Project powered by the [Jetstream - Inertia - Vue.js](https://jetstream.laravel.com/2.x/stacks/inertia.html) Stack.
+![](.README_images/jig-preview.gif)
 ## Scenario
 You are developing a NextGen project. The data model is complex. It requires **Many CRUDS** managed by the admin in order to power the main end-user functionality. You don't want to spend **Days or even Months** writing boilerplate code for all the CRUDs.
 If that is you, this package comes to your rescue. Just follow these simple steps:
@@ -13,7 +14,6 @@ If that is you, this package comes to your rescue. Just follow these simple step
 * Generate a Migration for your CRUD table, e.g articles, and run `php artisan migrate` (About **2 minutes**)
 * With this package, just run `php artisan jig:generate articles` (About **3 seconds!!!**)
 * Build your css and javascript (About **27 seconds**)
-
 DONE! In about **2 and a half minutes**, you get a fully working module consisting of -:
 - Model
 - Admin Controller - Index, Create, Show, Edit, Store, Update, Delete
@@ -148,12 +148,13 @@ NB: If you had already separately published laravel-permission's migrations, the
     ```
 ## Usage
 The hard part is over. This is the easy part.
-##Prepare:
-### General Steps:
+### General Steps to generate a CRUD:
+![](.README_images/jig-generate.gif)
+1. Generate and write a migration for your table with `php artisan make:migration` command.
+2. Run the migration to the database with `php artisan migrate` command
+3. Generate the Whole Admin Scaffold for the module with `php artisan jig:generate` command
+4. Modify and customize the generated code to suit your specific requirements if necessary.
 
-2. Generate and write a migration for your table with `php artisan make:migration` command.
-3. Run the migration to the database with `php artisan migrate` command
-4. Generate the Whole Admin Scaffold for the module with `php artisan jig:generate` command
 ### Example
 Assuming you want to generate a `books` table:
 ```shell

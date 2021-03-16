@@ -12,16 +12,20 @@
             </div>
         </template>
         <div v-if="can.viewAny" class="flex flex-wrap px-4">
-            <div class="z-10 flex-auto p-4 bg-white md:rounded-md md:shadow-md">
-                <dt-component
-                    :table-id="tableId"
-                    :ajax-url="ajaxUrl"
-                    :columns="columns"
-                    :ajax-params="tableParams"
-                    {{'@'}}show-model="showModel"
-                    {{'@'}}edit-model="editModel"
-                    {{'@'}}delete-model="confirmDeletion"
-                />
+            <div class="z-10 flex-auto bg-white md:rounded-md md:shadow-md">
+                <h3 class="sm:rounded-t-lg font-black text-lg bg-primary-100 w-full mb-2 p-4"><i class="fas fa-bars mr-2"></i> List of All
+                    {{Str::plural($modelTitle)}}</h3>
+                <div class="p-4">
+                    <dt-component
+                        :table-id="tableId"
+                        :ajax-url="ajaxUrl"
+                        :columns="columns"
+                        :ajax-params="tableParams"
+                        {{'@'}}show-model="showModel"
+                        {{'@'}}edit-model="editModel"
+                        {{'@'}}delete-model="confirmDeletion"
+                    />
+                </div>
                 <jet-confirmation-modal title="Confirm Deletion" :show="confirmDelete">
                     <template v-slot:content>
                         <div>Are you sure you want to delete this record?</div>

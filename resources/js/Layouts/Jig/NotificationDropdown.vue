@@ -1,13 +1,12 @@
 <template>
   <div>
-    <a
+    <button
       class="text-gray-600 block py-1 px-3"
-      href="#pablo"
       v-on:click="toggleDropdown($event)"
       ref="btnDropdownRef"
     >
       <i class="fas fa-bell"></i>
-    </a>
+    </button>
     <div
       ref="popoverDropdownRef"
       class="bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1"

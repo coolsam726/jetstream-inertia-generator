@@ -1,12 +1,12 @@
 <template>
     <!-- Navbar -->
-    <nav class="bg-gray-700 sticky top-0 md:-top-14 z-20 w-full border-b border-secondary-700">
+    <nav class="bg-gray-50 sticky top-0 md:-top-14 z-20 w-full border-b border-secondary-700">
         <!-- Primary Navigation Menu -->
         <div class="mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex">
                     <!-- Logo -->
-                    <jet-application-logo class="h-full"/>
+                    <application-logo class="h-full"/>
                     <!-- Navigation Links -->
                     <div class="hidden sm:-my-px sm:ml-10 sm:flex">
                         <slot>
@@ -72,8 +72,8 @@
                     </div>
 
                     <!-- Settings Dropdown -->
-                    <system-notifications-dropdown :unread-notifications="$page.props.user.new_notifications" class="ml-3 relative"
-                                                   v-model="notificationsShown"
+                    <system-notifications-dropdown :unread-notifications="[]" class="ml-3 relative"
+                                                   :open="notificationsShown"
                                                    @opened="toggleNotificationDropdown"
                     ></system-notifications-dropdown>
 
@@ -217,30 +217,30 @@
 </template>
 <script>
 import UserDropdownComponent from "./UserDropdown.vue";
-import JetApplicationMark from "@/Jetstream/ApplicationMark"
 import JetNavLink from "@/Jetstream/NavLink"
 import JetDropdown from "@/Jetstream/Dropdown"
 import JetDropdownLink from "@/Jetstream/DropdownLink"
 import ResponsiveNavLink from "@/JigComponents/ResponsiveNavLink"
 import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink"
-import JetApplicationLogo from "@/Jetstream/ApplicationLogo"
 import SystemNotificationsDropdown from "@/JigComponents/SystemNotificationsDropdown";
+import ApplicationLogo from "@/JigComponents/ApplicationLogo";
+import ApplicationMark from "@/JigComponents/ApplicationMark";
 export default {
     components: {
+        ApplicationLogo,
+        ApplicationMark,
         SystemNotificationsDropdown,
         JetNavLink,
         UserDropdownComponent,
-        JetApplicationMark,
         JetDropdown,
         JetDropdownLink,
         ResponsiveNavLink,
         JetResponsiveNavLink,
-        JetApplicationLogo,
     },
     data() {
         return {
             showingNavigationDropdown: false,
-            notificationsShown: false,
+            notificationsShown: true,
         }
     },
     methods: {

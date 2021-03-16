@@ -134,8 +134,8 @@ import UserDropdownComponent from "./UserDropdown.vue";
 import SidebarLink from "@/JigComponents/SidebarLink";
 import menu from "./Menu.json"
 import JigSidebarLink from "@/JigComponents/JigSidebarLink";
-import ApplicationMark from "@/Jetstream/ApplicationMark";
-import ApplicationLogo from "@/Jetstream/ApplicationLogo";
+import ApplicationMark from "@/JigComponents/ApplicationMark";
+import ApplicationLogo from "@/JigComponents/ApplicationLogo";
 import InertiaButton from "@/JigComponents/InertiaButton";
 export default {
     props: {

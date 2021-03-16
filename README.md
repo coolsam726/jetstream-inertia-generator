@@ -74,7 +74,7 @@ module.exports = {
    
 ```javascript
 const defaultTheme = require('tailwindcss/defaultTheme');
-
+const colors  = require("tailwindcss/colors");
 module.exports = {
     purge: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
@@ -82,7 +82,6 @@ module.exports = {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         './resources/js/**/*.vue',
-        './node_modules/pagetables/**/*.vue',
     ],
 
     theme: {
@@ -91,37 +90,38 @@ module.exports = {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
             colors: {
-                info: defaultTheme.colors.blue["300"],
-                primary: {...defaultTheme.colors.indigo,DEFAULT: defaultTheme.indigo["500"]},//Your colors here...
-                secondary: {...defaultTheme.gray,DEFAULT: defaultTheme.gray["500"]}
-                },
+                info: colors.blue["300"],
+                primary: {...colors.indigo,DEFAULT: colors.indigo["500"]},//Your colors here...
+                secondary: {...colors.gray,DEFAULT: colors.gray["500"]},
                 warning: {
-                    ...defaultTheme.orange,
-                    DEFAULT: defaultTHeme.orange["500"]
+                    ...colors.orange,
+                    DEFAULT: colors.orange["500"]
                 },
                 danger: {
-                    ...defaultTheme.colors.red,
-                    DEFAULT: defaultTheme.colors.red[500]
+                    ...colors.red,
+                    DEFAULT: colors.red["500"]
                 },
                 success: {
-                    ...defaultTheme.colors.green,
-                    DEFAULT: defaultTheme.colors.green["500"]
+                    ...colors.green,
+                    DEFAULT: colors.green["500"]
                 },
-            }
+            },
         },
     },
-    variants
-{
+
+    variants: {
         extend: {
             opacity: ['disabled'],
             width: ["responsive", "hover", "focus"],
             height: ["responsive", "hover", "focus"],
             objectFit: ["responsive", "hover", "focus"],
             borderRadius: ["hover","focus"]
-        }
-    }
-    plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')]
+        },
+    },
+
+    plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
 };
+
 ```
 Feel free to configure the color palette to your own preference, but for uniformity be sure to include `primary`,`secondary`, `success` and `danger` variants since they are used in the jig template.
 5. Publish the Package's assets and views. This is necessary for you to get the admin layout and all the vue components used in the generated code:

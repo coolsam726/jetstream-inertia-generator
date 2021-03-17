@@ -44,7 +44,7 @@
                         @elseif($col['type'] === 'boolean') @php $hasCheckbox = true;echo "\r"; @endphp
                     <div class=" sm:col-span-4">
                         <jet-label for="{{$col['name']}}" value="{{$col['label']}}" />
-                        <jet-checkbox class="p-2" type="checkbox" id="{{$col['name']}}" name="{{$col['name']}}" v-model="form.{{$col['name']}}"
+                        <jet-checkbox class="p-2" type="checkbox" id="{{$col['name']}}" name="{{$col['name']}}" :checked="form.{{$col['name']}}" v-model="form.{{$col['name']}}"
                                       :class="{'border-red-500 sm:focus:border-red-300 sm:focus:ring-red-100': form.errors.{{$col['name']}}}"
                         ></jet-checkbox>
                         <jet-input-error :message="form.errors.{{$col['name']}}" class="mt-2" />

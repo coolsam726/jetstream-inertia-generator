@@ -41,6 +41,7 @@ trait Columns {
                 'type' => Schema::getColumnType($tableName, $columnName),
                 'required' => boolval(Schema::getConnection()->getDoctrineColumn($tableName, $columnName)->getNotnull()),
                 'unique' => $columnUniqueIndexes->count() > 0,
+                'unique_indexes' => $columnUniqueIndexes,
                 'unique_deleted_at_condition' => $columnUniqueDeleteAtCondition->count() > 0,
             ];
         })
@@ -76,13 +77,15 @@ trait Columns {
     }
 
     protected function getVisibleColumns($tableName, $modelVariableName) {
+        $relationships = $this->setBelongsToRelations();
         $columns = $this->readColumnsFromTable($tableName);
         $hasSoftDelete = ($columns->filter(function($column) {
                 return $column['name'] == "deleted_at";
             })->count() > 0);
-        return $columns->filter(function($column) {
+        $filtered = $columns->filter(function($column) {
             return !($column['name'] == "id" || $column['name'] == "created_at" || $column['name'] == "updated_at" || $column['name'] == "deleted_at" || $column['name'] == "remember_token");
-        })->map(function($column) use ($tableName, $hasSoftDelete, $modelVariableName){
+        });
+        return $filtered->map(function($column) use ($tableName, $hasSoftDelete, $modelVariableName,$filtered,$relationships){
             $serverStoreRules = collect([]);
             $serverUpdateRules = collect([]);
             $frontendRules = collect([]);
@@ -120,23 +123,62 @@ trait Columns {
 
             if($column['unique'] || $column['name'] == 'slug') {
                 if($column['type'] == 'json') {
-                    $storeRule = 'Rule::unique(\''.$tableName.'\', \''.$column['name'].'->\'.$locale)';
-                    $updateRule = 'Rule::unique(\''.$tableName.'\', \''.$column['name'].'->\'.$locale)->ignore($this->'.$modelVariableName.'->getKey(), $this->'.$modelVariableName.'->getKeyName())';
-                    if($hasSoftDelete && $column['unique_deleted_at_condition']) {
-                        $storeRule .= '->whereNull(\'deleted_at\')';
-                        $updateRule .= '->whereNull(\'deleted_at\')';
+                    if (count($column['unique_indexes']) == 1) {
+                        $storeRule = 'Rule::unique(\''.$tableName.'\', \''.$column['name'].'->\'.$locale)';
+                        $updateRule = 'Rule::unique(\''.$tableName.'\', \''.$column['name'].'->\'.$locale)->ignore($this->'.$modelVariableName.'->getKey(), $this->'.$modelVariableName.'->getKeyName())';
+                        if($hasSoftDelete && $column['unique_deleted_at_condition']) {
+                            $storeRule .= '->whereNull(\'deleted_at\')';
+                            $updateRule .= '->whereNull(\'deleted_at\')';
+                        }
+                        $cols = $column['unique_indexes'][0]->getColumns();
+                        if (count($cols) > 1) {
+                            $otherCols = collect($cols)->reject(function ($col) use ($column) { return $col ===$column['name'];});
+                            foreach ($otherCols as $otherCol) {
+                                $storeRule .= '->where('.$otherCol.',$this->'.$otherCol.')';
+                                $updateRule .= '->where('.$otherCol.',$this->'.$otherCol.')';
+                            }
+                        }
+                        $serverStoreRules->push($storeRule);
+                        $serverUpdateRules->push($updateRule);
                     }
-                    $serverStoreRules->push($storeRule);
-                    $serverUpdateRules->push($updateRule);
                 } else {
-                    $storeRule = 'Rule::unique(\''.$tableName.'\', \''.$column['name'].'\')';
-                    $updateRule = 'Rule::unique(\''.$tableName.'\', \''.$column['name'].'\')->ignore($this->'.$modelVariableName.'->getKey(), $this->'.$modelVariableName.'->getKeyName())';
-                    if($hasSoftDelete && $column['unique_deleted_at_condition']) {
-                        $storeRule .= '->whereNull(\'deleted_at\')';
-                        $updateRule .= '->whereNull(\'deleted_at\')';
+                    if (count($column['unique_indexes']) == 1) {
+                        $storeRule = 'Rule::unique(\''.$tableName.'\', \''.$column['name'].'\')';
+                        $updateRule = 'Rule::unique(\''.$tableName.'\', \''.$column['name'].'\')';
+                        if($hasSoftDelete && $column['unique_deleted_at_condition']) {
+                            $storeRule .= '->whereNull(\'deleted_at\')';
+                            $updateRule .= '->whereNull(\'deleted_at\')';
+                        }
+                        $cols = $column['unique_indexes']->first()->getColumns();
+                        if (count($cols) > 1) {
+                            $otherCols = collect($cols)->reject(function ($col) use ($column) { return $col ===$column['name'];});
+                            foreach ($otherCols as $otherCol) {
+                                if ($filtered->has($otherCol)) {
+                                    $otherRel = $otherCol;
+                                    $otherKey = '';
+                                } elseif ($relationships->has($otherCol)) {
+                                    $otherRel = $relationships->get($otherCol)['relationship_variable'];
+                                    $ownerKey = $relationships->get($otherCol)["owner_key"];
+                                    $otherKey = $ownerKey;
+                                } else {
+                                    $otherRel = null;
+                                    $otherKey = null;
+                                }
+                                if ($otherKey) {
+                                    if ($otherKey) {
+                                        $where = 'collect($this->'.$otherRel.')->get(\''.$otherKey.'\')';
+                                    } else {
+                                        $where = $otherKey;
+                                    }
+                                    $storeRule .= '->where("'.$otherCol.'",'.$where.')';
+                                    $updateRule .= '->where("'.$otherCol.'",'.$where.')';
+                                }
+                            }
+                        }
+                        $updateRule .= '->ignore($this->'.$modelVariableName.'->getKey(), $this->'.$modelVariableName.'->getKeyName())';
+                        $serverStoreRules->push($storeRule);
+                        $serverUpdateRules->push($updateRule);
                     }
-                    $serverStoreRules->push($storeRule);
-                    $serverUpdateRules->push($updateRule);
                 }
             }
 

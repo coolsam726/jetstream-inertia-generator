@@ -37,6 +37,11 @@
         components: {
             "v-select": vSelect
         },
+        emits: ["input"],
+        model: {
+            prop: 'value',
+            event: 'input'
+        },
         props: {
             "apiUrl": {
                 required: true,

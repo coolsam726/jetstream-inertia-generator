@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import vSelect from "vue-select"
+import vSelect from "vue-select/src/index"
 export default {
     name: "JigSelect",
     emits: ['input'],

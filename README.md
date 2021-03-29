@@ -46,7 +46,13 @@ Other Important dependencies that you MUST configure include:
 ```bash
 composer require savannabits/jetstream-inertia-generator
 ```
-2. Install the yarn dependencies listed above by adding them as `devDependencies` in `packages.json` and running `yarn install` or `npm install`, or simply run the following command
+2. Install the necessary `npm` dev dependencies by running the following command:
+
+If you are using npm:
+```shell
+npm run --dev pagetables popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo sass sass-loader vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-pdf mitt "https://github.com/sagalbot/vue-select/tarball/feat/vue-3-compat"
+```
+Or if you are using yarn:
 ```shell
 yarn add -D pagetables popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo sass sass-loader vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-pdf mitt "https://github.com/sagalbot/vue-select/tarball/feat/vue-3-compat"
 ```
@@ -94,8 +100,8 @@ module.exports = {
                 primary: {...colors.indigo,DEFAULT: colors.indigo["500"]},//Your colors here...
                 secondary: {...colors.gray,DEFAULT: colors.gray["500"]},
                 warning: {
-                    ...colors.orange,
-                    DEFAULT: colors.orange["500"]
+                    ...colors.yellow,
+                    DEFAULT: colors.yellow["500"]
                 },
                 danger: {
                     ...colors.red,
@@ -137,7 +143,7 @@ php artisan vendor:publish --tag=jig-assets #publishes logos and other assets
 ```shell
 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
 ```
-NB: If you had already separately published laravel-permission's migrations, then you need to modify the `roles` table and add a nullable `title` field
+NB: If you had already separately published laravel-permission's migrations, then you need to modify both the `roles` and `permissions` tables and add a nullable `title` field to each. This is used especially when scaffolding permissions for each generated module.
 
 7. Add the `JigMiddleware` to the Global middleware group in `app/Http/Kernel.php`:
     ```php

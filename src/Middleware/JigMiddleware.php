@@ -28,6 +28,10 @@ class JigMiddleware
         } else {
             $menuPerms = collect([]);
         }
+        $flash = [];
+        if (session()->has('success')) $flash["success"] = session('success');
+        if (session()->has('error')) $flash["success"] = session('error');
+        Inertia::share('flash', $flash);
         Inertia::share('menu_permissions', $menuPerms->toArray());
         Inertia::share('app',collect(config('app'))->only(['name','url'])->toArray());
         return $next($request);

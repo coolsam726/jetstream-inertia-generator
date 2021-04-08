@@ -91,6 +91,9 @@ class Repository extends ClassGenerator {
             'exportBaseName' => $this->exportBaseName,
             'resource' => $this->resource,
             // index
+            'columnsToQuery' => $this->readColumnsFromTable($this->tableName)->filter(function($column) {
+                return !($column['type'] == 'text' || $column['name'] == "password" || $column['name'] == "remember_token" || $column['name'] == "deleted_at"||Str::contains($column['name'],"_id"));
+            })->pluck('name')->toArray(),
             'columnsToSearchIn' => $this->readColumnsFromTable($this->tableName)->filter(function($column) {
                 return ($column['type'] == 'json' || $column['type'] == 'text' || $column['type'] == 'string' || $column['name'] == "id") && !($column['name'] == "password" || $column['name'] == "remember_token");
             })->pluck('name')->toArray(),

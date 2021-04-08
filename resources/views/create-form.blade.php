@@ -138,8 +138,8 @@
         data() {
             return {
                 form: useForm({
-                    @foreach($columns as $col)
-                    "{{$col}}": null,
+                    @foreach($columns as $key => $col)
+                    "{{$key}}": null,
                     @endforeach
                         @if (count($relations))
                         @if(isset($relations['belongsTo']) && count($relations['belongsTo']))
@@ -152,6 +152,11 @@
             }
         },
         mounted() {
+        },
+        computed: {
+            flash() {
+                return this.$page.props.flash || {}
+            }
         },
         methods: {
             async storeModel() {

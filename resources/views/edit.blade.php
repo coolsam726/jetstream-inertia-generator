@@ -1,85 +1,68 @@
-{{'@'}}extends('savannabits/admin-ui::admin.layout.default')
+@php
+    $hasCheckbox = false;
+    $hasSelect = false;
+    $hasTextArea = false;
+    $hasInput = false;
+    $hasPassword = false;
+@endphp
+<template>
+    <jig-layout>
+        <template {{"#"}}header>
+            <div class="flex flex-wrap items-center justify-between w-full px-4">
+                <inertia-link :href="route('admin.{{$modelRouteAndViewName}}.index')" class="text-xl font-black text-white"><i class="fas fa-arrow-left"></i> Back | Edit
+                    {{$modelTitle}} #@{{model.id}}</inertia-link>
+            </div>
+        </template>
+        <div class="flex flex-wrap px-4">
+            <div class="z-10 flex-auto max-w-2xl p-4 mx-auto bg-white md:rounded-md md:shadow-md">
+                <edit-form :model="model" {{'@'}}success="onSuccess" {{'@'}}error="onError"></edit-form>
+            </div>
+        </div>
+    </jig-layout>
+</template>
 
-{{'@'}}section('title', trans('admin.{{ $modelLangFormat }}.actions.edit', ['name' => ${{ $modelVariableName }}->{{$modelTitle}}]))
+<script>
+    import JigLayout from "@/Layouts/JigLayout";
+    import JetLabel from "@/Jetstream/Label";
+    import InertiaButton from "@/JigComponents/InertiaButton";
+    import JetInputError from "@/Jetstream/InputError";
+    import JetButton from "@/Jetstream/Button";
+    import EditForm from "./EditForm";
+    import DisplayMixin from "@/Mixins/DisplayMixin";
+    export default {
+        name: "Edit",
+        props: {
+            model: Object,
+        },
+        components: {
+            InertiaButton,
+            JetLabel,
+            JetButton,
+            JetInputError,
+            JigLayout,
+            EditForm,
+        },
+        data() {
+            return {}
+        },
+        mixins: [DisplayMixin],
+        mounted() {},
+        computed: {
+            flash() {
+                return this.$page.props.flash || {}
+            }
+        },methods: {
+            onSuccess(msg) {
+                this.displayNotification('success',msg);
+                this.$inertia.visit(route('admin.{{$modelRouteAndViewName}}.index'));
+            },
+            onError(msg) {
+                this.displayNotification('error',msg);
+            }
+        }
+    }
+</script>
 
-{{'@'}}section('body')
+<style scoped>
 
-    <div class="container-xl">
-@if(!$isUsedTwoColumnsLayout)
-        <div class="card">
-@endif
-
-            @if($hasTranslatable)<{{ $modelJSName }}-form
-                :action="'{{'{{'}} ${{ $modelVariableName }}->resource_url }}'"
-                :data="{{'{{'}} ${{ $modelVariableName }}->toJsonAllLocales() }}"
-                :locales="@{{ json_encode($locales) }}"
-                :send-empty-locales="false"
-                v-cloak
-                inline-template>
-            @else<{{ $modelJSName }}-form
-                :action="'{{'{{'}} ${{ $modelVariableName }}->resource_url }}'"
-                :data="{{'{{'}} ${{ $modelVariableName }}->toJson() }}"
-                v-cloak
-                inline-template>
-            @endif
-
-                <form class="form-horizontal form-edit" method="post" {{'@'}}submit.prevent="onSubmit" :action="action" novalidate>
-
-@if($isUsedTwoColumnsLayout)
-                    <div class="row">
-                        <div class="col">
-                            <div class="card">
-                                <div class="card-header">
-                                    <i class="fa fa-pencil"></i> {{'{{'}} trans('admin.{{ $modelLangFormat }}.actions.edit', ['name' => ${{ $modelVariableName }}->{{$modelTitle}}]) }}
-                                </div>
-                                <div class="card-body">
-                                    {{'@'}}include('admin.{{ $modelDotNotation }}.components.form-elements')
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12 col-lg-12 col-xl-5 col-xxl-4">
-                            {{'@'}}include('admin.{{ $modelDotNotation }}.components.form-elements-right', ['showHistory' => true])
-                        </div>
-                    </div>
-                    @else
-
-                    <div class="card-header">
-                        <i class="fa fa-pencil"></i> {{'{{'}} trans('admin.{{ $modelLangFormat }}.actions.edit', ['name' => ${{ $modelVariableName }}->{{$modelTitle}}]) }}
-                    </div>
-
-                    <div class="card-body">
-                        {{'@'}}include('admin.{{ $modelDotNotation }}.components.form-elements')
-                    </div>
-                    @endif
-
-                    @if($isUsedTwoColumnsLayout)<button type="submit" class="btn btn-primary fixed-cta-button button-save" :disabled="submiting">
-                        <i class="fa" :class="submiting ? 'fa-spinner' : 'fa-save'"></i>
-                        @{{ trans('savannabits/admin-ui::admin.btn.save') }}
-                    </button>
-
-                    <button type="submit" style="display: none" class="btn btn-success fixed-cta-button button-saved" :disabled="submiting" :class="">
-                        <i class="fa" :class="submiting ? 'fa-spinner' : 'fa-check'"></i>
-                        <span>@{{ trans('savannabits/admin-ui::admin.btn.saved') }}</span>
-                    </button>
-                     @else
-
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-primary" :disabled="submiting">
-                            <i class="fa" :class="submiting ? 'fa-spinner' : 'fa-download'"></i>
-                            @{{ trans('savannabits/admin-ui::admin.btn.save') }}
-                        </button>
-                    </div>
-                    @endif
-
-                </form>
-
-        </{{ $modelJSName }}-form>
-
-    @if(!$isUsedTwoColumnsLayout)
-    </div>
-    @endif
-
-</div>
-
-{{'@'}}endsection
+</style>

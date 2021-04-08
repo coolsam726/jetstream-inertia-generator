@@ -22,19 +22,6 @@
 
 <script>
     import JigLayout from "@/Layouts/JigLayout";
-        @if($hasCheckbox)
-    import JetCheckbox from "@/Jetstream/Checkbox";
-        @endif
-        @if($hasInput)
-    import JetInput from "@/Jetstream/Input";
-        @endif
-        @if($hasTextArea)
-    import JigTextarea from "@/JigComponents/JigTextarea";
-        @endif
-
-        @if($hasSelect)
-    import InfiniteSelect from '@/JigComponents/InfiniteSelect.vue';
-        @endif
     import InertiaButton from "@/JigComponents/InertiaButton";
     import CreateForm from "./CreateForm";
     import DisplayMixin from "@/Mixins/DisplayMixin";
@@ -42,28 +29,11 @@
         name: "Create",
         components: {
             InertiaButton,
-            @if($hasInput) JetInput,{{"\r"}}@endif
-            @if($hasCheckbox) JetCheckbox,{{"\r"}}@endif
-            @if($hasTextArea) JigTextarea,{{"\r"}}@endif
-            @if($hasSelect) InfiniteSelect,{{"\r"}}@endif
             JigLayout,
             CreateForm,
         },
         data() {
-            return {
-                form: this.$inertia.form({
-                    @foreach($columns as $col)
-                    "{{$col}}": null,
-                    @endforeach
-                        @if (count($relations))
-                        @if(isset($relations['belongsTo']) && count($relations['belongsTo']))
-                        @foreach($relations['belongsTo'] as $belongsTo)
-                    "{{$belongsTo["relationship_variable"]}}": null,
-                    @endforeach
-                    @endif
-                    @endif
-                }),
-            }
+            return {}
         },
         mixins: [DisplayMixin],
         mounted() {},

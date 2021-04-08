@@ -48,7 +48,7 @@ class {{ $controllerBaseName }}  extends Controller
 
     public function dt(Request $request) {
         $query = {{$modelBaseName}}::query()->select({{$modelBaseName}}::getModel()->getTable().'.*'); // You can extend this however you want.
-        return $this->repo::dt($query)
+        return $this->repo::dt($query);
     }
     /**
      * Store a newly created resource in storage.

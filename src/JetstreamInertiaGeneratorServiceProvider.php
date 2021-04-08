@@ -76,7 +76,7 @@ class JetstreamInertiaGeneratorServiceProvider extends RouteServiceProvider
             ], 'jig-views');
 
             $this->publishes([
-                __DIR__.'/../resources/js' => resource_path('compiler-configs'),
+                __DIR__.'/../resources/compiler-configs' => base_path(''),
             ], 'jig-compiler-configs');
 
             $this->publishes([

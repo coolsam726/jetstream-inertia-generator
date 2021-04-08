@@ -65,6 +65,19 @@ class ViewForm extends ViewGenerator {
             $this->setBelongToManyRelation($belongsToMany);
         }
         /*Make Create Form*/
+        $viewPath = resource_path('js/Pages/'.$this->modelPlural.'/CreateForm.vue');
+        if ($this->alreadyExists($viewPath) && !$force) {
+            $this->error('File '.$viewPath.' already exists!');
+        } else {
+            if ($this->alreadyExists($viewPath) && $force) {
+                $this->warn('File '.$viewPath.' already exists! File will be deleted.');
+                $this->files->delete($viewPath);
+            }
+            $this->makeDirectory($viewPath);
+            $this->files->put($viewPath, $this->buildForm("create-form"));
+            $this->info('Generating '.$viewPath.' finished');
+        }
+        /*Make Create Page*/
         $viewPath = resource_path('js/Pages/'.$this->modelPlural.'/Create.vue');
         if ($this->alreadyExists($viewPath) && !$force) {
             $this->error('File '.$viewPath.' already exists!');
@@ -77,6 +90,20 @@ class ViewForm extends ViewGenerator {
             $this->files->put($viewPath, $this->buildForm("create"));
             $this->info('Generating '.$viewPath.' finished');
         }
+        //Make edit form
+        $viewPath = resource_path('js/Pages/'.$this->modelPlural.'/EditForm.vue');
+        if ($this->alreadyExists($viewPath) && !$force) {
+            $this->error('File '.$viewPath.' already exists!');
+        } else {
+            if ($this->alreadyExists($viewPath) && $force) {
+                $this->warn('File '.$viewPath.' already exists! File will be deleted.');
+                $this->files->delete($viewPath);
+            }
+            $this->makeDirectory($viewPath);
+            $this->files->put($viewPath, $this->buildForm("edit-form"));
+            $this->info('Generating '.$viewPath.' finished');
+        }
+
         //Make edit form
         $viewPath = resource_path('js/Pages/'.$this->modelPlural.'/Edit.vue');
         if ($this->alreadyExists($viewPath) && !$force) {
@@ -121,7 +148,7 @@ class ViewForm extends ViewGenerator {
             $column["label"] = str_replace("_"," ",Str::title($column['name']));
             return $column;
         })->keyBy('name');
-        return view('jig::'.$type."-form", [
+        return view('jig::'.$type, [
             'modelBaseName' => $this->modelBaseName,
             'modelRouteAndViewName' => $this->modelRouteAndViewName,
             'modelPlural' => $this->modelPlural,

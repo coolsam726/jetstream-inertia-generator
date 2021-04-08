@@ -6,6 +6,7 @@ namespace {{ $repoNamespace }};
 use {{$modelFullName}};
 use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
+use Yajra\DataTables\Html\Column;
 
 class {{ $repoBaseName }}
 {

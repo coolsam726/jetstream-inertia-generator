@@ -1,6 +1,6 @@
 <template>
     <nav
-        class="relative z-40 flex no-scrollbar flex-wrap items-center justify-between px-0 bg-gray-700 shadow-xl md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-no-wrap md:overflow-hidden"
+        class="relative z-40 flex no-scrollbar flex-wrap items-center justify-between px-0 bg-primary-800 shadow-xl md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-no-wrap md:overflow-hidden"
         :class="{'md:w-64': !minimized, 'w-16 hover:w-64': minimized}"
     >
         <div
@@ -8,24 +8,25 @@
         >
             <!-- Toggler -->
             <button
-                class="px-3 py-1 text-xl leading-none text-gray-100 border border-transparent border-solid rounded opacity-50 cursor-pointer md:hidden"
+                class="px-3 py-1 text-xl leading-none border border-transparent border-solid rounded opacity-50 cursor-pointer md:hidden"
                 type="button"
                 v-on:click="toggleCollapseShow('bg-white m-2 py-3 px-6')"
             >
                 <svg viewBox="0 0 100 80" width="40" height="40">
-                    <rect fill="white" width="100" height="5"></rect>
-                    <rect fill="white" y="20" width="80" height="5"></rect>
-                    <rect fill="white" y="40" width="70" height="5"></rect>
-                    <rect fill="white" y="60" width="90" height="5"></rect>
+                    <rect fill="#eee" width="100" height="5"></rect>
+                    <rect fill="#eee" y="20" width="80" height="5"></rect>
+                    <rect fill="#eee" y="40" width="70" height="5"></rect>
+                    <rect fill="#eee" y="60" width="90" height="5"></rect>
                 </svg>
             </button>
             <!-- Brand -->
-            <a
-                class="inline-block p-2 my-0 mr-0 text-sm border-b border-secondary-600 font-bold text-left text-gray-100 uppercase whitespace-no-wrap"
-                href="javascript:void(0)"
+            <inertia-link
+                class="inline-flex items-center justify-center text-center p-2 h-16 my-0 mr-0 text-sm border-secondary-600 font-bold text-left overflow-hidden text-white uppercase whitespace-no-wrap"
+                :href="route('dashboard')"
             >
-                <application-mark class="h-12 w-12 text-4xl p-1 flex items-center justify-center"/>
-            </a>
+                <span class="text-2xl font-semibold">{{$page.props.app.name}}</span>
+<!--                <application-mark class="h-12 w-12 text-4xl p-1 flex items-center justify-center"/>-->
+            </inertia-link>
             <!-- User -->
             <!--            <ul class="flex flex-wrap items-center list-none md:hidden">
                             <li class="relative inline-block">
@@ -79,7 +80,7 @@
                 <ul class="flex flex-col list-none md:flex-col md:min-w-full">
                     <li v-for="(menuItem, idx) of menuItems" :key="idx" class="items-center">
                         <sidebar-link
-                            v-if="!menuItem.isParent && $page.props.menu_permissions[idx]"
+                            v-if="!menuItem.isParent && ($page.props.menu_permissions[idx] || menuItem.ignorePerm)"
                             :href="route(menuItem.route)"
                             :active="route().current(menuItem.route)"
                         ><i
@@ -88,7 +89,7 @@
                             <span class="hover:visible">{{menuItem.title}}</span></sidebar-link
                         >
                         <jig-sidebar-link
-                            v-else-if="menuItem.isParent && $page.props.menu_permissions[idx]"
+                            v-else-if="menuItem.isParent && ($page.props.menu_permissions[idx] || !!menuItem.ignorePerm)"
                             class="flex flex-wrap items-center justify-between"
                             @click.native.prevent="toggleExpanded(idx)"
                             :active="false"
@@ -99,10 +100,10 @@
                             </div>
                             <i :class="`mr-2 pl-4 text-md ml-auto text-gray-500 fas ${expanded === idx ? 'fa-angle-down' : 'fa-angle-right'}`"></i>
                         </jig-sidebar-link>
-                        <ul v-if="menuItem.isParent && $page.props.menu_permissions[idx] && expanded === idx" class="flex-col pl-2 list-none md:flex-col md:min-w-full">
+                        <ul v-if="menuItem.isParent && ($page.props.menu_permissions[idx] || menuItem.ignorePerm) && expanded === idx" class="flex-col pl-2 list-none md:flex-col md:min-w-full">
                             <li v-for="(child, childIdx) of menuItem.children" :key="`${idx}-${childIdx}`" class="items-center">
                                 <jig-sidebar-link
-                                    v-if="$page.props.menu_permissions[childIdx]"
+                                    v-if="$page.props.menu_permissions[childIdx] || child.ignorePerm"
                                     class="flex flex-wrap items-center justify-between"
                                     :href="route(child.route)"
                                     :active="route().current(child.routePattern)"
@@ -132,13 +133,16 @@
 import NotificationDropdownComponent from "./NotificationDropdown.vue";
 import UserDropdownComponent from "./UserDropdown.vue";
 import SidebarLink from "@/JigComponents/SidebarLink";
-import menu from "./Menu.json"
 import JigSidebarLink from "@/JigComponents/JigSidebarLink";
 import ApplicationMark from "@/JigComponents/ApplicationMark";
 import ApplicationLogo from "@/JigComponents/ApplicationLogo";
 import InertiaButton from "@/JigComponents/InertiaButton";
 export default {
     props: {
+        menu:{
+            type: Object,
+            default: () => {return {};}
+        },
         minimized: {
             default: false,
         }
@@ -146,7 +150,6 @@ export default {
     data() {
         return {
             collapseShow: "hidden",
-            menuItems: menu,
             expanded: null,
             bakMinimized: null,
         };
@@ -183,6 +186,9 @@ export default {
         }
     },
     computed: {
+        menuItems() {
+            return this.menu;
+        }
     },
     components: {
         InertiaButton,

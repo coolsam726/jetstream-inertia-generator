@@ -5,6 +5,7 @@ namespace Savannabits\JetstreamInertiaGenerator;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
+use Savannabits\JetstreamInertiaGenerator\Helpers\JigInstaller;
 use Savannabits\JetstreamInertiaGenerator\Middleware\JigMiddleware;
 
 class JetstreamInertiaGeneratorServiceProvider extends RouteServiceProvider
@@ -75,6 +76,10 @@ class JetstreamInertiaGeneratorServiceProvider extends RouteServiceProvider
             ], 'jig-views');
 
             $this->publishes([
+                __DIR__.'/../resources/js' => resource_path('compiler-configs'),
+            ], 'jig-compiler-configs');
+
+            $this->publishes([
                 __DIR__.'/routes.php' => base_path('routes/jig.php'),
             ], 'jig-routes');
 
@@ -90,7 +95,7 @@ class JetstreamInertiaGeneratorServiceProvider extends RouteServiceProvider
             ], 'lang');*/
 
             // Registering package commands.
-            // $this->commands([]);
+             $this->commands([JigInstaller::class]);
         }
     }
 

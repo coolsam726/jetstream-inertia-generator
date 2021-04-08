@@ -1,0 +1,32 @@
+{
+    "backend": {
+        "route": "admin.dashboard",
+        "routePattern": "admin.dashboard",
+        "title": "Admin Area",
+        "faIcon": "fas fa-cogs",
+        "isTitle": false,
+        "isParent": false,
+        "ignorePerm": false,
+        "children": []
+    },
+    "dashboard": {
+        "route": "dashboard",
+        "routePattern": "dashboard",
+        "title": "Dashboard",
+        "faIcon": "fas fa-tv",
+        "isTitle": false,
+        "isParent": false,
+        "ignorePerm": true,
+        "children": []
+    },
+    "my-profile": {
+        "route": "profile.show",
+        "routePattern": "case-files",
+        "title": "My Profile",
+        "faIcon": "fas fa-tv",
+        "isTitle": false,
+        "isParent": false,
+        "ignorePerm": true,
+        "children": []
+    }
+}

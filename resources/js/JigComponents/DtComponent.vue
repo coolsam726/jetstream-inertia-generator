@@ -69,6 +69,18 @@ import {emitter} from "./eventHub"
                 required:false,
                 default: null
             },
+            defaultOrderColumn: {
+                type: Number,
+                default: 0
+            },
+            defaultOrderDirection: {
+                type: String,
+                default: 'asc'
+            },
+            stateSave: {
+                type: Boolean,
+                default: true,
+            }
         },
         data() {
             return {
@@ -89,7 +101,7 @@ import {emitter} from "./eventHub"
                 vm.table = $(`#${vm.tableId}`).DataTable({
                     processing: true,
                     serverSide: true,
-                    stateSave: true,
+                    stateSave: vm.stateSave,
                     responsive: {
                         breakpoints: [
                             { name: 'tv',  width: Infinity },
@@ -117,7 +129,9 @@ import {emitter} from "./eventHub"
                         }
                     },
                     columns: columns,
-                    columnDefs: [...vm.columnDefs,{responsivePriority: 2, targets: -1}],
+                    columnDefs: [...vm.columnDefs],
+                    order: [[vm.defaultOrderColumn,vm.defaultOrderDirection]]
+
                 });
                 vm.table.columns.adjust().responsive.recalc();
                 vm.table.columns.adjust().responsive.rebuild();

@@ -1,25 +1,26 @@
 <template>
     <div class="bg-gray-200">
-        <sidebar-component class="z-40" v-if="withSidebar && !fullScreenBody"></sidebar-component>
-        <div class="relative flex flex-col min-h-screen bg-gray-200" :class="{'md:ml-64': withSidebar}">
-            <navbar-component v-if="!fullScreenBody">
+        <slot name="sidebar">
+            <sidebar-component :menu="sidebarMenu" class="z-40" v-if="withSidebar && !fullScreenBody"></sidebar-component>
+        </slot>
+        <div class="relative flex flex-col min-h-screen" :class="{'md:ml-64': withSidebar}">
+            <navbar-component class="gap-x-2" v-if="!fullScreenBody">
                     <slot name="navbar-menu">
-                        <jet-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
-                            Home
-                        </jet-nav-link>
-                        <jet-nav-link v-if="$page.props.menu_permissions.backend" :href="route('admin.dashboard')" :active="route().current('admin.*')">
-                            Backend
+                        <jet-nav-link :class="`text-secondary font-bold hover:text-secondary-400`" :href="route('dashboard')" :active="route().current('dashboard')">
+                            Frontend
                         </jet-nav-link>
                     </slot>
             </navbar-component>
             <!-- Header -->
             <jig-notifications/>
-            <div v-if="!fullScreenBody" class="relative max-w-full pt-12 pb-32 bg-primary lg:pt-20">
+
+            <div v-if="!fullScreenBody" class="relative max-w-full pb-32 bg-primary">
+                <div class="mt-2 pb-8 lg:mx-4 border-t border-primary-400"></div>
 <!--                <inertia-button v-if="withSidebar" @click.native.prevent="toggleSidebarMin" pill style="z-index: 100"
                                 class="absolute bg-gray-800 h-11 w-11 text-white -top-2 -left-3 md:-top-1 md:-left-8 focus:outline-none focus:ring-0">
                     <i class="fas" :class="{'fa-angle-left': !minSidebar,'fa-angle-right': minSidebar}"></i>
                 </inertia-button>-->
-                <div class="w-full px-1 mx-auto lg:px-10">
+                <div class="w-full px-1 pt-8 mb-4 mx-auto lg:px-10">
                     <div>
                         <!-- Card stats -->
                         <div class="flex flex-wrap">
@@ -285,7 +286,6 @@
                 </footer>
             </div>
         </div>
-        <portal-target name="modal" multiple></portal-target>
     </div>
 </template>
 <script>
@@ -295,6 +295,7 @@ import JigNotifications from "@/JigComponents/JigNotifications";
 import JetNavLink from "@/Jetstream/NavLink"
 import InertiaButton from "@/JigComponents/InertiaButton";
 import ApplicationMark from "@/Jetstream/ApplicationMark";
+import menu from "@/Layouts/Jig/Menu.json"
 
 export default {
     name: "JigLayout",
@@ -318,6 +319,7 @@ export default {
         return {
             date: new Date().getFullYear(),
             minSidebar: false,
+            sidebarMenu: menu,
         };
     },
     mounted() {

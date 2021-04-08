@@ -1,6 +1,6 @@
 <template>
     <v-select
-        class="px-2 py-1 border rounded-md shadow-sm"
+        class="px-2 py-1 border bg-gray-50 rounded-md shadow-sm"
         :value="value"
         @input="onSelect"
         :multiple="multiple"

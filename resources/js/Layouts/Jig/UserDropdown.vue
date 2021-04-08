@@ -2,7 +2,7 @@
   <div>
     <a
       class="text-gray-600 block"
-      href="#pablo"
+      href="#"
       v-on:click="toggleDropdown($event)"
       ref="btnDropdownRef"
     >

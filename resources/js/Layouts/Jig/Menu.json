@@ -1,13 +1,13 @@
 {
-
     "dashboard": {
-        "route"     :   "admin.dashboard",
-        "routePattern"     :   "admin.dashboard",
+        "route": "admin.dashboard",
+        "routePattern": "admin.dashboard",
         "permissionName": "dashboard",
-        "title"     :   "Dashboard",
-        "faIcon"    :   "fas fa-tv",
-        "isTitle"   :   false,
-        "isParent"  :   false,
-        "children"  :   []
+        "title": "Dashboard",
+        "faIcon": "fas fa-tv",
+        "isTitle": false,
+        "isParent": false,
+        "ignorePerm": true,
+        "children": []
     }
 }

@@ -1,16 +1,15 @@
 <template>
     <!-- Navbar -->
-    <nav class="bg-gray-50 sticky top-0 md:-top-14 z-20 w-full border-b border-secondary-700">
+    <nav class="bg-primary sticky top-0 md:-top-0 z-20 w-full">
         <!-- Primary Navigation Menu -->
-        <div class="mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto pr-4 sm:pr-6 lg:pr-8">
             <div class="flex justify-between h-16">
                 <div class="flex">
                     <!-- Logo -->
-                    <application-logo class="h-full"/>
+                    <application-logo class="h-full bg-primary px-8"/>
                     <!-- Navigation Links -->
-                    <div class="hidden sm:-my-px sm:ml-10 sm:flex">
+                    <div class="hidden sm:-my-px text-gray-50 hover:text-gray-200 sm:ml-10 sm:flex">
                         <slot>
-
                         </slot>
                     </div>
                 </div>
@@ -113,7 +112,7 @@
                                 <div class="border-t border-gray-100"></div>
 
                                 <!-- Authentication -->
-                                <responsive-nav-link @click.native.prevent="logout" target="_blank" v-if="$page.props.use_cas" :href="route('cas.logout')">LOGOUT</responsive-nav-link>
+                                <responsive-nav-link @click.native.prevent="logout" target="_blank" v-if="$page.props.user.is_cas" :href="route('cas.logout')">Logout</responsive-nav-link>
                                 <form v-else @submit.prevent="logout">
                                     <jet-dropdown-link as="button">
                                         Logout
@@ -167,7 +166,7 @@
                     </jet-responsive-nav-link>
 
                     <!-- Authentication -->
-                    <responsive-nav-link @click.native.prevent="logout" target="_blank" v-if="$page.props.use_cas" :href="route('cas.logout')">LOGOUT</responsive-nav-link>
+                    <responsive-nav-link @click.native.prevent="logout" target="_blank" v-if="$page.props.user.is_cas" :href="route('cas.logout')">Logout</responsive-nav-link>
                     <form v-else method="POST" @submit.prevent="logout">
                         <jet-responsive-nav-link as="button">
                             Logout
@@ -256,13 +255,13 @@ export default {
         },
         logout() {
             let vm = this;
-            if (this.$page.props.use_cas) {
+            if (this.$page.props.user?.is_cas) {
                 console.log("Logging out of cas");
                 const win = window.open(this.route('cas.logout'), "_blank");
                 setTimeout(function() {
                     win.close();
                     vm.$inertia.reload();
-                },1000)
+                },2000)
             } else {
                 this.$inertia.post(route('logout'));
             }

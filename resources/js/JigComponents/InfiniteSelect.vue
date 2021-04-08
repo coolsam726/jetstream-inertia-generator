@@ -1,6 +1,6 @@
 <template>
     <v-select
-        class="px-2 py-1 border rounded-md shadow-sm"
+        class="px-2 py-1 bg-gray-50 border rounded-md shadow-sm"
         :value="value"
         @input="onSelect"
         :multiple="multiple"
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-    import vSelect from 'vue-select'
+    import vSelect from 'vue-select/src/index'
     export default {
         name: "InfiniteSelect",
         components: {

@@ -153,10 +153,10 @@ trait Columns {
                         if (count($cols) > 1) {
                             $otherCols = collect($cols)->reject(function ($col) use ($column) { return $col ===$column['name'];});
                             foreach ($otherCols as $otherCol) {
-                                if ($filtered->has($otherCol)) {
+                                if ($filtered->keyBy("name")->has($otherCol)) {
                                     $otherRel = $otherCol;
                                     $otherKey = '';
-                                } elseif ($relationships->has($otherCol)) {
+                                } elseif ($relationships->keyBy("name")->has($otherCol)) {
                                     $otherRel = $relationships->get($otherCol)['relationship_variable'];
                                     $ownerKey = $relationships->get($otherCol)["owner_key"];
                                     $otherKey = $ownerKey;
@@ -164,14 +164,15 @@ trait Columns {
                                     $otherRel = null;
                                     $otherKey = null;
                                 }
-                                if ($otherKey) {
+                                if ($otherRel) {
                                     if ($otherKey) {
                                         $where = 'collect($this->'.$otherRel.')->get(\''.$otherKey.'\')';
                                     } else {
-                                        $where = $otherKey;
+                                        $where = $otherRel;
                                     }
-                                    $storeRule .= '->where("'.$otherCol.'",'.$where.')';
-                                    $updateRule .= '->where("'.$otherCol.'",'.$where.')';
+                                    $storeRule .= '->where("'.$otherCol.'", $this->'.$where.')';
+                                    $updateRule .= '->where("'.$otherCol.'",$this->'.$where.')';
+
                                 }
                             }
                         }

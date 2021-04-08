@@ -94,14 +94,14 @@ class {{ $controllerBaseName }}  extends Controller
             $this->authorize('view', ${{$modelVariableName}});
             //Fetch relationships
             @if (count($relations)){{PHP_EOL}}
-                @if (isset($relations['belongsTo']) && count($relations['belongsTo'])){{PHP_EOL}}
-                    @php $parents = $relations['belongsTo']->pluck("function_name")->toArray(); @endphp
-                    ${{$modelVariableName}}->load([
-                    @foreach($parents as $parent)
-                        '{{$parent}}',
-                    @endforeach
-                    ]);
-                @endif
+@if (isset($relations['belongsTo']) && count($relations['belongsTo'])){{PHP_EOL}}
+    @php $parents = $relations['belongsTo']->pluck("function_name")->toArray(); @endphp
+    ${{$modelVariableName}}->load([
+    @foreach($parents as $parent)
+        '{{$parent}}',
+    @endforeach
+    ]);
+@endif
             @endif
             return Inertia::render("{{$modelPlural}}/Show", ["model" => ${{$modelVariableName}}]);
         } catch (\Throwable $exception) {
@@ -125,14 +125,14 @@ class {{ $controllerBaseName }}  extends Controller
             $this->authorize('update', ${{$modelVariableName}});
             //Fetch relationships
             @if (count($relations)){{ PHP_EOL }}
-                @if (isset($relations['belongsTo']) && count($relations['belongsTo'])){{PHP_EOL}}
-                    @php $parents = $relations['belongsTo']->pluck("function_name")->toArray(); @endphp
-                    ${{$modelVariableName}}->load([
-                    @foreach($parents as $parent)
-                        '{{$parent}}',
-                    @endforeach
-                    ]);
-                @endif
+@if (isset($relations['belongsTo']) && count($relations['belongsTo'])){{PHP_EOL}}
+    @php $parents = $relations['belongsTo']->pluck("function_name")->toArray(); @endphp
+    ${{$modelVariableName}}->load([
+    @foreach($parents as $parent)
+        '{{$parent}}',
+    @endforeach
+    ]);
+@endif
             @endif
             return Inertia::render("{{$modelPlural}}/Edit", ["model" => ${{$modelVariableName}}]);
         } catch (\Throwable $exception) {
@@ -174,10 +174,10 @@ class {{ $controllerBaseName }}  extends Controller
     {
         $res = $this->repo::init(${{$modelVariableName}})->destroy();
         if ($res) {
-            return \Redirect::route('admin.{{$modelRouteAndViewName}}.index')->with(['success' => "The {{$modelBaseName}} was deleted succesfully."]);
+            return back()->with(['success' => "The {{$modelBaseName}} was deleted succesfully."]);
         }
         else {
-            return \Redirect::route('admin.{{$modelRouteAndViewName}}.index')->with(['error' => "The {{$modelBaseName}} could not be deleted."]);
+            return back()->with(['error' => "The {{$modelBaseName}} could not be deleted."]);
         }
     }
 }

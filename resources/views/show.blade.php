@@ -16,8 +16,9 @@
             <div
                 class="z-10 flex-auto max-w-5xl p-4 mx-auto bg-white md:rounded-md md:shadow-md"
             >
-                <div class="grid grid-cols-1 gap-4">
+                <dl class="gap-4">
                     @foreach($columns as $column)
+                        <jig-dd></jig-dd>
                         <div class="grid grid-cols-1 p-0 text-lg font-semibold sm:grid-cols-3">
                             <div class="p-4 sm:text-right sm:col-span-1 bg-blue-50">
                                 {{$column['label']}}:
@@ -35,12 +36,12 @@
                                     {{$parent['related_model_title']}}:
                                 </div>
                                 <div class="p-4 bg-blue-100 sm:col-span-2">
-                                    {{'{{'}} model.{{$parent['relationship_variable']}}.{{$parent["label_column"]}} }}
+                                    {{'{{'}} model.{{$parent['relationship_variable']}} ? model.{{$parent['relationship_variable']}}.{{$parent["label_column"]}} : '-' }}
                                 </div>
                             </div>
                         @endforeach
                     @endif
-                </div>
+                </dl>
             </div>
         </div>
         <div v-else class="text-center space-4 px-4 bg-white rounded-md shadow-md text-red-500 font-bold text-lg">You don't have permission to view this resource.</div>

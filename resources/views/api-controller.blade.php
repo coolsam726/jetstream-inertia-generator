@@ -22,6 +22,7 @@ use Yajra\DataTables\DataTables;
 class {{ $controllerBaseName }}  extends Controller
 {
     private $api;
+    private {{$repoBaseName}} $repo;
     public function __construct(ApiResponse $apiResponse, {{$repoBaseName}} $repo)
     {
         $this->api = $apiResponse;
@@ -47,16 +48,7 @@ class {{ $controllerBaseName }}  extends Controller
 
     public function dt(Request $request) {
         $query = {{$modelBaseName}}::query()->select({{$modelBaseName}}::getModel()->getTable().'.*'); // You can extend this however you want.
-        return DataTables::of($query)
-        ->editColumn('actions', function ({{$modelBaseName}} $model) {
-            $actions = '';
-            if (\Auth::user()->can('view',$model)) $actions .= '<button class="bg-primary hover:bg-primary-600 px-2 focus:ring-0 focus:outline-none text-white action-button" title="View Details" data-action="show-model" data-tag="button" data-id="'.$model->id.'"><i class="fas fa-eye"></i></button>';
-            if (\Auth::user()->can('update',$model)) $actions .= '<button class="bg-secondary hover:bg-secondary-600 focus:ring-0 focus:outline-none px-2 action-button" title="Edit Record" data-action="edit-model" data-tag="button" data-id="'.$model->id.'"><i class="fas fa-edit"></i></button>';
-            if (\Auth::user()->can('delete',$model)) $actions .= '<button class="bg-danger hover:bg-danger-600 px-2 text-white focus:ring-0 focus:outline-none action-button" title="Delete Record" data-action="delete-model" data-tag="button" data-id="'.$model->id.'"><i class="fas fa-trash"></i></button>';
-            return "<div class='gap-x-1 flex w-full justify-end'>".$actions."</div>";
-        })
-        ->rawColumns(['actions'])
-        ->make();
+        return $this->repo::dt($query)
     }
     /**
      * Store a newly created resource in storage.

@@ -5,6 +5,7 @@ namespace {{ $repoNamespace }};
 
 use {{$modelFullName}};
 use Illuminate\Support\Str;
+use Yajra\DataTables\DataTables;
 
 class {{ $repoBaseName }}
 {
@@ -72,5 +73,34 @@ $this->model->slug = Str::slug($this->model->title);
     public function destroy(): bool
     {
         return !!$this->model->delete();
+    }
+    public static function dtColumns() {
+        $columns = [
+        @foreach($columnsToQuery as $col)
+@if($col ==='id')
+    Column::make('{{$col}}')->title('ID')->className('all text-right'),
+@elseif($col==='name'||$col==='title')
+    Column::make("{{$col}}")->className('all'),
+@elseif($col==='created_at'|| $col==='updated_at')
+    Column::make("{{$col}}")->className('min-tv'),
+@else
+    Column::make("{{$col}}")->className('min-desktop-lg'),
+@endif
+        @endforeach
+    Column::make('actions')->className('min-desktop text-right')->orderable(false)->searchable(false),
+        ];
+        return $columns;
+    }
+    public static function dt($query) {
+        return DataTables::of($query)
+            ->editColumn('actions', function ({{$modelBaseName}} $model) {
+                $actions = '';
+                if (\Auth::user()->can('view',$model)) $actions .= '<button class="bg-primary hover:bg-primary-600 p-2 px-3 focus:ring-0 focus:outline-none text-white action-button" title="View Details" data-action="show-model" data-tag="button" data-id="'.$model->id.'"><i class="fas fa-eye"></i></button>';
+                if (\Auth::user()->can('update',$model)) $actions .= '<button class="bg-secondary hover:bg-secondary-600 p-2 px-3 focus:ring-0 focus:outline-none action-button" title="Edit Record" data-action="edit-model" data-tag="button" data-id="'.$model->id.'"><i class="fas fa-edit"></i></button>';
+                if (\Auth::user()->can('delete',$model)) $actions .= '<button class="bg-danger hover:bg-danger-600 p-2 px-3 text-white focus:ring-0 focus:outline-none action-button" title="Delete Record" data-action="delete-model" data-tag="button" data-id="'.$model->id.'"><i class="fas fa-trash"></i></button>';
+                return "<div class='gap-x-1 flex w-full justify-end'>".$actions."</div>";
+            })
+            ->rawColumns(['actions'])
+            ->make();
     }
 }

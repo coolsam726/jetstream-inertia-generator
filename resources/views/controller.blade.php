@@ -36,27 +36,12 @@ class {{ $controllerBaseName }}  extends Controller
     public function index(Request $request): \Inertia\Response
     {
         $this->authorize('viewAny', {{$modelBaseName}}::class);
-
-        $columns = [
-        @foreach($columnsToQuery as $col)
-@if($col ==='id')
-    Column::make('{{$col}}')->title('ID')->className('all text-right'),
-@elseif($col==='name'||$col==='title')
-    Column::make("{{$col}}")->className('all'),
-@elseif($col==='created_at'|| $col==='updated_at')
-    Column::make("{{$col}}")->className('min-tv'),
-@else
-    Column::make("{{$col}}")->className('min-desktop-lg'),
-@endif
-        @endforeach
-    Column::make('actions')->className('min-desktop text-right')->orderable(false)->searchable(false),
-        ];
         return Inertia::render('{{$modelPlural}}/Index',[
             "can" => [
                 "viewAny" => \Auth::user()->can('viewAny', {{$modelBaseName}}::class),
                 "create" => \Auth::user()->can('create', {{$modelBaseName}}::class),
             ],
-            "columns" => $columns,
+            "columns" => $this->repo::dtColumns(),
         ]);
     }
 
@@ -87,7 +72,7 @@ class {{ $controllerBaseName }}  extends Controller
         try {
             $data = $request->sanitizedObject();
             ${{$modelVariableName}} = $this->repo::store($data);
-            return \Redirect::route('admin.{{$modelRouteAndViewName}}.index')->with(['success' => "The {{$modelBaseName}} was created succesfully."]);
+            return back()->with(['success' => "The {{$modelTitle}} was created succesfully."]);
         } catch (\Throwable $exception) {
             \Log::error($exception);
             return back()->with([
@@ -112,11 +97,9 @@ class {{ $controllerBaseName }}  extends Controller
                 @if (isset($relations['belongsTo']) && count($relations['belongsTo'])){{PHP_EOL}}
                     @php $parents = $relations['belongsTo']->pluck("function_name")->toArray(); @endphp
                     ${{$modelVariableName}}->load([
-
                     @foreach($parents as $parent)
                         '{{$parent}}',
                     @endforeach
-
                     ]);
                 @endif
             @endif
@@ -145,11 +128,9 @@ class {{ $controllerBaseName }}  extends Controller
                 @if (isset($relations['belongsTo']) && count($relations['belongsTo'])){{PHP_EOL}}
                     @php $parents = $relations['belongsTo']->pluck("function_name")->toArray(); @endphp
                     ${{$modelVariableName}}->load([
-
                     @foreach($parents as $parent)
                         '{{$parent}}',
                     @endforeach
-
                     ]);
                 @endif
             @endif
@@ -174,7 +155,7 @@ class {{ $controllerBaseName }}  extends Controller
         try {
             $data = $request->sanitizedObject();
             $res = $this->repo::init(${{$modelVariableName}})->update($data);
-            return \Redirect::route('admin.{{$modelRouteAndViewName}}.index')->with(['success' => "The {{$modelBaseName}} was updated succesfully."]);
+            return back()->with(['success' => "The {{$modelBaseName}} was updated succesfully."]);
         } catch (\Throwable $exception) {
             \Log::error($exception);
             return back()->with([

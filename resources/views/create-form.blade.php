@@ -30,9 +30,6 @@
 
         <div class=" sm:col-span-4">
             <jet-label for="{{$col['name']}}" value="{{$col['label']}}" />
-            <jet-input type="time" id="{{$col['name']}}" name="{{$col['name']}}" v-model="form.{{$col['name']}}"
-                       :class="{'border-red-500 sm:focus:border-red-300 sm:focus:ring-red-100': form.errors.{{$col['name']}}}"
-            ></jet-input>
             <jig-datepicker class="w-full"
                             data-date-format="H:i"
                             :data-alt-input="true"
@@ -52,9 +49,6 @@
 
         <div class=" sm:col-span-4">
             <jet-label for="{{$col['name']}}" value="{{$col['label']}}" />
-            <jet-input type="datetime-local" id="{{$col['name']}}" name="{{$col['name']}}" v-model="form.{{$col['name']}}"
-                       :class="{'border-red-500 sm:focus:border-red-300 sm:focus:ring-red-100': form.errors.{{$col['name']}}}"
-            ></jet-input>
             <jig-datepicker class="w-full"
                             data-date-format="Y-m-d H:i:s"
                             :data-alt-input="true"

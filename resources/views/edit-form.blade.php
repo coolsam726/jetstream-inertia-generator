@@ -24,7 +24,7 @@
             ></jig-datepicker>
             <jet-input-error :message="form.errors.{{$col['name']}}" class="mt-2" />
         </div>
-@elseif($col['type'] === 'time')@php $hasInput = true;echo "\r"; @endphp
+@elseif($col['type'] === 'time')@php $hasDate = true;echo "\r"; @endphp
         <div class=" sm:col-span-4">
             <jet-label for="{{$col['name']}}" value="{{$col['label']}}" />
             <jig-datepicker class="w-full"
@@ -41,7 +41,7 @@
             ></jig-datepicker>
         <jet-input-error :message="form.errors.{{$col['name']}}" class="mt-2" />
     </div>
-@elseif($col['type'] === 'datetime')@php $hasInput = true;echo "\r"; @endphp
+@elseif($col['type'] === 'datetime')@php $hasDate = true;echo "\r"; @endphp
         <div class=" sm:col-span-4">
             <jet-label for="{{$col['name']}}" value="{{$col['label']}}" />
             <jig-datepicker class="w-full"

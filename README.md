@@ -2,7 +2,7 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/savannabits/jetstream-inertia-generator.svg?style=flat-square)](https://packagist.org/packages/savannabits/jetstream-inertia-generator)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/coolsam726/jetstream-inertia-generator)
-![Travis (.com) Build](https://img.shields.io/travis/com/coolsam726/jetstream-inertia-generator/master?label=travis-ci)
+![Travis (.com)](https://img.shields.io/travis/com/coolsam726/jetstream-inertia-generator?label=travis-ci)
 ![Scrutinizer code quality](https://img.shields.io/scrutinizer/quality/g/coolsam726/jetstream-inertia-generator/master)
 ![Scrutinizer build ](https://img.shields.io/scrutinizer/build/g/coolsam726/jetstream-inertia-generator/master?label=scrutnizer-build)
 [![Total Downloads](https://img.shields.io/packagist/dt/savannabits/jetstream-inertia-generator.svg?style=flat-square)](https://packagist.org/packages/savannabits/jetstream-inertia-generator)

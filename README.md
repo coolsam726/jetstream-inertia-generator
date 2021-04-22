@@ -2,9 +2,9 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/savannabits/jetstream-inertia-generator.svg?style=flat-square)](https://packagist.org/packages/savannabits/jetstream-inertia-generator)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/coolsam726/jetstream-inertia-generator)
-![Travis (.com) Build](https://img.shields.io/travis/com/coolsam726/jetstream-inertia-generator/master?label=travis-ci)
-![Scrutinizer code quality](https://img.shields.io/scrutinizer/quality/g/coolsam726/jetstream-inertia-generator/master)
-![Scrutinizer build ](https://img.shields.io/scrutinizer/build/g/coolsam726/jetstream-inertia-generator/master?label=scrutnizer-build)
+[![Travis (.com) Build](https://img.shields.io/travis/com/coolsam726/jetstream-inertia-generator/master?label=travis-ci)](https://travis-ci.com/github/coolsam726/jetstream-inertia-generator)
+[![Scrutinizer code quality](https://img.shields.io/scrutinizer/quality/g/coolsam726/jetstream-inertia-generator/master)](https://scrutinizer-ci.com/g/coolsam726/jetstream-inertia-generator)
+[![Scrutinizer build ](https://img.shields.io/scrutinizer/build/g/coolsam726/jetstream-inertia-generator/master?label=scrutnizer-build)](https://scrutinizer-ci.com/g/coolsam726/jetstream-inertia-generator)
 [![Total Downloads](https://img.shields.io/packagist/dt/savannabits/jetstream-inertia-generator.svg?style=flat-square)](https://packagist.org/packages/savannabits/jetstream-inertia-generator)
 
 **Jetstream Inertia Generator** a.k.a **jig** allows you to generate code for simple Admin CRUDs (Create, Read, UPdate, Delete) which are fully compatible with a Laravel Project powered by the [Jetstream - Inertia - Vue.js](https://jetstream.laravel.com/2.x/stacks/inertia.html) Stack.

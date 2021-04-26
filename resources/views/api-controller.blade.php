@@ -78,19 +78,12 @@ class {{ $controllerBaseName }}  extends Controller
     public function show(Request $request, {{$modelBaseName}} ${{$modelVariableName}})
     {
         try {
-            //Fetch relationships
-            @if (count($relations))
-@if (isset($relations['belongsTo']) && count($relations['belongsTo']))
-@php $parents = $relations['belongsTo']->pluck("function_name")->toArray(); @endphp
-${{$modelVariableName}}->load([
-@foreach($parents as $parent)
-            '{{$parent}}',
-@endforeach
-        ]);
-@endif
-            @endif
-return $this->api->success()->message("{{$modelTitle}} ${{$modelVariableName}}->id")->payload(${{$modelVariableName}})->send();
+            $payload = $this->repo::init(${{$modelVariableName}})->show($request);
+            return $this->api->success()
+                        ->message("{{$modelTitle}} ${{$modelVariableName}}->id")
+                        ->payload($payload)->send();
         } catch (\Throwable $exception) {
+            \Log::error($exception);
             return $this->api->failed()->message($exception->getMessage())->send();
         }
     }

@@ -15,7 +15,7 @@
         </template>
         <div class="flex flex-wrap px-4">
             <div class="z-10 flex-auto max-w-2xl p-4 mx-auto bg-white md:rounded-md md:shadow-md">
-                <edit-form :model="model" {{'@'}}success="onSuccess" {{'@'}}error="onError"></edit-form>
+                <edit-{{$modelRouteAndViewName}}-form :model="model" {{'@'}}success="onSuccess" {{'@'}}error="onError"/>
             </div>
         </div>
     </jig-layout>
@@ -27,10 +27,10 @@
     import InertiaButton from "@/JigComponents/InertiaButton";
     import JetInputError from "@/Jetstream/InputError";
     import JetButton from "@/Jetstream/Button";
-    import EditForm from "./EditForm";
+    import Edit{{$modelPlural}}Form from "./EditForm";
     import DisplayMixin from "@/Mixins/DisplayMixin";
     export default {
-        name: "Edit",
+        name: "Edit{{$modelPlural}}",
         props: {
             model: Object,
         },
@@ -40,7 +40,7 @@
             JetButton,
             JetInputError,
             JigLayout,
-            EditForm,
+            Edit{{$modelPlural}}Form,
         },
         data() {
             return {}

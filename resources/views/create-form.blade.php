@@ -164,7 +164,7 @@
     import JetInputError from "@/Jetstream/InputError"
     import {useForm} from "@inertiajs/inertia-vue3";
     export default {
-        name: "CreateForm",
+        name: "Create{{$modelPlural}}Form",
         components: {
             InertiaButton,
             JetInputError,

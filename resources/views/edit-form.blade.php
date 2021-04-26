@@ -131,6 +131,7 @@
     import JetLabel from "@/Jetstream/Label";
     import InertiaButton from "@/JigComponents/InertiaButton";
     import JetInputError from "@/Jetstream/InputError";
+    import {useForm} from "@inertiajs/inertia-vue3";
     @if($hasCheckbox)import JetCheckbox from "@/Jetstream/Checkbox";
 @endif
 @if($hasDate)import JigDatepicker from "@/JigComponents/JigDatepicker";
@@ -143,7 +144,7 @@
 @endif
 
     export default {
-        name: "EditForm",
+        name: "Edit{{$modelBaseName}}Form",
         props: {
             model: Object,
         },
@@ -165,12 +166,12 @@
         },
         data() {
             return {
-                form: this.$inertia.form({
+                form: useForm({
                     ...this.model,
 @if($hasPassword)
                     "password_confirmation": null,
 @endif
-                }),
+                },{remember:false}),
             }
         },
         mounted() {

@@ -92,18 +92,8 @@ class {{ $controllerBaseName }}  extends Controller
     {
         try {
             $this->authorize('view', ${{$modelVariableName}});
-            //Fetch relationships
-            @if (count($relations)){{PHP_EOL}}
-@if (isset($relations['belongsTo']) && count($relations['belongsTo'])){{PHP_EOL}}
-    @php $parents = $relations['belongsTo']->pluck("function_name")->toArray(); @endphp
-    ${{$modelVariableName}}->load([
-    @foreach($parents as $parent)
-        '{{$parent}}',
-    @endforeach
-    ]);
-@endif
-            @endif
-            return Inertia::render("{{$modelPlural}}/Show", ["model" => ${{$modelVariableName}}]);
+            $model = $this->repo::init(${{$modelVariableName}})->show($request);
+            return Inertia::render("{{$modelPlural}}/Show", ["model" => $model]);
         } catch (\Throwable $exception) {
             \Log::error($exception);
             return back()->with([

@@ -4,6 +4,7 @@
 namespace {{ $repoNamespace }};
 
 use {{$modelFullName}};
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Html\Column;
@@ -11,7 +12,7 @@ use Yajra\DataTables\Html\Column;
 class {{ $repoBaseName }}
 {
     private {{$modelBaseName}} $model;
-    public static function init({{$modelBaseName}} $model)
+    public static function init({{$modelBaseName}} $model): {{$repoBaseName}}
     {
         $instance = new self;
         $instance->model = $model;
@@ -28,7 +29,6 @@ $model->slug = Str::slug($model->name);
         @elseif(in_array("slug",$columns->pluck('name')->toArray()) && in_array("title",$columns->pluck('name')->toArray()))
 $model->slug = Str::slug($model->title);
         @endif
-
         // Save Relationships
         @if (count($relations))
     @if (isset($relations['belongsTo']) && count($relations['belongsTo'])){{PHP_EOL}}
@@ -44,7 +44,20 @@ if (isset($data->{{$relation["relationship_variable"]}})) {
         return $model;
     }
 
-
+    public function show(Request $request): {{$modelBaseName}} {
+        //Fetch relationships
+        @if (count($relations))
+@if (isset($relations['belongsTo']) && count($relations['belongsTo']))
+    @php $parents = $relations['belongsTo']->pluck("function_name")->toArray(); @endphp
+    $this->model->load([
+    @foreach($parents as $parent)
+        '{{$parent}}',
+    @endforeach
+    ]);
+@endif
+    @endif
+return $this->model;
+    }
     public function update(object $data): {{$modelBaseName}}
     {
         $this->model->update((array) $data);

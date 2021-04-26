@@ -104,7 +104,7 @@ class ViewForm extends ViewGenerator {
             $this->info('Generating '.$viewPath.' finished');
         }
 
-        //Make edit form
+        //Make edit Page
         $viewPath = resource_path('js/Pages/'.$this->modelPlural.'/Edit.vue');
         if ($this->alreadyExists($viewPath) && !$force) {
             $this->error('File '.$viewPath.' already exists!');
@@ -119,6 +119,20 @@ class ViewForm extends ViewGenerator {
         }
 
         // Make Show Form
+        $viewPath = resource_path('js/Pages/'.$this->modelPlural.'/ShowForm.vue');
+        if ($this->alreadyExists($viewPath) && !$force) {
+            $this->error('File '.$viewPath.' already exists!');
+        } else {
+            if ($this->alreadyExists($viewPath) && $force) {
+                $this->warn('File '.$viewPath.' already exists! File will be deleted.');
+                $this->files->delete($viewPath);
+            }
+            $this->makeDirectory($viewPath);
+            $this->files->put($viewPath, $this->buildForm("show-form"));
+            $this->info('Generating '.$viewPath.' finished');
+        }
+
+        // Make Show Page
         $viewPath = resource_path('js/Pages/'.$this->modelPlural.'/Show.vue');
         if ($this->alreadyExists($viewPath) && !$force) {
             $this->error('File '.$viewPath.' already exists!');
@@ -128,9 +142,10 @@ class ViewForm extends ViewGenerator {
                 $this->files->delete($viewPath);
             }
             $this->makeDirectory($viewPath);
-            $this->files->put($viewPath, $this->buildShow());
+            $this->files->put($viewPath, $this->buildForm("show"));
             $this->info('Generating '.$viewPath.' finished');
         }
+
     }
 
     protected function isUsedTwoColumnsLayout() : bool {

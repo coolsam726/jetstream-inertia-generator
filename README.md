@@ -58,102 +58,72 @@ Or if you are using yarn:
 ```shell
 yarn add -D pagetables popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo sass sass-loader vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-pdf mitt "https://github.com/sagalbot/vue-select/tarball/feat/vue-3-compat"
 ```
-3. Ensure your webpack mix is properly configured to support [code splitting](https://inertiajs.com/client-side-setup). Check that the `webpack.config.js` file matches or is close to the following:
-```js
-const path = require('path');
-require('dotenv').config();
 
-module.exports = {
-    resolve: {
-        alias: {
-            '@': path.resolve('resources/js'),
-        },
-    },
-    output: {
-        chunkFilename: `js/chunks/[name].js?id=[chunkhash]`,
-        filename: "[name].js?id=[chunkhash]",
-        publicPath: `/${process.env.MIX_APP_URI ? process.env.MIX_APP_URI+'/' : ''}`
-    }
-};
-
-```
-
-4.Ensure tailwind.config.js is present and has the correct configuration, including the @tailwindcss/forms plugin, and all the necessary paths for purge. Here is my recommendation:
-   
-```javascript
-const defaultTheme = require('tailwindcss/defaultTheme');
-const colors  = require("tailwindcss/colors");
-module.exports = {
-    purge: [
-        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-        './vendor/laravel/jetstream/**/*.blade.php',
-        './storage/framework/views/*.php',
-        './resources/views/**/*.blade.php',
-        './resources/js/**/*.vue',
-    ],
-
-    theme: {
-        extend: {
-            fontFamily: {
-                sans: ['Nunito', ...defaultTheme.fontFamily.sans],
-            },
-            colors: {
-                info: colors.blue["300"],
-                primary: {...colors.indigo,DEFAULT: colors.indigo["500"]},//Your colors here...
-                secondary: {...colors.gray,DEFAULT: colors.gray["500"]},
-                warning: {
-                    ...colors.yellow,
-                    DEFAULT: colors.yellow["500"]
-                },
-                danger: {
-                    ...colors.red,
-                    DEFAULT: colors.red["500"]
-                },
-                success: {
-                    ...colors.green,
-                    DEFAULT: colors.green["500"]
-                },
-            },
-        },
-    },
-
-    variants: {
-        extend: {
-            opacity: ['disabled'],
-            width: ["responsive", "hover", "focus"],
-            height: ["responsive", "hover", "focus"],
-            objectFit: ["responsive", "hover", "focus"],
-            borderRadius: ["hover","focus"]
-        },
-    },
-
-    plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
-};
-
-```
 Feel free to configure the color palette to your own preference, but for uniformity be sure to include `primary`,`secondary`, `success` and `danger` variants since they are used in the jig template.
-5. Publish the Package's assets and views. This is necessary for you to get the admin layout and all the vue components used in the generated code:
+3. Publish the Package's assets, configs, templates, components and layouts.
+   This is necessary for you to get the admin layout and all the vue components used in the generated code:
+   
+__Option 1__ (Suitable for fresh installations)
 ```shell
-php artisan vendor:publish --tag=jig-blade-templates --force #Publishes resources/views/app.blade.php. If it already exists, use --force to replace it
-php artisan vendor:publish --tag=jig-config #Publishes the config file
-php artisan vendor:publish --tag=jig-routes #Publishes routes/jig.php to hold routes for generated modules.
-php artisan vendor:publish --tag=jig-views #publishes Vue Components and Layout files
-php artisan vendor:publish --tag=jig-assets #publishes logos and other assets
+php artisan vendor:publish --force --provider="Savannabits\JetstreamInertiaGenerator\JetstreamInertiaGeneratorServiceProvider"
 ```
 
-6. Then finish installation steps for spatie/laravel-permission by publishing its migrations.
+__Option 2__ (Useful if you are upgrading the package or already have local changes you don't want to override.)
+NB: If you only want to update some published files, delete only the published files that you want to update, then run the appropriate command below:
+```shell
+php artisan vendor:publish --tag=jig-blade-templates #Publishes resources/views/app.blade.php. If it already exists, use --force to replace it
+php artisan vendor:publish --tag=jig-config #Publishes the config file. If it exists use --force to replace it.
+php artisan vendor:publish --tag=jig-routes #Publishes routes/jig.php to hold routes for generated modules.If you have already generated some routes, be sure to back them up as this file will be reset if you --force it.
+php artisan vendor:publish --tag=jig-views #publishes Vue Components, app.js, bootstrap.js and Layout files. Use --force to force replace
+php artisan vendor:publish --tag=jig-assets #publishes logos and other assets
+php artisan vendor:publish --tag=jig-compiler-configs #publishes webpack.config.js and tailwind.config.js
+```
+
+4. Then finish installation steps for spatie/laravel-permission by publishing its migrations.
 ```shell
 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
 ```
-NB: If you had already separately published laravel-permission's migrations, then you need to modify both the `roles` and `permissions` tables and add a nullable `title` field to each. This is used especially when scaffolding permissions for each generated module.
+NB: The `title` field will be automatically added to the `roles` and `permissions` tables when the first CRUD is generated.
 
-7. Add the `JigMiddleware` to the Global middleware group in `app/Http/Kernel.php`:
+5. Add the `JigMiddleware` to the Global middleware and the `web` middleware group in `app/Http/Kernel.php`:
     ```php
     protected $middleware = [
         ...,
         \Savannabits\JetstreamInertiaGenerator\Middleware\JigMiddleware::class,
     ];
+   
+   protected $middlewareGroups = [
+        'web' => [
+            ...,
+            \Savannabits\JetstreamInertiaGenerator\Middleware\JigMiddleware::class,
+        ],
+   ];
     ```
+6. Modify the .env to have the following keys:
+```dotenv
+APP_BASE_DOMAIN=mydomain.test
+APP_SCHEME=http #or https
+MIX_APP_URI= #optional (The path under which the app will be served. It is recommended to run the app from the root of the domain.
+APP_URL=${APP_SCHEME}://${APP_BASE_DOMAIN} #If MIX_APP_URI is empty.
+#APP_URL=${APP_SCHEME}://${APP_BASE_DOMAIN}/${MIX_APP_URI} #If MIX_APP_URI is not empty.
+
+# Append the following key to your .env to allow 1st party consumption of your api:
+SANCTUM_STATEFUL_DOMAINS="${APP_BASE_DOMAIN}" #You can add other comma separated domains
+```
+7. Allow First-Party access to the Sanctum API by adding the following to the `api` middleware group in `app/Http/Kernel.php`
+```php
+protected $middlewareGroups = [
+    'api' => [
+        \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+        ...
+    ],
+];
+```
+8. create the storage:link (See laravel documentation) to allow access to the public disk assets (e.g logos) via web:
+```shell
+php artisan storage:link
+```
+
 ## Usage
 The hard part is over. This is the easy part.
 ### General Steps to generate a CRUD:
@@ -162,7 +132,7 @@ The hard part is over. This is the easy part.
 2. Run the migration to the database with `php artisan migrate` command
 3. Generate the Whole Admin Scaffold for the module with `php artisan jig:generate` command
 4. Modify and customize the generated code to suit your specific requirements if necessary.
-
+__NB: If the crud already exists, and you would like to generate, you can use the `-f` or `--force` option to force replacement of files.
 ### Example
 Assuming you want to generate a `books` table:
 ```shell

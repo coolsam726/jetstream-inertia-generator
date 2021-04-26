@@ -27,7 +27,6 @@
         "yajra/laravel-datatables": "^1.5"
     },
     "require-dev": {
-        "barryvdh/laravel-ide-helper": "^2.9",
         "orchestra/testbench": "^v6.0.0",
         "phpunit/phpunit": "^9.4.4"
     },
@@ -44,7 +43,6 @@
     "scripts": {
         "test": "vendor/bin/phpunit",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
-
     },
     "config": {
         "sort-packages": true

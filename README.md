@@ -130,7 +130,7 @@ When you run `php artisan vendor:publish --tag=jig-migrations`, a migration is p
 
 Use these creds after migration to login and explore all parts of the application
 
-#### Create the Permissions, Roles and Users Modules first, in that order:
+### Create the Permissions, Roles and Users Modules first, in that order:
 Run the following commands to generate the User Access Control Module before proceeding to generate your admin:
 ```shell
 php artisan jig:generate:permission -f

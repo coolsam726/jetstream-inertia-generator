@@ -3,7 +3,6 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/savannabits/jetstream-inertia-generator.svg?style=flat-square)](https://packagist.org/packages/savannabits/jetstream-inertia-generator)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/coolsam726/jetstream-inertia-generator)
 [![Travis (.com) Build](https://img.shields.io/travis/com/coolsam726/jetstream-inertia-generator/master?label=travis-ci)](https://travis-ci.com/github/coolsam726/jetstream-inertia-generator)
-[![Scrutinizer code quality](https://img.shields.io/scrutinizer/quality/g/coolsam726/jetstream-inertia-generator/master)](https://scrutinizer-ci.com/g/coolsam726/jetstream-inertia-generator)
 [![Scrutinizer build ](https://img.shields.io/scrutinizer/build/g/coolsam726/jetstream-inertia-generator/master?label=scrutnizer-build)](https://scrutinizer-ci.com/g/coolsam726/jetstream-inertia-generator)
 [![Total Downloads](https://img.shields.io/packagist/dt/savannabits/jetstream-inertia-generator.svg?style=flat-square)](https://packagist.org/packages/savannabits/jetstream-inertia-generator)
 
@@ -49,7 +48,6 @@ Other Important dependencies that you MUST configure include:
 composer require savannabits/jetstream-inertia-generator
 ```
 2. Install the necessary `npm` dev dependencies by running the following command:
-
 If you are using npm:
 ```shell
 npm run --dev pagetables popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo sass sass-loader vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-pdf mitt "https://github.com/sagalbot/vue-select/tarball/feat/vue-3-compat"
@@ -58,11 +56,10 @@ Or if you are using yarn:
 ```shell
 yarn add -D pagetables popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo sass sass-loader vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-pdf mitt "https://github.com/sagalbot/vue-select/tarball/feat/vue-3-compat"
 ```
-
 Feel free to configure the color palette to your own preference, but for uniformity be sure to include `primary`,`secondary`, `success` and `danger` variants since they are used in the jig template.
-3. Publish the Package's assets, configs, templates, components and layouts.
+3.  Publish the Package's assets, configs, templates, components and layouts.
    This is necessary for you to get the admin layout and all the vue components used in the generated code:
-   
+
 __Option 1__ (Suitable for fresh installations)
 ```shell
 php artisan vendor:publish --force --provider="Savannabits\JetstreamInertiaGenerator\JetstreamInertiaGeneratorServiceProvider"
@@ -77,14 +74,13 @@ php artisan vendor:publish --tag=jig-routes #Publishes routes/jig.php to hold ro
 php artisan vendor:publish --tag=jig-views #publishes Vue Components, app.js, bootstrap.js and Layout files. Use --force to force replace
 php artisan vendor:publish --tag=jig-assets #publishes logos and other assets
 php artisan vendor:publish --tag=jig-compiler-configs #publishes webpack.config.js and tailwind.config.js
+php artisan vendor:publish --tag=jig-migrations #Publish database migrations
 ```
-
 4. Then finish installation steps for spatie/laravel-permission by publishing its migrations.
 ```shell
 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
 ```
 NB: The `title` field will be automatically added to the `roles` and `permissions` tables when the first CRUD is generated.
-
 5. Add the `JigMiddleware` to the Global middleware and the `web` middleware group in `app/Http/Kernel.php`:
     ```php
     protected $middleware = [
@@ -99,18 +95,7 @@ NB: The `title` field will be automatically added to the `roles` and `permission
         ],
    ];
     ```
-6. Modify the .env to have the following keys:
-```dotenv
-APP_BASE_DOMAIN=mydomain.test
-APP_SCHEME=http #or https
-MIX_APP_URI= #optional (The path under which the app will be served. It is recommended to run the app from the root of the domain.
-APP_URL=${APP_SCHEME}://${APP_BASE_DOMAIN} #If MIX_APP_URI is empty.
-#APP_URL=${APP_SCHEME}://${APP_BASE_DOMAIN}/${MIX_APP_URI} #If MIX_APP_URI is not empty.
-
-# Append the following key to your .env to allow 1st party consumption of your api:
-SANCTUM_STATEFUL_DOMAINS="${APP_BASE_DOMAIN}" #You can add other comma separated domains
-```
-7. Allow First-Party access to the Sanctum API by adding the following to the `api` middleware group in `app/Http/Kernel.php`
+6. Allow First-Party access to the Sanctum API by adding the following to the `api` middleware group in `app/Http/Kernel.php`
 ```php
 protected $middlewareGroups = [
     'api' => [
@@ -119,13 +104,38 @@ protected $middlewareGroups = [
     ],
 ];
 ```
+7. Modify the .env to have the following keys:
+```dotenv
+APP_BASE_DOMAIN=mydomain.test
+APP_SCHEME=http #or https
+#optional mix_app_uri (The path under which the app will be served. It is recommended to run the app from the root of the domain.
+MIX_APP_URI= 
+APP_URL=${APP_SCHEME}://${APP_BASE_DOMAIN} #If MIX_APP_URI is empty.
+#APP_URL=${APP_SCHEME}://${APP_BASE_DOMAIN}/${MIX_APP_URI} #If MIX_APP_URI is not empty.
+
+# Append the following key to your .env to allow 1st party consumption of your api:
+SANCTUM_STATEFUL_DOMAINS="${APP_BASE_DOMAIN}" #You can add other comma separated domains
+```
 8. create the storage:link (See laravel documentation) to allow access to the public disk assets (e.g logos) via web:
 ```shell
 php artisan storage:link
 ```
 
 ## Usage
-The hard part is over. This is the easy part.
+### The initial seeded admin user and role
+When you run `php artisan vendor:publish --tag=jig-migrations`, a migration is published that creates an initial default user called `Administrator` and a role with the name `administrator` to enable you gain access to the system with admin privileges. The credentials for the user account are:
+* Email: **admin@savannabits.com**
+* Password: **password**
+Use this to login and explore all parts of the application
+
+#### Create the Permissions, Roles and Users Modules first, in that order:
+Run the following commands to generate the User Access Control Module before proceeding to generate your admin:
+```shell
+php artisan jig:generate:permission -f
+php artisan jig:generate:role -f
+php artisan jig:generate:user -f
+```
+You can now proceed to generate any other CRUD you want using the steps in the following section.
 ### General Steps to generate a CRUD:
 ![](.README_images/jig-generate.gif)
 1. Generate and write a migration for your table with `php artisan make:migration` command.

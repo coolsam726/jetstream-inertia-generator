@@ -127,7 +127,8 @@ php artisan storage:link
 When you run `php artisan vendor:publish --tag=jig-migrations`, a migration is published that creates an initial default user called `Administrator` and a role with the name `administrator` to enable you gain access to the system with admin privileges. The credentials for the user account are:
 * Email: **admin@savannabits.com**
 * Password: **password**
-Use this to login and explore all parts of the application
+
+Use these creds after migration to login and explore all parts of the application
 
 #### Create the Permissions, Roles and Users Modules first, in that order:
 Run the following commands to generate the User Access Control Module before proceeding to generate your admin:

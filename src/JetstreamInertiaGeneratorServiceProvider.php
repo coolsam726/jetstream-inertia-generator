@@ -44,7 +44,7 @@ class JetstreamInertiaGeneratorServiceProvider extends RouteServiceProvider
          */
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'jetstream-inertia-generator');
          $this->loadViewsFrom(__DIR__.'/../resources/views', 'jig');
-        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+//         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         /**
          * @var Router $router
          */
@@ -74,6 +74,10 @@ class JetstreamInertiaGeneratorServiceProvider extends RouteServiceProvider
             $this->publishes([
                 __DIR__.'/../resources/js' => resource_path('js'),
             ], 'jig-views');
+
+            $this->publishes([
+                __DIR__.'/../database/migrations' => database_path('migrations'),
+            ], 'jig-migrations');
 
             $this->publishes([
                 __DIR__.'/../resources/compiler-configs' => base_path(''),

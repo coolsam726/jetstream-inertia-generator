@@ -81,6 +81,7 @@ php artisan vendor:publish --tag=jig-migrations #Publish database migrations
 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
 ```
 NB: The `title` field will be automatically added to the `roles` and `permissions` tables when the first CRUD is generated.
+
 5. Add the `JigMiddleware` to the Global middleware and the `web` middleware group in `app/Http/Kernel.php`:
 ```php
 protected $middleware = [

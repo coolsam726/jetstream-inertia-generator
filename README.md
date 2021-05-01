@@ -82,19 +82,19 @@ php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvid
 ```
 NB: The `title` field will be automatically added to the `roles` and `permissions` tables when the first CRUD is generated.
 5. Add the `JigMiddleware` to the Global middleware and the `web` middleware group in `app/Http/Kernel.php`:
-    ```php
-    protected $middleware = [
+```php
+protected $middleware = [
+    ...,
+    \Savannabits\JetstreamInertiaGenerator\Middleware\JigMiddleware::class,
+];
+
+protected $middlewareGroups = [
+    'web' => [
         ...,
         \Savannabits\JetstreamInertiaGenerator\Middleware\JigMiddleware::class,
-    ];
-   
-   protected $middlewareGroups = [
-        'web' => [
-            ...,
-            \Savannabits\JetstreamInertiaGenerator\Middleware\JigMiddleware::class,
-        ],
-   ];
-    ```
+    ],
+];
+```
 6. Allow First-Party access to the Sanctum API by adding the following to the `api` middleware group in `app/Http/Kernel.php`
 ```php
 protected $middlewareGroups = [
@@ -105,7 +105,7 @@ protected $middlewareGroups = [
 ];
 ```
 7. Modify the .env to have the following keys:
-```dotenv
+```env
 APP_BASE_DOMAIN=mydomain.test
 APP_SCHEME=http #or https
 #optional mix_app_uri (The path under which the app will be served. It is recommended to run the app from the root of the domain.

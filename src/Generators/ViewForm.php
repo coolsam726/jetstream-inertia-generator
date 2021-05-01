@@ -33,13 +33,17 @@ class ViewForm extends ViewGenerator {
      * @var string
      */
     protected string $show = 'show';
+    protected string $edit = 'edit';
+    protected ?string $assignPermissions = null;
 
     /**
      * Path for form view
      *
      * @var string
      */
-    protected string $form = 'form';
+    protected string $showForm = 'show-form';
+    protected string $createForm = 'create-form';
+    protected string $editForm = 'edit-form';
 
     /**
      * Execute the console command.
@@ -53,13 +57,15 @@ class ViewForm extends ViewGenerator {
         //TODO check if exists
         //TODO make global for all generator
         //TODO also with prefix
-        /*if(!empty($template = $this->option('template'))) {
+        if(!empty($template = $this->option('template'))) {
             $this->create = 'templates.'.$template.'.create';
+            $this->createForm = 'templates.'.$template.'.create-form';
             $this->edit = 'templates.'.$template.'.edit';
-            $this->form = 'templates.'.$template.'.form';
-            $this->formRight = 'templates.'.$template.'form-right';
-            $this->formJs = 'templates.'.$template.'.form-js';
-        }*/
+            $this->editForm = 'templates.'.$template.'.edit-form';
+            $this->show = 'templates.'.$template.'.show';
+            $this->showForm = 'templates.'.$template.'.show-form';
+            $this->assignPermissions = 'templates.'.$template.'.assign-permissions';
+        }
 
         if(!empty($belongsToMany = $this->option('belongs-to-many'))) {
             $this->setBelongToManyRelation($belongsToMany);
@@ -74,7 +80,7 @@ class ViewForm extends ViewGenerator {
                 $this->files->delete($viewPath);
             }
             $this->makeDirectory($viewPath);
-            $this->files->put($viewPath, $this->buildForm("create-form"));
+            $this->files->put($viewPath, $this->buildForm($this->createForm));
             $this->info('Generating '.$viewPath.' finished');
         }
         /*Make Create Page*/
@@ -87,7 +93,7 @@ class ViewForm extends ViewGenerator {
                 $this->files->delete($viewPath);
             }
             $this->makeDirectory($viewPath);
-            $this->files->put($viewPath, $this->buildForm("create"));
+            $this->files->put($viewPath, $this->buildForm($this->create));
             $this->info('Generating '.$viewPath.' finished');
         }
         //Make edit form
@@ -100,8 +106,24 @@ class ViewForm extends ViewGenerator {
                 $this->files->delete($viewPath);
             }
             $this->makeDirectory($viewPath);
-            $this->files->put($viewPath, $this->buildForm("edit-form"));
+            $this->files->put($viewPath, $this->buildForm($this->editForm));
             $this->info('Generating '.$viewPath.' finished');
+        }
+
+        //Make Assign Permissions form
+        if ($this->tableName ==='roles' && $this->assignPermissions) {
+            $viewPath = resource_path('js/Pages/'.$this->modelPlural.'/AssignPerms.vue');
+            if ($this->alreadyExists($viewPath) && !$force) {
+                $this->error('File '.$viewPath.' already exists!');
+            } else {
+                if ($this->alreadyExists($viewPath) && $force) {
+                    $this->warn('File '.$viewPath.' already exists! File will be deleted.');
+                    $this->files->delete($viewPath);
+                }
+                $this->makeDirectory($viewPath);
+                $this->files->put($viewPath, $this->buildForm($this->assignPermissions));
+                $this->info('Generating '.$viewPath.' finished');
+            }
         }
 
         //Make edit Page
@@ -114,7 +136,7 @@ class ViewForm extends ViewGenerator {
                 $this->files->delete($viewPath);
             }
             $this->makeDirectory($viewPath);
-            $this->files->put($viewPath, $this->buildForm("edit"));
+            $this->files->put($viewPath, $this->buildForm($this->edit));
             $this->info('Generating '.$viewPath.' finished');
         }
 
@@ -128,7 +150,7 @@ class ViewForm extends ViewGenerator {
                 $this->files->delete($viewPath);
             }
             $this->makeDirectory($viewPath);
-            $this->files->put($viewPath, $this->buildForm("show-form"));
+            $this->files->put($viewPath, $this->buildForm($this->showForm));
             $this->info('Generating '.$viewPath.' finished');
         }
 
@@ -142,7 +164,7 @@ class ViewForm extends ViewGenerator {
                 $this->files->delete($viewPath);
             }
             $this->makeDirectory($viewPath);
-            $this->files->put($viewPath, $this->buildForm("show"));
+            $this->files->put($viewPath, $this->buildForm($this->show));
             $this->info('Generating '.$viewPath.' finished');
         }
 

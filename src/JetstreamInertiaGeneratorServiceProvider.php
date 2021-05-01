@@ -18,6 +18,9 @@ class JetstreamInertiaGeneratorServiceProvider extends RouteServiceProvider
         parent::boot();
         $this->commands([
             JetstreamInertiaGenerator::class,
+            RoleGenerator::class,
+            PermissionsGenerator::class,
+            UsersGenerator::class,
             Generators\Model::class,
             Generators\Policy::class,
             Generators\Repository::class,

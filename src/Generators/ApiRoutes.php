@@ -54,7 +54,7 @@ class ApiRoutes extends FileAppender {
         //TODO make global for all generator
         //TODO also with prefix
         if(!empty($template = $this->option('template'))) {
-            $this->view = 'templates.'.$template.'.routes';
+            $this->view = 'templates.'.$template.'.api-routes';
         }
 
         if ($this->appendIfNotAlreadyAppended(base_path('routes/api.php'), PHP_EOL.PHP_EOL.$this->buildClass())){

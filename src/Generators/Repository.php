@@ -61,6 +61,10 @@ class Repository extends ClassGenerator {
             $this->setBelongToManyRelation($belongsToMany);
         }
 
+        if(!empty($template = $this->option('template'))) {
+            $this->view = 'templates.'.$template.'.repository';
+        }
+
         if ($this->generateClass($force)){
 
             $this->info('Generating '.$this->classFullName.' finished');

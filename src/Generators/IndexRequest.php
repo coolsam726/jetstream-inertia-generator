@@ -17,6 +17,7 @@ class IndexRequest extends ClassGenerator {
      * @var string
      */
     protected $description = 'Generate an Index request class';
+    protected string $view  = 'index-request';
 
     /**
      * Execute the console command.
@@ -27,6 +28,10 @@ class IndexRequest extends ClassGenerator {
     {
         $force = $this->option('force');
 
+        if(!empty($template = $this->option('template'))) {
+            $this->view = 'templates.'.$template.'.index-request';
+        }
+
         if ($this->generateClass($force)){
             $this->info('Generating '.$this->classFullName.' finished');
         }
@@ -34,7 +39,7 @@ class IndexRequest extends ClassGenerator {
 
     protected function buildClass() :string {
 
-        return view('jig::index-request', [
+        return view('jig::'.$this->view, [
             'modelBaseName'                 => $this->modelBaseName,
             'modelDotNotation'              => $this->modelDotNotation,
             'modelWithNamespaceFromDefault' => $this->modelWithNamespaceFromDefault,
@@ -48,6 +53,7 @@ class IndexRequest extends ClassGenerator {
 
     protected function getOptions() {
         return [
+            ['template', 't', InputOption::VALUE_OPTIONAL, 'Specify custom template'],
             ['model-name', 'm', InputOption::VALUE_OPTIONAL, 'Generates a code for the given model'],
             ['force', 'f', InputOption::VALUE_NONE, 'Force will delete files before regenerating request'],
         ];

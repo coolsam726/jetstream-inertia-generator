@@ -49,12 +49,12 @@ class Model extends ClassGenerator {
             $this->info('Generating '.$this->classFullName.' finished');
         }
 
-        /*Generate a Policy Skeleton for the model*/
-        /*$this->call('make:policy', [
-            "name" => $this->modelBaseName."Policy",
+        /*Generate a Factory Skeleton for the model*/
+        $this->call('make:factory', [
+            "name" => $this->modelBaseName."Factory",
             '--model' => $this->modelBaseName,
         ]);
-        $this->info('Generating '.$this->modelBaseName."Policy".' finished');*/
+        $this->info('Generating '.$this->modelBaseName."Factory".' finished');
     }
 
     /**
@@ -83,20 +83,52 @@ class Model extends ClassGenerator {
                 return $column['type'] == "boolean" || $column['type'] == "bool";
             })->pluck('name'),
             'fillable' => $this->readColumnsFromTable($this->tableName)->filter(function($column) {
-                return !in_array($column['name'], ['id', 'created_at', 'updated_at', 'deleted_at','password', 'remember_token','slug']);
+                return !in_array($column['name'], [
+                    'id',
+                    'created_at',
+                    'updated_at',
+                    'deleted_at',
+                    'password',
+                    'remember_token',
+                    'slug',
+                    'email_verified_at',
+                    'two_factor_recovery_codes',
+                    'two_factor_secret',
+                    'api_key',
+                ]);
             })->pluck('name'),
             'searchable' => $this->readColumnsFromTable($this->tableName)->filter(function($column) {
-                return !in_array($column['name'], ['created_at', 'updated_at', 'deleted_at','password', 'remember_token','slug'])
+                return !in_array($column['name'], [
+                    'created_at',
+                        'updated_at',
+                        'deleted_at',
+                        'password',
+                        'remember_token',
+                        'two_factor_recovery_codes',
+                        'two_factor_secret',
+                        'api_key',
+                    ])
                     && !in_array($column["type"],["json"]);
             })->pluck('name'),
             'hidden' => $this->readColumnsFromTable($this->tableName)->filter(function($column) {
-                return in_array($column['name'], ['password', 'remember_token']);
+                return in_array($column['name'], [
+                    'password',
+                    'remember_token',
+                    'two_factor_recovery_codes',
+                    'two_factor_secret',
+                    'api_key',
+                ]);
             })->pluck('name'),
             'translatable' => $this->readColumnsFromTable($this->tableName)->filter(function($column) {
                 return $column['type'] == "json";
             })->pluck('name'),
             'timestamps' => $this->readColumnsFromTable($this->tableName)->filter(function($column) {
-                return in_array($column['name'], ['created_at', 'updated_at']);
+                return in_array($column['name'], [
+                    'created_at',
+                    'updated_at',
+                    'email_verified_at',
+                    'deleted_at',
+                ]);
             })->count() > 0,
             'hasSoftDelete' => $this->readColumnsFromTable($this->tableName)->filter(function($column) {
                 return $column['name'] == "deleted_at";

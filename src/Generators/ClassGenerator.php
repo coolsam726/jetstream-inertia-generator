@@ -15,14 +15,14 @@ abstract class ClassGenerator extends Command {
 
     use Helpers, Columns, Names;
 
-    public $classBaseName;
-    public $classFullName;
-    public $classNamespace;
+    public string $classBaseName;
+    public string $classFullName;
+    public string $classNamespace;
 
     /**
      * @var Filesystem
      */
-    protected $files;
+    protected Filesystem $files;
 
     /**
      * Relations

@@ -53,6 +53,10 @@ class ViewIndex extends ViewGenerator {
             $this->export = true;
         }
 
+        if(!empty($template = $this->option('template'))) {
+            $this->view = 'templates.'.$template.'.index';
+        }
+
         if($this->option('without-bulk')){
             $this->withoutBulk = true;
         }

@@ -1,275 +1,185 @@
 @php echo "<?php";
 @endphp
 
-
 namespace {{ $controllerNamespace }};
-@php
-    $activation = $columns->search(function ($column, $key) {
-            return $column['name'] === 'activated';
-        }) !== false;
-@endphp
-
-@if($export)use App\Exports\{{$exportBaseName}};
+@if($export)
+    use App\Exports\{{$exportBaseName}};
+    use Maatwebsite\Excel\Excel
 @endif
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\{{ $modelWithNamespaceFromDefault }}\Destroy{{ $modelBaseName }};
-use App\Http\Requests\Admin\{{ $modelWithNamespaceFromDefault }}\Index{{ $modelBaseName }};
-use App\Http\Requests\Admin\{{ $modelWithNamespaceFromDefault }}\Store{{ $modelBaseName }};
-use App\Http\Requests\Admin\{{ $modelWithNamespaceFromDefault }}\Update{{ $modelBaseName }};
-use {{ $modelFullName }};
-@if (count($relations))
-@if (count($relations['belongsToMany']))
-@foreach($relations['belongsToMany'] as $belongsToMany)
-use {{ $belongsToMany['related_model'] }};
-@endforeach
-@endif
-@endif
-@if($activation)use Savannabits\AdminAuth\Activation\Facades\Activation;
-@endif
-@if($activation)use Savannabits\AdminAuth\Services\ActivationService;
-@endif
-use Savannabits\AdminListing\Facades\AdminListing;
-use Exception;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\{{ $modelWithNamespaceFromDefault }}\Index{{ $modelBaseName }};
+use App\Http\Requests\{{ $modelWithNamespaceFromDefault }}\Store{{ $modelBaseName }};
+use App\Http\Requests\{{ $modelWithNamespaceFromDefault }}\Update{{ $modelBaseName }};
+use App\Http\Requests\{{ $modelWithNamespaceFromDefault }}\Destroy{{ $modelBaseName }};
+use {{$modelFullName}};
+use {{$repoFullName}};
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\Config;
-use Illuminate\View\View;
-@if($export)use Maatwebsite\Excel\Facades\Excel;
-@endif
-@if($export)use Symfony\Component\HttpFoundation\BinaryFileResponse;
-@endif
+use Illuminate\Support\Str;
+use Inertia\Inertia;
+use Yajra\DataTables\Html\Column;
+use \Spatie\Permission\Models\Role;
 
-class {{ $controllerBaseName }} extends Controller
+class {{ $controllerBaseName }}  extends Controller
 {
-
-    /**
-     * Display a listing of the resource.
-     *
-     * {{'@'}}param  Index{{ $modelBaseName }} $request
-     * {{'@'}}return array|Factory|View
-     */
-    public function index(Index{{ $modelBaseName }} $request)
+    private {{$repoBaseName}} $repo;
+    public function __construct({{$repoBaseName}} $repo)
     {
-        // create and AdminListing instance for a specific model and
-        $data = AdminListing::create({{ $modelBaseName }}::class)->processRequestAndGet(
-            // pass the request with params
-            $request,
-
-            // set columns to query
-            ['{!! implode('\', \'', $columnsToQuery) !!}'],
-
-            // set columns to searchIn
-            ['{!! implode('\', \'', $columnsToSearchIn) !!}']
-        );
-
-        if ($request->ajax()) {
-            return ['data' => $data, 'activation' => Config::get('admin-auth.activation_enabled')];
-        }
-
-        return view('admin.{{ $modelDotNotation }}.index', ['data' => $data, 'activation' => Config::get('admin-auth.activation_enabled')]);
-
+        $this->repo = $repo;
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * {{'@'}}return Factory|View
-     * {{'@'}}throws AuthorizationException
-     */
+    * Display a listing of the resource.
+    *
+    * @param Request $request
+    * @return  \Inertia\Response
+    * @throws \Illuminate\Auth\Access\AuthorizationException
+    */
+    public function index(Request $request): \Inertia\Response
+    {
+        $this->authorize('viewAny', {{$modelBaseName}}::class);
+        return Inertia::render('{{$modelPlural}}/Index',[
+            "can" => [
+                "viewAny" => \Auth::user()->can('viewAny', {{$modelBaseName}}::class),
+                "create" => \Auth::user()->can('create', {{$modelBaseName}}::class),
+            ],
+            "columns" => $this->repo::dtColumns(),
+        ]);
+    }
+
+    /**
+    * Show the form for creating a new resource.
+    *
+    * @return \Inertia\Response
+    */
     public function create()
     {
-        $this->authorize('admin.{{ $modelDotNotation }}.create');
-
-@if (count($relations))
-        return view('admin.{{ $modelDotNotation }}.create',[
-            'activation' => Config::get('admin-auth.activation_enabled'),
-@if (count($relations['belongsToMany']))
-@foreach($relations['belongsToMany'] as $belongsToMany)
-            '{{ $belongsToMany['related_table'] }}' => {{ $belongsToMany['related_model_name'] }}::all(),
-@endforeach
-@endif
-        ]);
-@else
-        return view('admin.{{ $modelDotNotation }}.create');
-@endif
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * {{'@'}}param  Store{{ $modelBaseName }} $request
-     * {{'@'}}return array|RedirectResponse|Redirector
-     */
-    public function store(Store{{ $modelBaseName }} $request)
-    {
-        // Sanitize input
-        $sanitized = $request->getModifiedData();
-
-        // Store the {{ $modelBaseName }}
-        ${{ $modelVariableName }} = {{ $modelBaseName }}::create($sanitized);
-
-@if (count($relations))
-@if (count($relations['belongsToMany']))
-@foreach($relations['belongsToMany'] as $belongsToMany)
-        // But we do have a {{ $belongsToMany['related_table'] }}, so we need to attach the {{ $belongsToMany['related_table'] }} to the {{ $modelVariableName }}
-        ${{ $modelVariableName }}->{{ $belongsToMany['related_table'] }}()->sync(collect($request->input('{{ $belongsToMany['related_table'] }}', []))->map->id->toArray());
-@endforeach
-
-@endif
-@endif
-        if ($request->ajax()) {
-            return ['redirect' => url('admin/{{ $resource }}'), 'message' => trans('savannabits/admin-ui::admin.operation.succeeded')];
-        }
-
-        return redirect('admin/{{ $resource }}');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * {{'@'}}param  {{ $modelBaseName }} ${{ $modelVariableName }}
-     * {{'@'}}return void
-     * {{'@'}}throws AuthorizationException
-     */
-    public function show({{ $modelBaseName }} ${{ $modelVariableName }})
-    {
-        $this->authorize('admin.{{ $modelDotNotation }}.show', ${{ $modelVariableName }});
-
-        // TODO your code goes here
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * {{'@'}}param  {{ $modelBaseName }} ${{ $modelVariableName }}
-     * {{'@'}}return Factory|View
-     * {{'@'}}throws AuthorizationException
-     */
-    public function edit({{ $modelBaseName }} ${{ $modelVariableName }})
-    {
-        $this->authorize('admin.{{ $modelDotNotation }}.edit', ${{ $modelVariableName }});
-
-@if (count($relations))
-@if (count($relations['belongsToMany']))
-@foreach($relations['belongsToMany'] as $belongsToMany)
-        ${{ $modelVariableName }}->load('{{ $belongsToMany['related_table'] }}');
-@endforeach
-
-@endif
-@endif
-        return view('admin.{{ $modelDotNotation }}.edit', [
-            '{{ $modelVariableName }}' => ${{ $modelVariableName }},
-            'activation' => Config::get('admin-auth.activation_enabled'),
-@if (count($relations))
-@if (count($relations['belongsToMany']))
-@foreach($relations['belongsToMany'] as $belongsToMany)
-            '{{ $belongsToMany['related_table'] }}' => {{ $belongsToMany['related_model_name'] }}::all(),
-@endforeach
-@endif
-@endif
+        $this->authorize('create', User::class);
+        $roles = Role::all()->map(function ($role) {
+            $role->checked = false;
+            return $role->only(['id', 'name', 'title', 'checked']);
+        })->keyBy('name');
+        return Inertia::render("Users/Create", [
+            "can" => [
+                "viewAny" => \Auth::user()->can('viewAny', User::class),
+                "create" => \Auth::user()->can('create', User::class),
+            ],
+            "roles" => $roles,
         ]);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * {{'@'}}param  Update{{ $modelBaseName }} $request
-     * {{'@'}}param  {{ $modelBaseName }} ${{ $modelVariableName }}
-     * {{'@'}}return array|RedirectResponse|Redirector
-     */
-    public function update(Update{{ $modelBaseName }} $request, {{ $modelBaseName }} ${{ $modelVariableName }})
-    {
-        // Sanitize input
-        $sanitized = $request->getModifiedData();
-
-        // Update changed values {{ $modelBaseName }}
-        ${{ $modelVariableName }}->update($sanitized);
-
-@if (count($relations))
-@if (count($relations['belongsToMany']))
-@foreach($relations['belongsToMany'] as $belongsToMany)
-        // But we do have a {{ $belongsToMany['related_table'] }}, so we need to attach the {{ $belongsToMany['related_table'] }} to the {{ $modelVariableName }}
-        if($request->input('{{ $belongsToMany['related_table'] }}')) {
-            ${{ $modelVariableName }}->{{ $belongsToMany['related_table'] }}()->sync(collect($request->input('{{ $belongsToMany['related_table'] }}', []))->map->id->toArray());
-        }
-@endforeach
-@endif
-@endif
-
-        if ($request->ajax()) {
-            return ['redirect' => url('admin/{{ $resource }}'), 'message' => trans('savannabits/admin-ui::admin.operation.succeeded')];
-        }
-
-        return redirect('admin/{{ $resource }}');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * {{'@'}}param  Destroy{{ $modelBaseName }} $request
-     * {{'@'}}param  {{ $modelBaseName }} ${{ $modelVariableName }}
-     * {{'@'}}return ResponseFactory|RedirectResponse|Response
-     * {{'@'}}throws Exception
-     */
-    public function destroy(Destroy{{ $modelBaseName }} $request, {{ $modelBaseName }} ${{ $modelVariableName }})
-    {
-        ${{ $modelVariableName }}->delete();
-
-        if ($request->ajax()) {
-            return response(['message' => trans('savannabits/admin-ui::admin.operation.succeeded')]);
-        }
-
-        return redirect()->back();
-    }
-
-    @if($activation)/**
-    * Resend activation e-mail
+    * Store a newly created resource in storage.
     *
-    * {{'@'}}param Request $request
-    * {{'@'}}param {{ $modelBaseName }} ${{ $modelVariableName }}
-    * {{'@'}}return array|RedirectResponse
+    * {{"@"}}param Store{{$modelBaseName}} $request
+    * {{"@"}}return \Illuminate\Http\RedirectResponse
     */
-    public function resendActivationEmail(Request $request, ActivationService $activationService, {{ $modelBaseName }} ${{ $modelVariableName }})
+    public function store(Store{{$modelBaseName}} $request)
     {
-        if(Config::get('admin-auth.activation_enabled')) {
-
-            $response = $activationService->handle(${{ $modelVariableName }});
-            if($response == Activation::ACTIVATION_LINK_SENT) {
-                if ($request->ajax()) {
-                    return ['message' => trans('savannabits/admin-ui::admin.operation.succeeded')];
-                }
-
-                return redirect()->back();
-            } else {
-                if ($request->ajax()) {
-                    abort(409, trans('savannabits/admin-ui::admin.operation.failed'));
-                }
-
-                return redirect()->back();
-            }
-        } else {
-            if ($request->ajax()) {
-                abort(400, trans('savannabits/admin-ui::admin.operation.not_allowed'));
-            }
-
-            return redirect()->back();
+        try {
+            $data = $request->sanitizedObject();
+            ${{$modelVariableName}} = $this->repo::store($data);
+            return back()->with(['success' => "The {{$modelTitle}} was created succesfully."]);
+        } catch (\Throwable $exception) {
+            \Log::error($exception);
+            return back()->with([
+                'error' => $exception->getMessage(),
+            ]);
         }
     }
-@endif
-@if($export)
 
     /**
-     * Export entities
-     *
-     * {{'@'}}return BinaryFileResponse|null
-     */
-    public function export(): ?BinaryFileResponse
+    * Display the specified resource.
+    *
+    * {{"@"}}param Request $request
+    * {{"@"}}param {{$modelBaseName}} ${{$modelVariableName}}
+    * {{"@"}}return \Inertia\Response|\Illuminate\Http\RedirectResponse
+    */
+    public function show(Request $request, {{$modelBaseName}} ${{$modelVariableName}})
     {
-        return Excel::download(app({{ $exportBaseName }}::class), '{{ str_plural($modelVariableName) }}.xlsx');
+        try {
+            $this->authorize('view', ${{$modelVariableName}});
+            $model = $this->repo::init(${{$modelVariableName}})->show($request);
+            return Inertia::render("{{$modelPlural}}/Show", ["model" => $model]);
+        } catch (\Throwable $exception) {
+            \Log::error($exception);
+            return back()->with([
+                'error' => $exception->getMessage(),
+            ]);
+        }
     }
-@endif}
+
+    /**
+    * Show Edit Form for the specified resource.
+    *
+    * {{"@"}}param Request $request
+    * {{"@"}}param {{$modelBaseName}} ${{$modelVariableName}}
+    * {{"@"}}return \Inertia\Response|\Illuminate\Http\RedirectResponse
+    */
+    public function edit(Request $request, {{$modelBaseName}} ${{$modelVariableName}})
+    {
+        try {
+            $this->authorize('update', ${{$modelVariableName}});
+            $roles = Role::all()->map(function ($role) use($user) {
+                $checked = $user->hasRole([$role]);
+                $role->checked = $checked;
+                $role->title = $role->title ?? Str::title(str_replace("-"," ",Str::slug($role->name)));
+                return $role->only(['id','name','title', 'checked']);
+            })->keyBy('name');
+            //Fetch relationships
+            @if (count($relations)){{ PHP_EOL }}
+@if (isset($relations['belongsTo']) && count($relations['belongsTo'])){{PHP_EOL}}
+    @php $parents = $relations['belongsTo']->pluck("function_name")->toArray(); @endphp
+    ${{$modelVariableName}}->load([
+    @foreach($parents as $parent)
+        '{{$parent}}',
+    @endforeach
+    ]);
+@endif
+            @endif
+            return Inertia::render("{{$modelPlural}}/Edit", ["model" => ${{$modelVariableName}},"roles" => $roles]);
+        } catch (\Throwable $exception) {
+            \Log::error($exception);
+            return back()->with([
+                'error' => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+    * Update the specified resource in storage.
+    *
+    * {{"@"}}param Update{{$modelBaseName}} $request
+    * {{"@"}}param {$modelBaseName} ${{$modelVariableName}}
+    * {{"@"}}return \Illuminate\Http\RedirectResponse
+    */
+    public function update(Update{{$modelBaseName}} $request, {{$modelBaseName}} ${{$modelVariableName}})
+    {
+        try {
+            $data = $request->sanitizedObject();
+            $res = $this->repo::init(${{$modelVariableName}})->update($data);
+            return back()->with(['success' => "The {{$modelBaseName}} was updated succesfully."]);
+        } catch (\Throwable $exception) {
+            \Log::error($exception);
+            return back()->with([
+                'error' => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+    * Remove the specified resource from storage.
+    *
+    * {{"@"}}param {{$modelBaseName}} ${{$modelVariableName}}
+    * {{"@"}}return \Illuminate\Http\RedirectResponse
+    */
+    public function destroy(Destroy{{$modelBaseName}} $request, {{$modelBaseName}} ${{$modelVariableName}})
+    {
+        $res = $this->repo::init(${{$modelVariableName}})->destroy();
+        if ($res) {
+            return back()->with(['success' => "The {{$modelBaseName}} was deleted succesfully."]);
+        }
+        else {
+            return back()->with(['error' => "The {{$modelBaseName}} could not be deleted."]);
+        }
+    }
+}

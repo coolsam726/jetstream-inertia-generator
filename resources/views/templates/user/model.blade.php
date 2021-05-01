@@ -4,45 +4,45 @@
 
 namespace {{ $modelNameSpace }};
 @php
-    $hasRoles = false;
-    if(count($relations) && count($relations['belongsToMany'])) {
-        $hasRoles = $relations['belongsToMany']->filter(function($belongsToMany) {
-            return $belongsToMany['related_table'] == 'roles';
-        })->count() > 0;
-        $relations['belongsToMany'] = $relations['belongsToMany']->reject(function($belongsToMany) {
-            return $belongsToMany['related_table'] == 'roles';
-        });
-    }
+    $hasRoles = true;
 @endphp
-
-use Savannabits\AdminAuth\Activation\Contracts\CanActivate as CanActivateContract;
-use Savannabits\AdminAuth\Activation\Traits\CanActivate;
-use Savannabits\AdminAuth\Notifications\ResetPassword;
-@if($translatable->count() > 0)use Savannabits\Translatable\Traits\HasTranslations;
-@endif
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-@if($hasSoftDelete)use Illuminate\Database\Eloquent\SoftDeletes;
-@endif
+/* Imports */
+use DateTimeInterface;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Jetstream\HasProfilePhoto;
+use Laravel\Sanctum\HasApiTokens;
+@if($hasSoftDelete)use Illuminate\Database\Eloquent\SoftDeletes;
+@endif
+@if (isset($relations['belongsToMany']) && count($relations['belongsToMany']))
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+@endif
 @if($hasRoles)use Spatie\Permission\Traits\HasRoles;
 @endif
 
-class {{ $modelBaseName }} extends Authenticatable implements CanActivateContract
+class {{ $modelBaseName }} extends Authenticatable
 {
-    use Notifiable;
-    use CanActivate;
-    @if($hasSoftDelete)use SoftDeletes;
+@if($hasSoftDelete)
+    use SoftDeletes;
     @endif
 @if($hasRoles)use HasRoles;
-@endif
-@if($translatable->count() > 0)use HasTranslations;
-@endif
-
-    @if (!is_null($tableName))protected $table = '{{ $tableName }}';
     @endif
+    use HasFactory;
+    use HasApiTokens;
+    use HasFactory;
+    use HasProfilePhoto;
+    use Notifiable;
+    use TwoFactorAuthenticatable;
+    use HasRoles;
 
-    @if ($fillable)protected $fillable = [
+@if (!is_null($tableName))protected $table = '{{ $tableName }}';
+    @endif
+@if ($fillable)
+
+    protected $fillable = [
     @foreach($fillable as $f)
     '{{ $f }}',
     @endforeach
@@ -50,71 +50,93 @@ class {{ $modelBaseName }} extends Authenticatable implements CanActivateContrac
     ];
     @endif
 
-    @if ($hidden)protected $hidden = [
+    @if ($hidden && count($hidden) > 0)protected $hidden = [
     @foreach($hidden as $h)
     '{{ $h }}',
     @endforeach
 
+        'remember_token',
+        'two_factor_recovery_codes',
+        'two_factor_secret',
     ];
     @endif
 
-    @if ($dates)protected $dates = [
+    /**
+    * The attributes that should be cast to native types.
+    *
+    * @var array
+    */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        @if ($booleans && count($booleans) > 0)
+@foreach($booleans as $b)'{{ $b }}' => 'boolean',@endforeach
+        @endif
+    ];
+
+    protected $dates = [
+@if ($dates)
     @foreach($dates as $date)
+    '{{ $date }}' => 'Y-m-d',
+    @endforeach
+@endif
+@if($datetimes)
+    @foreach($datetimes as $date)
     '{{ $date }}',
     @endforeach
+@endif
+];
+@if (!$timestamps)public $timestamps = false;
+    @endif
 
+    protected $appends = [
+        'api_route',
+        'can',
+        'profile_photo_url',
     ];
-    @endif
-
-    @if ($translatable->count() > 0)// these attributes are translatable
-    public $translatable = [
-    @foreach($translatable as $translatableField)
-    '{{ $translatableField }}',
-    @endforeach
-
-    ];
-    @endif
-
-    @if (!$timestamps)public $timestamps = false;
-    @endif
-
-    protected $appends = ['full_name', 'resource_url'];
 
     /* ************************ ACCESSOR ************************* */
 
-    public function getResourceUrlAttribute() {
-        return url('/admin/{{$resource}}/'.$this->getKey());
+    public function getApiRouteAttribute() {
+        return route("api.{{ $routeBaseName }}.index");
+    }
+    public function getCanAttribute() {
+        return [
+            "view" => \Auth::check() && \Auth::user()->can("view", $this),
+            "update" => \Auth::check() && \Auth::user()->can("update", $this),
+            "delete" => \Auth::check() && \Auth::user()->can("delete", $this),
+            "restore" => \Auth::check() && \Auth::user()->can("restore", $this),
+            "forceDelete" => \Auth::check() && \Auth::user()->can("forceDelete", $this),
+        ];
     }
 
-    public function getFullNameAttribute() {
-        return $this->first_name." ".$this->last_name;
+    protected function serializeDate(DateTimeInterface $date) {
+        return $date->format('Y-m-d H:i:s');
     }
+@if (count($relations))
 
+    /* ************************ RELATIONS ************************ */
+@if(isset($relations['belongsTo']) && count($relations['belongsTo']))
+@foreach($relations["belongsTo"] as $belongsTo)
     /**
-     * Send the password reset notification.
-     *
-     * {{'@'}}param string $token
-     * {{'@'}}return void
-     */
-    public function sendPasswordResetNotification($token)
-    {
-        $this->notify(app( ResetPassword::class, ['token' => $token]));
+    * Many to One Relationship to {{$belongsTo["related_model"]}}
+    * {{'@'}}return \Illuminate\Database\Eloquent\Relations\BelongsTo
+    */
+    public function {{$belongsTo['function_name']}}() {
+        return $this->belongsTo({{$belongsTo['related_model']}},"{{$belongsTo['foreign_key']}}","{{$belongsTo["owner_key"]}}");
     }
-
-    @if (count($relations))/* ************************ RELATIONS ************************ */
-
-    @if (count($relations['belongsToMany']))
-@foreach($relations['belongsToMany'] as $belongsToMany)/**
+@endforeach
+@endif
+@if (isset($relations["belongsToMany"]) && count($relations['belongsToMany']))
+@foreach($relations['belongsToMany'] as $belongsToMany)
+    /**
     * Relation to {{ $belongsToMany['related_model_name_plural'] }}
     *
     * {{'@'}}return BelongsToMany
     */
-    public function {{ $belongsToMany['related_table'] }}() {
+    public function {{ Str::camel($belongsToMany['related_table']) }}() {
         return $this->belongsToMany({{ $belongsToMany['related_model_class'] }}, '{{ $belongsToMany['relation_table'] }}', '{{ $belongsToMany['foreign_key'] }}', '{{ $belongsToMany['related_key'] }}');
     }
-
 @endforeach
-    @endif
-    @endif
 
-}
+@endif
+@endif}

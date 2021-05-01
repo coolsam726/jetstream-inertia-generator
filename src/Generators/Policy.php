@@ -54,7 +54,9 @@ class Policy extends ClassGenerator {
         if($this->option('without-bulk')){
             $this->withoutBulk = true;
         }
-
+        if(!empty($template = $this->option('template'))) {
+            $this->view = 'templates.'.$template.'.policy';
+        }
         if ($this->generateClass($force)){
 
             $this->info('Generating '.$this->classFullName.' finished');

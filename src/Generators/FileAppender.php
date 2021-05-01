@@ -1,5 +1,6 @@
 <?php namespace Savannabits\JetstreamInertiaGenerator\Generators;
 
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Savannabits\JetstreamInertiaGenerator\Generators\Traits\Helpers;
 use Savannabits\JetstreamInertiaGenerator\Generators\Traits\Names;
 use Savannabits\JetstreamInertiaGenerator\Generators\Traits\Columns;
@@ -16,7 +17,7 @@ abstract class FileAppender extends Command {
     /**
      * @var Filesystem
      */
-    protected $files;
+    protected Filesystem $files;
 
     /**
      * Relations
@@ -28,7 +29,7 @@ abstract class FileAppender extends Command {
     /**
      * Create a new controller creator command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
+     * @param Filesystem $files
      */
     public function __construct(Filesystem $files)
     {
@@ -51,7 +52,7 @@ abstract class FileAppender extends Command {
      * @param string $defaultContent content that will be used to populated with newly created file (in case it does not already exists)
      * @return bool
      */
-    protected function appendIfNotAlreadyAppended($path, $content, $defaultContent = "<?php".PHP_EOL.PHP_EOL)
+    protected function appendIfNotAlreadyAppended($path, $content, string $defaultContent = "<?php".PHP_EOL.PHP_EOL): bool
     {
         if (!$this->files->exists($path)) {
             $this->makeDirectory($path);
@@ -73,8 +74,9 @@ abstract class FileAppender extends Command {
      * @param $replace
      * @param string $defaultContent content that will be used to populated with newly created file (in case it does not already exists)
      * @return bool
+     * @throws FileNotFoundException
      */
-    protected function replaceIfNotPresent($path, $search, $replace, $defaultContent = "<?php".PHP_EOL.PHP_EOL)
+    protected function replaceIfNotPresent($path, $search, $replace, string $defaultContent = "<?php".PHP_EOL.PHP_EOL): bool
     {
         if (!$this->files->exists($path)) {
             $this->makeDirectory($path);
@@ -92,16 +94,14 @@ abstract class FileAppender extends Command {
     /**
      * Execute the console command.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
-     * @return mixed
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->initCommonNames($this->argument('table_name'), $this->option('model-name'), $this->option('controller-name'), $this->option('model-with-full-namespace'));
 
-        $output = parent::execute($input, $output);
-
-        return $output;
+        return parent::execute($input, $output);
     }
 }

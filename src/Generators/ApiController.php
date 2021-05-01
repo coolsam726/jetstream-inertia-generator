@@ -62,7 +62,7 @@ class ApiController extends ClassGenerator {
         //TODO make global for all generator
         //TODO also with prefix
         if(!empty($template = $this->option('template'))) {
-            $this->view = 'templates.'.$template.'.controller';
+            $this->view = 'templates.'.$template.'.api-controller';
         }
 
         if(!empty($belongsToMany = $this->option('belongs-to-many'))) {

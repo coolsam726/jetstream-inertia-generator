@@ -1,122 +1,82 @@
-@php echo "<?php";
+@php echo "<?php"
 @endphp
 
-
-namespace App\Http\Requests\Admin\{{ $modelWithNamespaceFromDefault }};
+namespace App\Http\Requests\{{ $modelWithNamespaceFromDefault }};
 @php
-    if($translatable->count() > 0) {
-        $translatableColumns = $columns->filter(function($column) use ($translatable) {
-            return in_array($column['name'], $translatable->toArray());
-        });
-        $standardColumn = $columns->reject(function($column) use ($translatable) {
-            return in_array($column['name'], $translatable->toArray());
-        });
-    }
+    $standardColumns = $columns->reject(function($column) use ($relatable) {
+        return in_array($column['name'], $relatable->pluck('name')->toArray())|| $column["name"]=='slug';
+    });
+    $relatableColumns = $columns->filter(function($column) use ($relatable) {
+        return in_array($column['name'], $relatable->pluck('name')->toArray());
+    })->keyBy('name');
 @endphp
 
-@if($translatable->count() > 0)use Savannabits\AdminUI\TranslatableFormRequest;
-@else
 use Illuminate\Foundation\Http\FormRequest;
-@endif
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
-
-@if($translatable->count() > 0)class Store{{ $modelBaseName }} extends TranslatableFormRequest
-@else
+use {{$modelFullName}};
 class Store{{ $modelBaseName }} extends FormRequest
-@endif
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * {{'@'}}return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return Gate::allows('admin.{{ $modelDotNotation }}.create');
-    }
-
-@if($translatable->count() > 0)/**
-     * Get the validation rules that apply to the requests untranslatable fields.
-     *
-     * {{'@'}}return array
-     */
-    public function untranslatableRules(): array {
-        return [
-            @foreach($standardColumn as $column)'{{ $column['name'] }}' => [{!! implode(', ', (array) $column['serverStoreRules']) !!}],
-            @endforeach
-@if (count($relations))
-    @if (count($relations['belongsToMany']))
-
-            @foreach($relations['belongsToMany'] as $belongsToMany)'{{ $belongsToMany['related_table'] }}' => [{!! implode(', ', ['\'array\'']) !!}],
-            @endforeach
-    @endif
-@endif
-
-        ];
+        return $this->user()->can('create',{{$modelBaseName}}::class);
     }
 
     /**
-     * Get the validation rules that apply to the requests translatable fields.
-     *
-     * {{'@'}}return array
-     */
-    public function translatableRules($locale): array {
-        return [
-            @foreach($translatableColumns as $column)'{{ $column['name'] }}' => [{!! implode(', ', (array) $column['serverStoreRules']) !!}],
-            @endforeach
-
-        ];
-    }
-@else/**
      * Get the validation rules that apply to the request.
      *
      * {{'@'}}return array
      */
     public function rules(): array
     {
-@php
-    $columns = collect($columns)->reject(function($column) {
-        return $column['name'] == 'activated';
-    })->toArray();
-@endphp
-        $rules = [
-            @foreach($columns as $column)'{{ $column['name'] }}' => [{!! implode(', ', (array) $column['serverStoreRules']) !!}],
+        return [
+            @foreach($standardColumns as $column)
+@if(!($column['name'] == "updated_by_admin_user_id" || $column['name'] == "created_by_admin_user_id" ))'{{ $column['name'] }}' => [{!! implode(', ', (array) $column['serverStoreRules']) !!}],
+@endif
             @endforeach
 @if (count($relations))
-    @if (count($relations['belongsToMany']))
+    @if (isset($relations["belongsToMany"]) && count($relations['belongsToMany']))
 
             @foreach($relations['belongsToMany'] as $belongsToMany)'{{ $belongsToMany['related_table'] }}' => [{!! implode(', ', ['\'array\'']) !!}],
             @endforeach
     @endif
+    @if (isset($relations["belongsTo"]) && count($relations['belongsTo']))
+
+            @foreach($relations['belongsTo'] as $belongsTo)
+'{{ $belongsTo['relationship_variable'] }}' => [{!! implode(', ', array_merge(
+    ['\'array\''], collect($relatableColumns[$belongsTo['foreign_key']]['serverStoreRules'])->reject(function($rule){return str_contains($rule,'integer');})->toArray()
+)) !!}],
+            @endforeach
+    @endif
 @endif
 
+            'assigned_roles' => ["required","array"],
         ];
-
-        if(Config::get('admin-auth.activation_enabled')) {
-            $rules['activated'] = ['required', 'boolean'];
-        }
-
-        return $rules;
     }
-@endif
-
     /**
-     * Modify input data
-     *
-     * {{'@'}}return array
-     */
-    public function getModifiedData(): array
+    * Modify input data
+    *
+    * {{'@'}}return array
+    */
+    public function sanitizedArray(): array
     {
-        $data = $this->only(collect($this->rules())->keys()->all());
-        if (!Config::get('admin-auth.activation_enabled')) {
-            $data['activated'] = true;
-        }
-        if (!empty($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
-        }
-        return $data;
+        $sanitized = $this->validated();
+
+        //Add your code for manipulation with request data here
+
+        return $sanitized;
+    }
+    /**
+    * Return modified (sanitized data) as a php object
+    * @return object
+    */
+    public function sanitizedObject(): object {
+        $sanitized = $this->sanitizedArray();
+        return json_decode(collect($sanitized));
     }
 }

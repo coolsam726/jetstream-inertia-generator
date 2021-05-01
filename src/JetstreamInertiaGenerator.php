@@ -24,11 +24,13 @@ class JetstreamInertiaGenerator extends Command
         $exportOption = $this->option('with-export');
         $withoutBulkOptions = $this->option('without-bulk');
         $force = $this->option('force');
+        $template = $this->option('template');
 
         $this->call('jig:generate:model', [
             'table_name' => $tableNameArgument,
             'class_name' => $modelOption,
             '--force' => $force,
+            '--template' => $template,
         ]);
 
         /*$this->call('jig:generate:factory', [
@@ -41,18 +43,21 @@ class JetstreamInertiaGenerator extends Command
             'table_name' => $tableNameArgument,
             '--model-name' => $modelOption,
             '--force' => $force,
+            '--template' => $template,
         ]);
 
         $this->call('jig:generate:request:store', [
             'table_name' => $tableNameArgument,
             '--model-name' => $modelOption,
             '--force' => $force,
+            '--template' => $template,
         ]);
 
         $this->call('jig:generate:request:update', [
             'table_name' => $tableNameArgument,
             '--model-name' => $modelOption,
             '--force' => $force,
+            '--template' => $template,
         ]);
 
         $this->call('jig:generate:request:destroy', [
@@ -68,6 +73,7 @@ class JetstreamInertiaGenerator extends Command
             '--force' => $force,
             '--with-export' => $exportOption,
             '--without-bulk' => $withoutBulkOptions,
+            '--template' => $template,
         ]);
 
         $this->call('jig:generate:api:controller', [
@@ -77,6 +83,7 @@ class JetstreamInertiaGenerator extends Command
             '--force' => $force,
             '--with-export' => $exportOption,
             '--without-bulk' => $withoutBulkOptions,
+            '--template' => $template,
         ]);
         $this->call('jig:generate:controller', [
             'table_name' => $tableNameArgument,
@@ -85,6 +92,7 @@ class JetstreamInertiaGenerator extends Command
             '--force' => $force,
             '--with-export' => $exportOption,
             '--without-bulk' => $withoutBulkOptions,
+            '--template' => $template,
         ]);
 
 
@@ -94,6 +102,7 @@ class JetstreamInertiaGenerator extends Command
             '--controller-name' => $controllerOption,
             '--with-export' => $exportOption,
             '--without-bulk' => $withoutBulkOptions,
+             '--template' => $template,
         ]);
 
 
@@ -103,6 +112,7 @@ class JetstreamInertiaGenerator extends Command
             '--controller-name' => $controllerOption,
             '--with-export' => $exportOption,
             '--without-bulk' => $withoutBulkOptions,
+            '--template' => $template,
         ]);
 
         $this->call('jig:generate:index', [
@@ -111,12 +121,14 @@ class JetstreamInertiaGenerator extends Command
             '--force' => $force,
             '--with-export' => $exportOption,
             '--without-bulk' => $withoutBulkOptions,
+            '--template' => $template,
         ]);
 
         $this->call('jig:generate:form', [
             'table_name' => $tableNameArgument,
             '--model-name' => $modelOption,
             '--force' => $force,
+            '--template' => $template,
         ]);
 
         /*
@@ -142,6 +154,7 @@ class JetstreamInertiaGenerator extends Command
             '--force' => $force,
             '--with-export' => false,
             '--without-bulk' => false,
+            '--template' => $template,
         ]);
 
         if ($this->shouldGeneratePermissionsMigration()) {
@@ -168,6 +181,7 @@ class JetstreamInertiaGenerator extends Command
 
     protected function getOptions() {
         return [
+            ['template', 't', InputOption::VALUE_OPTIONAL, 'Specify custom model name'],
             ['model-name', 'm', InputOption::VALUE_OPTIONAL, 'Specify custom model name'],
             ['controller-name', 'c', InputOption::VALUE_OPTIONAL, 'Specify custom controller name'],
             ['repository-name', 'r', InputOption::VALUE_OPTIONAL, 'Specify custom repository class name'],

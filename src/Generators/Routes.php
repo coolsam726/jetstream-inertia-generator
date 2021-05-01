@@ -24,21 +24,21 @@ class Routes extends FileAppender {
      *
      * @var string
      */
-    protected $view = 'routes';
+    protected string $view = 'routes';
 
     /**
      * Routes have also export route
      *
      * @return mixed
      */
-    protected $export = false;
+    protected bool $export = false;
 
     /**
      * Routes have also bulk options route
      *
      * @return mixed
      */
-    protected $withoutBulk = false;
+    protected bool $withoutBulk = false;
 
     public function handle()
     {
@@ -62,7 +62,8 @@ class Routes extends FileAppender {
         }
     }
 
-    protected function buildClass($api=false) {
+    protected function buildClass(?bool $api=false): string
+    {
         return view('jig::'.$this->view, [
             'controllerClassName' => class_basename($this->controllerWithNamespaceFromDefault),
             'controllerPartiallyFullName' => $this->controllerWithNamespaceFromDefault,

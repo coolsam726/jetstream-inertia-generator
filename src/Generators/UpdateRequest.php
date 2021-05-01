@@ -25,7 +25,7 @@ class UpdateRequest extends ClassGenerator {
      *
      * @var string
      */
-    protected $view = 'update-request';
+    protected string $view = 'update-request';
 
     /**
      * Execute the console command.
@@ -52,7 +52,7 @@ class UpdateRequest extends ClassGenerator {
         }
     }
 
-    protected function buildClass() {
+    protected function buildClass() : string {
 
         $this->setBelongsToRelations();
         return view('jig::'.$this->view, [
@@ -88,17 +88,18 @@ class UpdateRequest extends ClassGenerator {
         ];
     }
 
-    public function generateClassNameFromTable($tableName) {
+    public function generateClassNameFromTable($tableName): string
+    {
         return 'Update'.$this->modelBaseName;
     }
 
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      * @return string
      */
-    protected function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace(string $rootNamespace) : string
     {
         return $rootNamespace.'\Http\Requests\\'.$this->modelWithNamespaceFromDefault;
     }

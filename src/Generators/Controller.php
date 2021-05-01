@@ -29,22 +29,22 @@ class Controller extends ClassGenerator {
      *
      * @var string
      */
-    protected $view = 'controller';
+    protected string $view = 'controller';
 
     /**
      * Controller has also export method
      *
      * @return mixed
      */
-    protected $export = false;
+    protected bool $export = false;
 
     /**
      * Controller has also bulk options method
      *
      * @return mixed
      */
-    protected $withoutBulk = false;
-    protected $modelTitle;
+    protected bool $withoutBulk = false;
+    protected string $modelTitle;
 
     public function handle()
     {
@@ -100,7 +100,7 @@ class Controller extends ClassGenerator {
 
     }
 
-    protected function buildClass() {
+    protected function buildClass() : string {
 
         //Set belongsTo Relations
         $this->setBelongsToRelations();
@@ -154,24 +154,27 @@ class Controller extends ClassGenerator {
         ];
     }
 
-    public function generateClassNameFromTable($tableName) {
+    public function generateClassNameFromTable($tableName): string
+    {
         return Str::studly(Str::singular($tableName)).'Controller';
     }
 
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      * @return string
      */
-    protected function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace(string $rootNamespace) :string
     {
         return $rootNamespace.'\Http\Controllers\Admin';
     }
-    protected function getRepoNamespace($rootNamespace) {
+    protected function getRepoNamespace($rootNamespace): string
+    {
         return $rootNamespace.'Repositories';
     }
-    protected function getRepositoryBaseName() {
+    protected function getRepositoryBaseName(): string
+    {
         return Str::studly(Str::plural($this->tableName));
     }
 }

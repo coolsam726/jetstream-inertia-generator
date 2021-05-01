@@ -24,12 +24,12 @@ class Model extends ClassGenerator {
      *
      * @var string
      */
-    protected $view = 'model';
+    protected string $view = 'model';
 
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
@@ -57,7 +57,11 @@ class Model extends ClassGenerator {
         $this->info('Generating '.$this->modelBaseName."Policy".' finished');*/
     }
 
-    protected function buildClass() {
+    /**
+     * @return string
+     */
+    protected function buildClass(): string
+    {
         //Set belongsTo Relations
 
         $this->setBelongsToRelations();
@@ -119,10 +123,10 @@ class Model extends ClassGenerator {
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      * @return string
      */
-    protected function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace(string $rootNamespace): string
     {
         return $rootNamespace.'\Models';
     }

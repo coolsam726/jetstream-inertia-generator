@@ -24,7 +24,7 @@ class ViewIndex extends ViewGenerator {
      *
      * @var string
      */
-    protected $view = 'index';
+    protected string $view = 'index';
 
     /**
      * Path for js view
@@ -36,14 +36,14 @@ class ViewIndex extends ViewGenerator {
      *
      * @return mixed
      */
-    protected $export = false;
+    protected bool $export = false;
 
     /**
      * Index view has also bulk options
      *
      * @return mixed
      */
-    protected $withoutBulk = false;
+    protected bool $withoutBulk = false;
 
     public function handle()
     {
@@ -75,7 +75,8 @@ class ViewIndex extends ViewGenerator {
         }
     }
 
-    protected function buildView() {
+    protected function buildView(): string
+    {
 
         return view('jig::'.$this->view, [
             'modelBaseName' => $this->modelBaseName,

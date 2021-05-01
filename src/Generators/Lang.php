@@ -23,19 +23,19 @@ class Lang extends FileAppender {
      *
      * @var string
      */
-    protected $view = 'lang';
+    protected string $view = 'lang';
 
     /**
      * Lang has also export translation
      *
      * @return mixed
      */
-    protected $export = false;
+    protected bool $export = false;
 
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
@@ -67,7 +67,8 @@ class Lang extends FileAppender {
         }
     }
 
-    protected function buildClass() {
+    protected function buildClass(): string
+    {
         return view('jig::'.$this->view, [
             'modelLangFormat' => $this->modelLangFormat,
             'modelBaseName' => $this->modelBaseName,

@@ -33,9 +33,9 @@ class JetstreamInertiaGeneratorServiceProvider extends RouteServiceProvider
             Generators\StoreRequest::class,
             Generators\UpdateRequest::class,
             Generators\DestroyRequest::class,
-            Generators\ImpersonalLoginRequest::class,
-            Generators\BulkDestroyRequest::class,
-            Generators\Lang::class,
+//            Generators\ImpersonalLoginRequest::class,
+//            Generators\BulkDestroyRequest::class,
+//            Generators\Lang::class,
             Generators\Permissions::class,
             Generators\Export::class,
         ]);

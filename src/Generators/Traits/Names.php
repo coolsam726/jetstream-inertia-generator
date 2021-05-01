@@ -8,7 +8,6 @@ trait Names
 {
 
     public $tableName;
-
     public $modelBaseName;
     public $modelFullName;
     public $modelPlural;

@@ -29,21 +29,21 @@ class ApiController extends ClassGenerator {
      *
      * @var string
      */
-    protected $view = 'api-controller';
+    protected string $view = 'api-controller';
 
     /**
      * Controller has also export method
      *
      * @return mixed
      */
-    protected $export = false;
+    protected bool $export = false;
 
     /**
      * Controller has also bulk options method
      *
      * @return mixed
      */
-    protected $withoutBulk = false;
+    protected bool $withoutBulk = false;
 
     public function handle()
     {
@@ -76,7 +76,7 @@ class ApiController extends ClassGenerator {
 
     }
 
-    protected function buildClass() {
+    protected function buildClass():string {
 
         //Set belongsTo Relations
         $this->setBelongsToRelations();
@@ -131,24 +131,27 @@ class ApiController extends ClassGenerator {
         ];
     }
 
-    public function generateClassNameFromTable($tableName) {
+    public function generateClassNameFromTable($tableName): string
+    {
         return Str::studly(Str::singular($tableName)).'Controller';
     }
 
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      * @return string
      */
-    protected function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace(string $rootNamespace): string
     {
         return $rootNamespace.'\Http\Controllers\API';
     }
-    protected function getRepoNamespace($rootNamespace) {
+    protected function getRepoNamespace($rootNamespace): string
+    {
         return $rootNamespace.'Repositories';
     }
-    protected function getRepositoryBaseName() {
+    protected function getRepositoryBaseName(): string
+    {
         return Str::studly(Str::plural($this->tableName));
     }
 }

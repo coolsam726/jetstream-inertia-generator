@@ -27,21 +27,21 @@ class Policy extends ClassGenerator {
      *
      * @var string
      */
-    protected $view = 'policy';
+    protected string $view = 'policy';
 
     /**
      * Controller has also export method
      *
      * @return mixed
      */
-    protected $export = false;
+    protected bool $export = false;
 
     /**
      * Controller has also bulk options method
      *
      * @return mixed
      */
-    protected $withoutBulk = true;
+    protected bool $withoutBulk = true;
 
     public function handle()
     {
@@ -62,7 +62,7 @@ class Policy extends ClassGenerator {
 
     }
 
-    protected function buildClass() {
+    protected function buildClass(): string {
 
         //Set belongsTo Relations
         $this->setBelongsToRelations();
@@ -106,17 +106,18 @@ class Policy extends ClassGenerator {
         ];
     }
 
-    public function generateClassNameFromTable($tableName) {
+    public function generateClassNameFromTable($tableName): string
+    {
         return Str::studly(Str::singular($tableName))."Policy";
     }
 
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      * @return string
      */
-    protected function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace(string $rootNamespace) : string
     {
         return $rootNamespace.'\Policies';
     }

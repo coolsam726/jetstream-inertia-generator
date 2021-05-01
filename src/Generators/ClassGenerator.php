@@ -34,7 +34,7 @@ abstract class ClassGenerator extends Command {
     /**
      * Create a new controller creator command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
+     * @param Filesystem $files
      */
     public function __construct(Filesystem $files)
     {
@@ -43,7 +43,8 @@ abstract class ClassGenerator extends Command {
         $this->files = $files;
     }
 
-    protected function getArguments() {
+    protected function getArguments(): array
+    {
         return [
             ['table_name', InputArgument::REQUIRED, 'Name of the existing table'],
             ['class_name', InputArgument::OPTIONAL, 'Name of the generated class'],
@@ -63,7 +64,7 @@ abstract class ClassGenerator extends Command {
      *
      * @return string
      */
-    abstract protected function buildClass();
+    abstract protected function buildClass(): string;
 
     public function getPathFromClassName($name) {
         $path = str_replace('\\', '/', $name).".php";
@@ -74,10 +75,10 @@ abstract class ClassGenerator extends Command {
     /**
      * Get the full namespace for a given class, without the class name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return string
      */
-    protected function getNamespace($name)
+    protected function getNamespace(string $name): string
     {
         return trim(implode('\\', array_slice(explode('\\', $name), 0, -1)), '\\');
     }
@@ -87,7 +88,7 @@ abstract class ClassGenerator extends Command {
      *
      * @return string
      */
-    public function rootNamespace()
+    public function rootNamespace(): string
     {
         return $this->laravel->getNamespace();
     }
@@ -95,10 +96,10 @@ abstract class ClassGenerator extends Command {
     /**
      * Parse the class name and format according to the root namespace.
      *
-     * @param  string  $name
+     * @param string $name
      * @return string
      */
-    public function qualifyClass($name)
+    public function qualifyClass(string $name): string
     {
         $name = str_replace('/', '\\', $name);
 
@@ -116,15 +117,16 @@ abstract class ClassGenerator extends Command {
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      * @return string
      */
-    protected function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace(string $rootNamespace): string
     {
         return $rootNamespace;
     }
 
-    protected function generateClass($force = false) {
+    protected function generateClass($force = false): bool
+    {
         $path = base_path($this->getPathFromClassName($this->classFullName));
         if ($this->alreadyExists($path)) {
             if($force) {
@@ -145,11 +147,11 @@ abstract class ClassGenerator extends Command {
     /**
      * Execute the console command.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
-     * @return mixed
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($this instanceof Model) {
             $this->initCommonNames($this->argument('table_name'), $this->argument('class_name'), null, $this->option('model-with-full-namespace'));
@@ -159,9 +161,7 @@ abstract class ClassGenerator extends Command {
 
         $this->initClassNames($this->argument('class_name'));
 
-        $output = parent::execute($input, $output);
-
-        return $output;
+        return parent::execute($input, $output);
     }
 
     protected function initClassNames($className = null) {

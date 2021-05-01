@@ -29,21 +29,21 @@ class Repository extends ClassGenerator {
      *
      * @var string
      */
-    protected $view = 'repository';
+    protected string $view = 'repository';
 
     /**
      * Controller has also export method
      *
      * @return mixed
      */
-    protected $export = false;
+    protected bool $export = false;
 
     /**
      * Controller has also bulk options method
      *
      * @return mixed
      */
-    protected $withoutBulk = false;
+    protected bool $withoutBulk = false;
 
     public function handle()
     {
@@ -68,7 +68,7 @@ class Repository extends ClassGenerator {
 
     }
 
-    protected function buildClass() {
+    protected function buildClass(): string {
 
         //Set belongsTo Relations
         $this->setBelongsToRelations();
@@ -128,10 +128,10 @@ class Repository extends ClassGenerator {
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      * @return string
      */
-    protected function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace(string $rootNamespace): string
     {
         return $rootNamespace.'\Repositories';
     }

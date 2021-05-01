@@ -12,10 +12,10 @@ trait Helpers {
     /**
      * Build the directory for the class if necessary.
      *
-     * @param  string  $path
+     * @param string $path
      * @return string
      */
-    protected function makeDirectory($path)
+    protected function makeDirectory(string $path): string
     {
         if (! $this->files->isDirectory(dirname($path))) {
             $this->files->makeDirectory(dirname($path), 0777, true, true);
@@ -30,7 +30,7 @@ trait Helpers {
      * @param $path
      * @return bool
      */
-    protected function alreadyExists($path)
+    protected function alreadyExists($path): bool
     {
         return $this->files->exists($path);
     }
@@ -86,9 +86,9 @@ trait Helpers {
      * @param $content
      * @return bool
      */
-    protected function alreadyAppended($path, $content)
+    protected function alreadyAppended($path, $content): bool
     {
-        if (strpos($this->files->get($path), $content) !== false) {
+        if (str_contains($this->files->get($path), $content)) {
             return true;
         }
         return false;

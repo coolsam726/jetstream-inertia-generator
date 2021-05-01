@@ -24,12 +24,12 @@ class Export extends ClassGenerator {
      *
      * @var string
      */
-    protected $view = 'export';
+    protected string $view = 'export';
 
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
@@ -45,7 +45,7 @@ class Export extends ClassGenerator {
 
     }
 
-    protected function buildClass() {
+    protected function buildClass(): string {
         return view('jig::'.$this->view, [
             'exportNamespace' => $this->classNamespace,
             'modelFullName' => $this->modelFullName,
@@ -73,10 +73,10 @@ class Export extends ClassGenerator {
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      * @return string
      */
-    protected function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace(string $rootNamespace) : string
     {
         return $rootNamespace.'\Exports';
     }

@@ -5,20 +5,20 @@ use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
-use Schema;
-
 trait Columns {
 
     /**
      * @param $tableName
      * @return Collection
      */
-    protected function readColumnsFromTable($tableName) {
+    protected function readColumnsFromTable($tableName): Collection
+    {
 
         // TODO how to process jsonb & json translatable columns? need to figure it out
 
-        $indexes = collect(\Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($tableName));
+        $indexes = collect(Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($tableName));
         return collect(Schema::getColumnListing($tableName))->map(function($columnName) use ($tableName, $indexes) {
 
             //Checked unique index
@@ -29,7 +29,7 @@ trait Columns {
                 return in_array($columnName,$index->getColumns()) && $index->isPrimary();
             });
             $columnUniqueDeleteAtCondition = $columnUniqueIndexes->filter(function($index) {
-                return $index->hasOption('where') ? $index->getOption('where') == '(deleted_at IS NULL)' : false;
+                return $index->hasOption('where') && $index->getOption('where') == '(deleted_at IS NULL)';
             });
 
             // TODO add foreign key
@@ -76,7 +76,8 @@ trait Columns {
             ;
     }
 
-    protected function getVisibleColumns($tableName, $modelVariableName) {
+    protected function getVisibleColumns($tableName, $modelVariableName): Collection
+    {
         $relationships = $this->setBelongsToRelations();
         $columns = $this->readColumnsFromTable($tableName);
         $hasSoftDelete = ($columns->filter(function($column) {
@@ -200,57 +201,17 @@ trait Columns {
                     $frontendRules->push('date_format:HH:mm:ss');
                     break;
 
-                case 'integer':
-                    $serverStoreRules->push('\'integer\'');
-                    $serverUpdateRules->push('\'integer\'');
-                    $frontendRules->push('integer');
-                    break;
                 case 'tinyInteger':
-                    $serverStoreRules->push('\'integer\'');
-                    $serverUpdateRules->push('\'integer\'');
-                    $frontendRules->push('integer');
-                    break;
                 case 'smallInteger':
-                    $serverStoreRules->push('\'integer\'');
-                    $serverUpdateRules->push('\'integer\'');
-                    $frontendRules->push('integer');
-                    break;
                 case 'mediumInteger':
-                    $serverStoreRules->push('\'integer\'');
-                    $serverUpdateRules->push('\'integer\'');
-                    $frontendRules->push('integer');
-                    break;
                 case 'bigInteger':
-                    $serverStoreRules->push('\'integer\'');
-                    $serverUpdateRules->push('\'integer\'');
-                    $frontendRules->push('integer');
-                    break;
                 case 'bigint':
-                    $serverStoreRules->push('\'integer\'');
-                    $serverUpdateRules->push('\'integer\'');
-                    $frontendRules->push('integer');
-                    break;
                 case 'unsignedInteger':
-                    $serverStoreRules->push('\'integer\'');
-                    $serverUpdateRules->push('\'integer\'');
-                    $frontendRules->push('integer');
-                    break;
                 case 'unsignedTinyInteger':
-                    $serverStoreRules->push('\'integer\'');
-                    $serverUpdateRules->push('\'integer\'');
-                    $frontendRules->push('integer');
-                    break;
                 case 'unsignedSmallInteger':
-                    $serverStoreRules->push('\'integer\'');
-                    $serverUpdateRules->push('\'integer\'');
-                    $frontendRules->push('integer');
-                    break;
                 case 'unsignedMediumInteger':
-                    $serverStoreRules->push('\'integer\'');
-                    $serverUpdateRules->push('\'integer\'');
-                    $frontendRules->push('integer');
-                    break;
                 case 'unsignedBigInteger':
+                case 'integer':
                     $serverStoreRules->push('\'integer\'');
                     $serverUpdateRules->push('\'integer\'');
                     $frontendRules->push('integer');
@@ -271,11 +232,8 @@ trait Columns {
                     $serverUpdateRules->push('\'numeric\'');
                     $frontendRules->push('decimal'); // FIXME?? I'm not sure about this one
                     break;
-                case 'string':
-                    $serverStoreRules->push('\'string\'');
-                    $serverUpdateRules->push('\'string\'');
-                    break;
                 case 'text':
+                case 'string':
                     $serverStoreRules->push('\'string\'');
                     $serverUpdateRules->push('\'string\'');
                     break;
@@ -295,7 +253,8 @@ trait Columns {
         });
     }
 
-    protected function setBelongsToRelations() {
+    protected function setBelongsToRelations(): Collection
+    {
         $relationships = collect(app('db')->connection()->getDoctrineSchemaManager()->listTableForeignKeys($this->tableName))->map(function($fk) {
             /**@var ForeignKeyConstraint $fk*/
             $columns = $this->readColumnsFromTable($fk->getForeignTableName())->filter(function($column) {

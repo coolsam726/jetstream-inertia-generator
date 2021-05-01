@@ -25,26 +25,26 @@ class ViewForm extends ViewGenerator {
      *
      * @var string
      */
-    protected $create = 'create';
+    protected string $create = 'create';
 
     /**
      * Path for edit view
      *
      * @var string
      */
-    protected $show = 'show';
+    protected string $show = 'show';
 
     /**
      * Path for form view
      *
      * @var string
      */
-    protected $form = 'form';
+    protected string $form = 'form';
 
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
@@ -152,7 +152,8 @@ class ViewForm extends ViewGenerator {
         return false;
     }
 
-    protected function buildForm($type=null) {
+    protected function buildForm(?string $type=null): string
+    {
         $belongsTos = $this->setBelongsToRelations();
         $relatables = $this->getVisibleColumns($this->tableName, $this->modelVariableName)->filter(function($column) use($belongsTos) {
             return in_array($column['name'],$belongsTos->pluck('foreign_key')->toArray());
@@ -180,7 +181,8 @@ class ViewForm extends ViewGenerator {
         ])->render();
     }
 
-    protected function buildShow() {
+    protected function buildShow(): string
+    {
 
         $belongsTos = $this->setBelongsToRelations();
         $relatables = $this->getVisibleColumns($this->tableName, $this->modelVariableName)->filter(function($column) use($belongsTos) {

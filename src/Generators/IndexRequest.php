@@ -21,7 +21,7 @@ class IndexRequest extends ClassGenerator {
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
@@ -32,7 +32,7 @@ class IndexRequest extends ClassGenerator {
         }
     }
 
-    protected function buildClass() {
+    protected function buildClass() :string {
 
         return view('jig::index-request', [
             'modelBaseName'                 => $this->modelBaseName,
@@ -53,17 +53,18 @@ class IndexRequest extends ClassGenerator {
         ];
     }
 
-    public function generateClassNameFromTable($tableName) {
+    public function generateClassNameFromTable($tableName): string
+    {
         return 'Index'.$this->modelBaseName;
     }
 
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      * @return string
      */
-    protected function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace(string $rootNamespace) :string
     {
         return $rootNamespace.'\Http\Requests\\'.$this->modelWithNamespaceFromDefault;
     }

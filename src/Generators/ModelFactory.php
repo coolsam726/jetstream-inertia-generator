@@ -24,12 +24,12 @@ class ModelFactory extends FileAppender {
      *
      * @var string
      */
-    protected $view = 'factory';
+    protected string $view = 'factory';
 
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
@@ -50,7 +50,8 @@ class ModelFactory extends FileAppender {
         }
     }
 
-    protected function buildClass() {
+    protected function buildClass(): string
+    {
 
         return view('jig::'.$this->view, [
             'modelFullName' => $this->modelFullName,

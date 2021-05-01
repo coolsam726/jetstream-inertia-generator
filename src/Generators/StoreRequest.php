@@ -25,12 +25,12 @@ class StoreRequest extends ClassGenerator {
      *
      * @var string
      */
-    protected $view = 'store-request';
+    protected string $view = 'store-request';
 
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
@@ -52,7 +52,7 @@ class StoreRequest extends ClassGenerator {
         }
     }
 
-    protected function buildClass() {
+    protected function buildClass() : string {
 
         $this->setBelongsToRelations();
         return view('jig::'.$this->view, [
@@ -83,17 +83,18 @@ class StoreRequest extends ClassGenerator {
         ];
     }
 
-    public function generateClassNameFromTable($tableName) {
+    public function generateClassNameFromTable($tableName): string
+    {
         return 'Store'.$this->modelBaseName;
     }
 
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      * @return string
      */
-    protected function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace(string $rootNamespace) : string
     {
         return $rootNamespace.'\Http\Requests\\'.$this->modelWithNamespaceFromDefault;
     }

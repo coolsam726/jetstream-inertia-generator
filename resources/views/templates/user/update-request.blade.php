@@ -114,7 +114,7 @@ class Update{{ $modelBaseName }} extends FormRequest
         if (!Config::get('admin-auth.activation_enabled')) {
             $data['activated'] = true;
         }
-        if (array_key_exists('password', $data) && empty($data['password'])) {
+        if (isset($data['password']) && empty($data['password'])) {
             unset($data['password']);
         }
         if (!empty($data['password'])) {

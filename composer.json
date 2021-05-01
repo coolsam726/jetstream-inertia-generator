@@ -16,15 +16,16 @@
         }
     ],
     "require": {
-        "php": "^7.4",
+        "php": "^7.4|^8.0",
         "doctrine/dbal": "^3.0",
-        "illuminate/support": "^8.0",
-        "inertiajs/inertia-laravel": "^v0.3.6",
+        "illuminate/support": "^v8.40.0",
+        "inertiajs/inertia-laravel": "^v0.4.1",
         "laravel/helpers": "^1.4",
-        "laravel/jetstream": "^2.1",
+        "laravel/jetstream": "^v2.3.4",
         "savannabits/laravel-pagetables": "^1.0.0",
         "spatie/laravel-permission": "^4.0.0",
-        "yajra/laravel-datatables": "^1.5"
+        "yajra/laravel-datatables": "^1.5",
+        "ext-json": "*"
     },
     "require-dev": {
         "orchestra/testbench": "^v6.0.0",

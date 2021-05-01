@@ -24,12 +24,12 @@ class Permissions extends ClassGenerator {
      *
      * @return mixed
      */
-    protected $withoutBulk = false;
+    protected bool $withoutBulk = false;
 
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
@@ -44,7 +44,7 @@ class Permissions extends ClassGenerator {
         }
     }
 
-    protected function generateClass($force = false) {
+    protected function generateClass($force = false) : bool {
         $fileName = 'fill_permissions_for_'.str_replace("-","_",$this->modelRouteAndViewName).'.php';
         $path = database_path('migrations/'.date('Y_m_d_His', time()).'_'.$fileName);
 
@@ -71,7 +71,7 @@ class Permissions extends ClassGenerator {
      * @param $path
      * @return bool
      */
-    protected function alreadyExists($path)
+    protected function alreadyExists($path): bool
     {
         foreach ($this->files->files(database_path('migrations')) as $file) {
             if(str_contains($file->getFilename(), $path)) {
@@ -81,7 +81,10 @@ class Permissions extends ClassGenerator {
         return false;
     }
 
-    protected function buildClass() {
+    /**
+     * @return string
+     */
+    protected function buildClass() : string {
 
         return view('jig::permissions', [
             'modelBaseName' => $this->modelBaseName,
@@ -103,7 +106,8 @@ class Permissions extends ClassGenerator {
         ];
     }
 
-    public function generateClassNameFromTable($tableName) {
+    public function generateClassNameFromTable($tableName): string
+    {
         return 'FillPermissionsFor'.Str::plural($this->modelBaseName);
     }
 }

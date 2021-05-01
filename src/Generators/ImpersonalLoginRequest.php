@@ -56,10 +56,10 @@ class ImpersonalLoginRequest extends ClassGenerator {
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      * @return string
      */
-    protected function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace(string $rootNamespace)
     {
         return $rootNamespace.'\Http\Requests\Admin\\'.$this->modelWithNamespaceFromDefault;
     }

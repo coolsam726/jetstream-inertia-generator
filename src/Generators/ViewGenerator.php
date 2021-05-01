@@ -18,7 +18,7 @@ abstract class ViewGenerator extends Command {
     /**
      * @var Filesystem
      */
-    protected $files;
+    protected Filesystem $files;
 
     /**
      * Relations
@@ -30,7 +30,7 @@ abstract class ViewGenerator extends Command {
     /**
      * Create a new controller creator command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
+     * @param Filesystem $files
      */
     public function __construct(Filesystem $files)
     {
@@ -54,7 +54,7 @@ abstract class ViewGenerator extends Command {
      * @param $content
      * @return bool
      */
-    protected function appendIfNotAlreadyAppended($path, $content)
+    protected function appendIfNotAlreadyAppended($path, $content): bool
     {
         if (!$this->files->exists($path)) {
             $this->makeDirectory($path);
@@ -72,17 +72,15 @@ abstract class ViewGenerator extends Command {
     /**
      * Execute the console command.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
-     * @return mixed
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->initCommonNames($this->argument('table_name'), $this->option('model-name'));
 
-        $output = parent::execute($input, $output);
-
-        return $output;
+        return parent::execute($input, $output);
     }
 
 }

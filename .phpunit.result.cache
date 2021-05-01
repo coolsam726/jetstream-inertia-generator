@@ -1,1 +1,1 @@
-C:37:"PHPUnit\Runner\DefaultTestResultCache":129:{a:2:{s:7:"defects";a:0:{}s:5:"times";a:1:{s:69:"Savannabits\JetstreamInertiaGenerator\Tests\ExampleTest::true_is_true";d:0.452;}}}
+C:37:"PHPUnit\Runner\DefaultTestResultCache":128:{a:2:{s:7:"defects";a:0:{}s:5:"times";a:1:{s:69:"Savannabits\JetstreamInertiaGenerator\Tests\ExampleTest::true_is_true";d:7.11;}}}

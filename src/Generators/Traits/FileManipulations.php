@@ -7,7 +7,7 @@ trait FileManipulations {
     protected function strReplaceInFile($fileName, $ifExistsRegex, $find, $replaceWith) {
         $content = File::get($fileName);
         if (preg_match($ifExistsRegex, $content)) {
-            return;
+            return null;
         }
 
         return File::put($fileName, str_replace($find, $replaceWith, $content));
@@ -16,6 +16,4 @@ trait FileManipulations {
         $content = File::get($fileName);
         return File::put($fileName, str_replace($find, $replaceWith, $content));
     }
-
-
 }

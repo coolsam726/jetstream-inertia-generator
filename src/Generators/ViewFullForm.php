@@ -24,38 +24,38 @@ class ViewFullForm extends ViewGenerator {
      *
      * @var string
      */
-    protected $view = 'full-form';
+    protected string $view = 'full-form';
 
     /**
      * Path for js view
      *
      * @var string
      */
-    protected $viewJs = 'form-js';
+    protected string $viewJs = 'form-js';
 
     /**
      * Name of view, will be used in directory
      *
      * @var string
      */
-    protected $fileName;
+    protected string $fileName;
 
     /**
      * Route to process form
      *
      * @var string
      */
-    protected $route;
+    protected string $route;
 
     /**
      * @var string
      */
-    protected $formJsRelativePath;
+    protected string $formJsRelativePath;
 
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
@@ -138,7 +138,8 @@ class ViewFullForm extends ViewGenerator {
 
     }
 
-    protected function buildForm() {
+    protected function buildForm(): string
+    {
 
         return view('jig::'.$this->view, [
             'modelBaseName' => $this->modelBaseName,
@@ -162,7 +163,8 @@ class ViewFullForm extends ViewGenerator {
         ])->render();
     }
 
-    protected function buildFormJs() {
+    protected function buildFormJs(): string
+    {
         return view('jig::'.$this->viewJs, [
             'modelJSName' => $this->formJsRelativePath,
 

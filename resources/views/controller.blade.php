@@ -15,7 +15,6 @@ use {{$modelFullName}};
 use {{$repoFullName}};
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use
 use Inertia\Inertia;
 use Yajra\DataTables\Html\Column;
 

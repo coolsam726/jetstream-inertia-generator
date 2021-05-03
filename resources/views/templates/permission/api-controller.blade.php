@@ -22,7 +22,7 @@ use Yajra\DataTables\DataTables;
 
 class {{ $controllerBaseName }}  extends Controller
 {
-    private $api;
+    private ApiResponse $api;
     private {{$repoBaseName}} $repo;
     public function __construct(ApiResponse $apiResponse, {{$repoBaseName}} $repo)
     {

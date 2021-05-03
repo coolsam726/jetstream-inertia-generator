@@ -127,8 +127,8 @@ $this->model->slug = Str::slug($this->model->title);
                 'name' => $permission,
                 'title' => Str::title(str_replace("-"," ",implode(" ",explode(".",$permission)))),
                 'guard_name' => $guard,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+                'created_at' => now(),
+                'updated_at' => now(),
             ];
         })->toArray();
 

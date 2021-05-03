@@ -35,4 +35,4 @@ createApp({
     .provide("$dayjs",dayjs)
     .mount(el);
 
-InertiaProgress.init({ color: '#4B5563' });
+InertiaProgress.init({ color: '#F59E0B' });

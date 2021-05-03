@@ -4,6 +4,7 @@
 namespace {{ $repoNamespace }};
 
 use {{$modelFullName}};
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;

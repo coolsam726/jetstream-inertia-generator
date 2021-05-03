@@ -30,7 +30,7 @@
     import InertiaButton from "@/JigComponents/InertiaButton";
 
     export default {
-        name: "Edit{{$modelPlural}}Form",
+        name: "Show{{$modelPlural}}Form",
         props: {
             model: Object,
         },

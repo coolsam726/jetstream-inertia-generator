@@ -50,11 +50,11 @@ composer require savannabits/jetstream-inertia-generator
 2. Install the necessary `npm` dev dependencies by running the following command:
 If you are using npm:
 ```shell
-npm run --dev pagetables popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo sass sass-loader vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-pdf mitt "https://github.com/sagalbot/vue-select/tarball/feat/vue-3-compat"
+npm run --dev @headlessui/vue pagetables popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo sass sass-loader vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-pdf mitt "https://github.com/sagalbot/vue-select/tarball/feat/vue-3-compat"
 ```
 Or if you are using yarn:
 ```shell
-yarn add -D pagetables popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo sass sass-loader vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-pdf mitt "https://github.com/sagalbot/vue-select/tarball/feat/vue-3-compat"
+yarn add -D @headlessui/vue pagetables popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo sass sass-loader vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-pdf mitt "https://github.com/sagalbot/vue-select/tarball/feat/vue-3-compat"
 ```
 Feel free to configure the color palette to your own preference, but for uniformity be sure to include `primary`,`secondary`, `success` and `danger` variants since they are used in the jig template.
 3.  Publish the Package's assets, configs, templates, components and layouts.

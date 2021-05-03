@@ -37,6 +37,20 @@
                         </div>
                     </template>
                 </jet-confirmation-modal>
+                <div v-if="showModal && currentModel">
+                    <jig-modal
+                        :show="showModal"
+                        corner-class="rounded-lg"
+                        position-class="align-middle"
+                        @close="currentModel = null; showModal = false">
+
+                        <template {{'#'}}{{'title'}}>Show {{$modelTitle}} {{'#'}}{{'{{'}}currentModel.id}}</template>
+                        <show-{{$modelRouteAndViewName}}-form :model="currentModel"></show-{{$modelRouteAndViewName}}-form>
+                        <template {{'#'}}{{'footer'}}>
+                            <inertia-button class="bg-primary px-4 text-white" {{'@'}}click="showModal = false; currentModel = null">Close</inertia-button>
+                        </template>
+                    </jig-modal>
+                </div>
             </div>
         </div>
         <div v-else class="p-4 rounded-md shadow-md bg-red-100 text-red-500 font-bold ">
@@ -51,11 +65,22 @@
     import JetDialogModal from "@/Jetstream/DialogModal";
     import InertiaButton from "@/JigComponents/InertiaButton";
     import JigToggle from "@/JigComponents/JigToggle";
+    import JigModal from "@/JigComponents/JigModal";
     import DtComponent from "@/JigComponents/DtComponent";
     import DisplayMixin from "@/Mixins/DisplayMixin";
+    import Show{{$modelPlural}}Form from "@/Pages/{{$modelPlural}}/ShowForm";
     export default {
         name: "Index",
-        components: {DtComponent, JigToggle, InertiaButton, JetConfirmationModal,JetDialogModal, JigLayout },
+        components: {
+            DtComponent,
+            JigToggle,
+            InertiaButton,
+            JetConfirmationModal,
+            JetDialogModal,
+            JigModal,
+            JigLayout,
+            Show{{$modelPlural}}Form,
+        },
         props: {
             can: Object,
             columns: Array,
@@ -69,6 +94,7 @@
                 confirmDelete: false,
                 currentModel: null,
                 withDisabled: false,
+                showModal: false,
             }
         },
         mixins: [
@@ -87,7 +113,11 @@
         },
         methods: {
             showModel(model) {
-                this.$inertia.visit(this.route('admin.{{$modelRouteAndViewName}}.show',model.id));
+                axios.get(route('api.{{$modelRouteAndViewName}}.show',model)).then(res => {
+                    this.currentModel = res.data.payload;
+                    this.showModal = true;
+                })
+                // this.$inertia.visit(this.route('admin.{{$modelRouteAndViewName}}.show',model.id));
             },
             editModel(model) {
                 this.$inertia.visit(this.route('admin.{{$modelRouteAndViewName}}.edit',model.id));

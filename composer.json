@@ -20,7 +20,7 @@
         "ext-json": "*",
         "doctrine/dbal": "^3.0",
         "illuminate/support": "^v8.40",
-        "inertiajs/inertia-laravel": "^0.3.5",
+        "inertiajs/inertia-laravel": "^0",
         "laravel/helpers": "^1.4",
         "laravel/jetstream": "^v2.3.4",
         "savannabits/laravel-pagetables": "^1.0",

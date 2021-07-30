@@ -1,8 +1,8 @@
 <template>
     <v-select
-        class="px-2 py-1 border bg-gray-50 rounded-md shadow-sm"
-        :value="value"
-        @input="onSelect"
+        class="px-2 py-1 border border-gray-200 bg-gray-50"
+        :model-value="modelValue"
+        @update:modelValue="onSelect"
         :multiple="multiple"
         :options="options"
         :label="label"
@@ -26,7 +26,7 @@
 import vSelect from "vue-select/src/index"
 export default {
     name: "JigSelect",
-    emits: ['input'],
+    emits: ['update:modelValue'],
     components: {
         vSelect,
     },
@@ -34,7 +34,7 @@ export default {
         multiple: {
             default: false,
         },
-        value: {
+        modelValue: {
             default: null,
         },
         options: {
@@ -58,7 +58,7 @@ export default {
     },
     methods: {
         onSelect(value) {
-            this.$emit('input', value);
+            this.$emit('update:modelValue', value);
         },
     }
 }

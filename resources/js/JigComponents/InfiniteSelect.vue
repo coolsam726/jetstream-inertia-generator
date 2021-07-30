@@ -1,8 +1,8 @@
 <template>
     <v-select
-        class="px-2 py-1 bg-gray-50 border rounded-md shadow-sm"
-        :value="value"
-        @input="onSelect"
+        class="px-2 py-1 bg-gray-50 border border-gray-200 rounded-none shadow-none"
+        :model-value="modelValue"
+        @update:modelValue="onSelect"
         :multiple="multiple"
         :options="paginatedObject.data"
         :filterable="false"
@@ -37,10 +37,10 @@
         components: {
             "v-select": vSelect
         },
-        emits: ["input"],
+        emits: ["update:modelValue"],
         model: {
-            prop: 'value',
-            event: 'input'
+            prop: 'modelValue',
+            event: 'update:modelValue'
         },
         props: {
             "apiUrl": {
@@ -59,7 +59,7 @@
                 type: Boolean,
                 default: false
             },
-            "value": {
+            "modelValue": {
                 default: null
             },
             "label": {
@@ -95,7 +95,7 @@
                 this.searchQuery = null;
             },
             onSelect(value) {
-                this.$emit('input', value);
+                this.$emit('update:modelValue', value);
             },
             async fetchResults(query, loading, more=false) {
                 const vm = this;

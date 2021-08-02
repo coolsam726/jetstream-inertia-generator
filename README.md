@@ -72,8 +72,10 @@ php artisan vendor:publish --tag=jig-blade-templates #Publishes resources/views/
 php artisan vendor:publish --tag=jig-config #Publishes the config file. If it exists use --force to replace it.
 php artisan vendor:publish --tag=jig-routes #Publishes routes/jig.php to hold routes for generated modules.If you have already generated some routes, be sure to back them up as this file will be reset if you --force it.
 php artisan vendor:publish --tag=jig-views #publishes Vue Components, app.js, bootstrap.js and Layout files. Use --force to force replace
+php artisan vendor:publish --tag=jig-scripts #publishes main.ts and Layout files. Use --force to force replace
+php artisan vendor:publish --tag=jig-css #publishes app.css. Use --force to force replace
 php artisan vendor:publish --tag=jig-assets #publishes logos and other assets
-php artisan vendor:publish --tag=jig-compiler-configs #publishes webpack.config.js and tailwind.config.js
+php artisan vendor:publish --tag=jig-compiler-configs #publishes postcss.config.js,vite.config.js, tsconfig.json and tailwind.config.js
 php artisan vendor:publish --tag=jig-migrations #Publish database migrations
 ```
 4. Then finish installation steps for spatie/laravel-permission by publishing its migrations.
@@ -82,13 +84,8 @@ php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvid
 ```
 NB: The `title` field will be automatically added to the `roles` and `permissions` tables when the first CRUD is generated.
 
-5. Add the `JigMiddleware` to the Global middleware and the `web` middleware group in `app/Http/Kernel.php`:
+5. Add the `JigMiddleware` to the `web` middleware group in `app/Http/Kernel.php`:
 ```php
-protected $middleware = [
-    ...,
-    \Savannabits\JetstreamInertiaGenerator\Middleware\JigMiddleware::class,
-];
-
 protected $middlewareGroups = [
     'web' => [
         ...,

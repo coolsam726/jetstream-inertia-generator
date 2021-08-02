@@ -26,8 +26,8 @@
 </template>
 
 <script>
-    import JigDd from "@/JigComponents/JigDd";
-    import InertiaButton from "@/JigComponents/InertiaButton";
+    import JigDd from "@/JigComponents/JigDd.vue";
+    import InertiaButton from "@/JigComponents/InertiaButton.vue";
 
     export default {
         name: "Show{{$modelPlural}}Form",

@@ -23,14 +23,14 @@
 </template>
 
 <script>
-    import JetApplicationMark from '@/Jetstream/ApplicationMark'
-    import JetBanner from '@/Jetstream/Banner'
-    import JetDropdown from '@/Jetstream/Dropdown'
-    import JetDropdownLink from '@/Jetstream/DropdownLink'
-    import JetNavLink from '@/Jetstream/NavLink'
-    import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink'
-    import JigLayout from "./JigLayout";
-    import Sidebar from "./Jig/Sidebar";
+    import JetApplicationMark from '@/Jetstream/ApplicationMark.vue'
+    import JetBanner from '@/Jetstream/Banner.vue'
+    import JetDropdown from '@/Jetstream/Dropdown.vue'
+    import JetDropdownLink from '@/Jetstream/DropdownLink.vue'
+    import JetNavLink from '@/Jetstream/NavLink.vue'
+    import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink.vue'
+    import JigLayout from "./JigLayout.vue";
+    import Sidebar from "./Jig/Sidebar.vue";
     import menu from "./FrontendSidebarMenu.json"
 
     export default {

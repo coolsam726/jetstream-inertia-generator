@@ -60,15 +60,15 @@
 </template>
 
 <script>
-    import JigLayout from "@/Layouts/JigLayout";
-    import JetConfirmationModal from "@/Jetstream/ConfirmationModal";
-    import JetDialogModal from "@/Jetstream/DialogModal";
-    import InertiaButton from "@/JigComponents/InertiaButton";
-    import JigToggle from "@/JigComponents/JigToggle";
-    import JigModal from "@/JigComponents/JigModal";
-    import DtComponent from "@/JigComponents/DtComponent";
-    import DisplayMixin from "@/Mixins/DisplayMixin";
-    import Show{{$modelPlural}}Form from "@/Pages/{{$modelPlural}}/ShowForm";
+    import JigLayout from "@/Layouts/JigLayout.vue";
+    import JetConfirmationModal from "@/Jetstream/ConfirmationModal.vue";
+    import JetDialogModal from "@/Jetstream/DialogModal.vue";
+    import InertiaButton from "@/JigComponents/InertiaButton.vue";
+    import JigToggle from "@/JigComponents/JigToggle.vue";
+    import JigModal from "@/JigComponents/JigModal.vue";
+    import DtComponent from "@/JigComponents/DtComponent.vue";
+    import DisplayMixin from "@/Mixins/DisplayMixin.js";
+    import Show{{$modelPlural}}Form from "@/Pages/{{$modelPlural}}/ShowForm.vue";
     export default {
         name: "Index",
         components: {

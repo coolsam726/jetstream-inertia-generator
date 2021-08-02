@@ -25,9 +25,9 @@
 </template>
 
 <script>
-    import JigLayout from "@/Layouts/JigLayout";
-    import InertiaButton from "@/JigComponents/InertiaButton";
-    import Show{{$modelPlural}}Form from "./ShowForm"
+    import JigLayout from "@/Layouts/JigLayout.vue";
+    import InertiaButton from "@/JigComponents/InertiaButton.vue";
+    import Show{{$modelPlural}}Form from "./ShowForm.vue"
     export default {
         name: "Show{{$modelBaseName}}",
         components: {

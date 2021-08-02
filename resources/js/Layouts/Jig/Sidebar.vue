@@ -132,11 +132,11 @@
 <script>
 import NotificationDropdownComponent from "./NotificationDropdown.vue";
 import UserDropdownComponent from "./UserDropdown.vue";
-import SidebarLink from "@/JigComponents/SidebarLink";
-import JigSidebarLink from "@/JigComponents/JigSidebarLink";
-import ApplicationMark from "@/JigComponents/ApplicationMark";
-import ApplicationLogo from "@/JigComponents/ApplicationLogo";
-import InertiaButton from "@/JigComponents/InertiaButton";
+import SidebarLink from "@/JigComponents/SidebarLink.vue";
+import JigSidebarLink from "@/JigComponents/JigSidebarLink.vue";
+import ApplicationMark from "@/JigComponents/ApplicationMark.vue";
+import ApplicationLogo from "@/JigComponents/ApplicationLogo.vue";
+import InertiaButton from "@/JigComponents/InertiaButton.vue";
 export default {
     props: {
         menu:{

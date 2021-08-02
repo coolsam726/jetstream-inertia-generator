@@ -23,10 +23,10 @@
 </template>
 
 <script>
-    import JigLayout from "@/Layouts/JigLayout";
-    import InertiaButton from "@/JigComponents/InertiaButton";
-    import Create{{$modelPlural}}Form from "./CreateForm";
-    import DisplayMixin from "@/Mixins/DisplayMixin";
+    import JigLayout from "@/Layouts/JigLayout.vue";
+    import InertiaButton from "@/JigComponents/InertiaButton.vue";
+    import Create{{$modelPlural}}Form from "./CreateForm.vue";
+    import DisplayMixin from "@/Mixins/DisplayMixin.js";
     export default {
         name: "Create{{$modelPlural}}",
         components: {

@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import ApplicationLogo from "@/JigComponents/ApplicationLogo";
+import ApplicationLogo from "@/JigComponents/ApplicationLogo.vue";
 export default {
     name: "LandingPage",
     components: {ApplicationLogo},

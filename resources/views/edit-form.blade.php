@@ -128,17 +128,17 @@
 </template>
 
 <script>
-    import JetLabel from "@/Jetstream/Label";
-    import InertiaButton from "@/JigComponents/InertiaButton";
-    import JetInputError from "@/Jetstream/InputError";
+    import JetLabel from "@/Jetstream/Label.vue";
+    import InertiaButton from "@/JigComponents/InertiaButton.vue";
+    import JetInputError from "@/Jetstream/InputError.vue";
     import {useForm} from "@inertiajs/inertia-vue3";
-    @if($hasCheckbox)import JetCheckbox from "@/Jetstream/Checkbox";
+    @if($hasCheckbox)import JetCheckbox from "@/Jetstream/Checkbox.vue";
 @endif
-@if($hasDate)import JigDatepicker from "@/JigComponents/JigDatepicker";
+@if($hasDate)import JigDatepicker from "@/JigComponents/JigDatepicker.vue";
 @endif
-    @if($hasInput)import JetInput from "@/Jetstream/Input";
+    @if($hasInput)import JetInput from "@/Jetstream/Input.vue";
 @endif
-    @if($hasTextArea)import JigTextarea from "@/JigComponents/JigTextarea";
+    @if($hasTextArea)import JigTextarea from "@/JigComponents/JigTextarea.vue";
 @endif
     @if($hasSelect)import InfiniteSelect from '@/JigComponents/InfiniteSelect.vue';
 @endif

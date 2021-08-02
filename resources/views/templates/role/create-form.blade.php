@@ -15,18 +15,18 @@
 </template>
 
 <script>
-    import JetInput from "@/Jetstream/Input";
-    import JetLabel from "@/Jetstream/Label";
-    import InertiaButton from "@/JigComponents/InertiaButton";
-    import JetInputError from "@/Jetstream/InputError"
+    import JetInput from "@/Jetstream/Input.vue";
+    import JetLabel from "@/Jetstream/Label.vue";
+    import InertiaButton from "@/JigComponents/InertiaButton.vue";
+    import JetInputError from "@/Jetstream/InputError.vue"
     import {useForm} from "@inertiajs/inertia-vue3";
     export default {
-        name: "CreateRolesForm",
+        name: "Create{{$modelPlural}}Form",
         components: {
             InertiaButton,
             JetInputError,
             JetLabel,
-                         JetInput,
+            JetInput,
 
         },
         data() {

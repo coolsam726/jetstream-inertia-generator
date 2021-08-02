@@ -34,12 +34,12 @@
 </template>
 
 <script>
-import JetDialogModal from "@/Jetstream/DialogModal"
-import InertiaButton from "@/JigComponents/InertiaButton";
-import JetLabel from "@/Jetstream/Label"
-import JetInput from "@/Jetstream/Input"
-import DisplayMixin from "@/Mixins/DisplayMixin";
-import JigTextarea from "@/JigComponents/JigTextarea";
+import JetDialogModal from "@/Jetstream/DialogModal.vue"
+import InertiaButton from "@/JigComponents/InertiaButton.vue";
+import JetLabel from "@/Jetstream/Label.vue"
+import JetInput from "@/Jetstream/Input.vue"
+import DisplayMixin from "@/Mixins/DisplayMixin.js";
+import JigTextarea from "@/JigComponents/JigTextarea.vue";
 export default {
     name: "CardDonation",
     props: {

@@ -103,10 +103,10 @@
 </template>
 
 <script>
-    import JetApplicationLogo from '@/Jetstream/ApplicationLogo'
-    import JigTabs from "../JigComponents/JigTabs";
-    import JigTabLink from "../JigComponents/JigTabLink";
-    import JigTab from "../JigComponents/JigTab";
+    import JetApplicationLogo from '@/Jetstream/ApplicationLogo.vue'
+    import JigTabs from "../JigComponents/JigTabs.vue";
+    import JigTabLink from "../JigComponents/JigTabLink.vue";
+    import JigTab from "../JigComponents/JigTab.vue";
 
     export default {
         components: {

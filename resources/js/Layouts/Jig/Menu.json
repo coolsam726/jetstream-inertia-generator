@@ -9,5 +9,32 @@
         "isParent": false,
         "ignorePerm": true,
         "children": []
+    },
+    "permissions": {
+        "route": "admin.permissions.index",
+        "title": "Permissions",
+        "routePattern": "admin.permissions.*",
+        "faIcon": "far fa-clone",
+        "isTitle": false,
+        "isParent": false,
+        "children": []
+    },
+    "roles": {
+        "route": "admin.roles.index",
+        "title": "Roles",
+        "routePattern": "admin.roles.*",
+        "faIcon": "far fa-clone",
+        "isTitle": false,
+        "isParent": false,
+        "children": []
+    },
+    "users": {
+        "route": "admin.users.index",
+        "title": "Users",
+        "routePattern": "admin.users.*",
+        "faIcon": "far fa-clone",
+        "isTitle": false,
+        "isParent": false,
+        "children": []
     }
 }

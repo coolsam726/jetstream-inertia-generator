@@ -5,7 +5,7 @@
 </template>
 <script>
 import { onMounted } from 'vue'
-import {emitter} from "./eventHub"
+import {emitter} from "./eventHub.js"
     export default {
         name: "DtComponent",
         props: {

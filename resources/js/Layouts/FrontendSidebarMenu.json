@@ -2,7 +2,7 @@
     "backend": {
         "route": "admin.dashboard",
         "routePattern": "admin.dashboard",
-        "title": "Admin Area",
+        "title": "Backend",
         "faIcon": "fas fa-cogs",
         "isTitle": false,
         "isParent": false,

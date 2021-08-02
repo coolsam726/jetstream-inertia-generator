@@ -6,9 +6,10 @@
 </style>
 
 <script>
-import InertiaButton from "@/JigComponents/InertiaButton";
-import LandingPage from "@/Pages/LandingPage";
+import InertiaButton from "@/JigComponents/InertiaButton.vue";
+import LandingPage from "@/Pages/LandingPage.vue";
 export default {
+    name: "Welcome",
     components: {LandingPage, InertiaButton},
     props: {
         canLogin: Boolean,

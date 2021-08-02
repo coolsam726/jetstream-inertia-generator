@@ -36,9 +36,9 @@
 </template>
 
 <script>
-    import AppLayout from '@/Layouts/AppLayout'
-    import Welcome from '@/Jetstream/Welcome'
-    import StatsCard from "../JigComponents/StatsCard";
+    import AppLayout from '@/Layouts/AppLayout.vue'
+    import Welcome from '@/Jetstream/Welcome.vue'
+    import StatsCard from "@/JigComponents/StatsCard.vue";
 
     export default {
         components: {

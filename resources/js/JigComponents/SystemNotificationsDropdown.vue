@@ -56,10 +56,10 @@
 </template>
 
 <script>
-import InertiaButton from "@/JigComponents/InertiaButton";
-import JetDialogModal from "@/Jetstream/DialogModal"
-import DisplayMixin from "@/Mixins/DisplayMixin";
-import JetDropdown from "@/Jetstream/Dropdown";
+import InertiaButton from "@/JigComponents/InertiaButton.vue";
+import JetDialogModal from "@/Jetstream/DialogModal.vue"
+import DisplayMixin from "@/Mixins/DisplayMixin.js";
+import JetDropdown from "@/Jetstream/Dropdown.vue";
 
 export default {
     name: "SystemNotificationsDropdown",
@@ -95,11 +95,11 @@ export default {
         this.notifications = this.unreadNotifications;
         this.unreadCount = this.notifications.length;
         if (this.$page.props.user) {
-            Echo.private(`App.Models.User.${this.$page.props.user.id}`)
+            /*Echo.private(`App.Models.User.${this.$page.props.user.id}`)
                 .notification((notification) => {
                     console.log(notification);
                     this.fetchNotification(notification.id);
-                });
+                });*/
         }
     },
     methods: {

@@ -67,6 +67,7 @@ class JetstreamInertiaGeneratorServiceProvider extends RouteServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/config.php' => config_path('jig.php'),
+                __DIR__.'/../config/vite.php' => config_path('vite.php'),
             ], 'jig-config');
 
             // Publishing the views.
@@ -77,6 +78,14 @@ class JetstreamInertiaGeneratorServiceProvider extends RouteServiceProvider
             $this->publishes([
                 __DIR__.'/../resources/js' => resource_path('js'),
             ], 'jig-views');
+
+            $this->publishes([
+                __DIR__.'/../resources/scripts' => resource_path('scripts'),
+            ], 'jig-scripts');
+
+            $this->publishes([
+                __DIR__.'/../resources/css' => resource_path('css'),
+            ], 'jig-css');
 
             $this->publishes([
                 __DIR__.'/../database/migrations' => database_path('migrations'),

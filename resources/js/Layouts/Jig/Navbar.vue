@@ -216,14 +216,14 @@
 </template>
 <script>
 import UserDropdownComponent from "./UserDropdown.vue";
-import JetNavLink from "@/Jetstream/NavLink"
-import JetDropdown from "@/Jetstream/Dropdown"
-import JetDropdownLink from "@/Jetstream/DropdownLink"
-import ResponsiveNavLink from "@/JigComponents/ResponsiveNavLink"
-import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink"
-import SystemNotificationsDropdown from "@/JigComponents/SystemNotificationsDropdown";
-import ApplicationLogo from "@/JigComponents/ApplicationLogo";
-import ApplicationMark from "@/JigComponents/ApplicationMark";
+import JetNavLink from "@/Jetstream/NavLink.vue"
+import JetDropdown from "@/Jetstream/Dropdown.vue"
+import JetDropdownLink from "@/Jetstream/DropdownLink.vue"
+import ResponsiveNavLink from "@/JigComponents/ResponsiveNavLink.vue"
+import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink.vue"
+import SystemNotificationsDropdown from "@/JigComponents/SystemNotificationsDropdown.vue";
+import ApplicationLogo from "@/JigComponents/ApplicationLogo.vue";
+import ApplicationMark from "@/JigComponents/ApplicationMark.vue";
 export default {
     components: {
         ApplicationLogo,

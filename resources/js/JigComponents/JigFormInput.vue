@@ -52,13 +52,13 @@
 </template>
 
 <script>
-import JetCheckbox from "@/Jetstream/Checkbox"
-import JetLabel from "@/Jetstream/Label"
-import JetInput from "@/Jetstream/Input"
-import JetInputError from "@/Jetstream/InputError"
-import JigSelect from "@/JigComponents/JigSelect";
-import JigTextarea from "@/JigComponents/JigTextarea";
-import InfiniteSelect from "@/JigComponents/InfiniteSelect";
+import JetCheckbox from "@/Jetstream/Checkbox.vue"
+import JetLabel from "@/Jetstream/Label.vue"
+import JetInput from "@/Jetstream/Input.vue"
+import JetInputError from "@/Jetstream/InputError.vue"
+import JigSelect from "@/JigComponents/JigSelect.vue";
+import JigTextarea from "@/JigComponents/JigTextarea.vue";
+import InfiniteSelect from "@/JigComponents/InfiniteSelect.vue";
 export default {
     name: "JigFormInput",
     components: {

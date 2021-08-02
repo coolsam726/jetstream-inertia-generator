@@ -291,10 +291,10 @@
 <script>
 import NavbarComponent from "@/Layouts/Jig/Navbar.vue";
 import SidebarComponent from "@/Layouts/Jig/Sidebar.vue";
-import JigNotifications from "@/JigComponents/JigNotifications";
-import JetNavLink from "@/Jetstream/NavLink"
-import InertiaButton from "@/JigComponents/InertiaButton";
-import ApplicationMark from "@/Jetstream/ApplicationMark";
+import JigNotifications from "@/JigComponents/JigNotifications.vue";
+import JetNavLink from "@/Jetstream/NavLink.vue"
+import InertiaButton from "@/JigComponents/InertiaButton.vue";
+import ApplicationMark from "@/Jetstream/ApplicationMark.vue";
 import menu from "@/Layouts/Jig/Menu.json"
 
 export default {

@@ -273,7 +273,7 @@
   </jig-layout>
 </template>
 <script>
-import JigLayout from "@/Layouts/JigLayout";
+import JigLayout from "@/Layouts/JigLayout.vue";
 export default {
   name: "dashboard-page",
   components: {

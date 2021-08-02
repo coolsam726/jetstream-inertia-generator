@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/jetstream-inertia-generator.iml" filepath="$PROJECT_DIR$/.idea/jetstream-inertia-generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../strathmore/mc-next/.idea/mc-next.iml" filepath="$PROJECT_DIR$/../../strathmore/mc-next/.idea/mc-next.iml" />
     </modules>
   </component>
 </project>

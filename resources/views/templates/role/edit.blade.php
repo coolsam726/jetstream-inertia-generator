@@ -22,13 +22,13 @@
 </template>
 
 <script>
-    import JigLayout from "@/Layouts/JigLayout";
-    import JetLabel from "@/Jetstream/Label";
-    import InertiaButton from "@/JigComponents/InertiaButton";
-    import JetInputError from "@/Jetstream/InputError";
-    import JetButton from "@/Jetstream/Button";
-    import Edit{{$modelPlural}}Form from "./EditForm";
-    import DisplayMixin from "@/Mixins/DisplayMixin";
+    import JigLayout from "@/Layouts/JigLayout.vue";
+    import JetLabel from "@/Jetstream/Label.vue";
+    import InertiaButton from "@/JigComponents/InertiaButton.vue";
+    import JetInputError from "@/Jetstream/InputError.vue";
+    import JetButton from "@/Jetstream/Button.vue";
+    import Edit{{$modelPlural}}Form from "./EditForm.vue";
+    import DisplayMixin from "@/Mixins/DisplayMixin.js";
     export default {
         name: "Edit{{$modelPlural}}",
         props: {

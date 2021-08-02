@@ -145,18 +145,18 @@
 </template>
 
 <script>
-import JetLabel from "@/Jetstream/Label";
-import InertiaButton from "@/JigComponents/InertiaButton";
-import JetInputError from "@/Jetstream/InputError";
+import JetLabel from "@/Jetstream/Label.vue";
+import InertiaButton from "@/JigComponents/InertiaButton.vue";
+import JetInputError from "@/Jetstream/InputError.vue";
 import {useForm} from "@inertiajs/inertia-vue3";
-import JetInput from "@/Jetstream/Input";
-import JigTabs from "@/JigComponents/JigTabs";
-import JigTabLink from "@/JigComponents/JigTabLink";
-import JigTab from "@/JigComponents/JigTab";
-import AssignPerms from "@/Pages/Roles/AssignPerms";
+import JetInput from "@/Jetstream/Input.vue";
+import JigTabs from "@/JigComponents/JigTabs.vue";
+import JigTabLink from "@/JigComponents/JigTabLink.vue";
+import JigTab from "@/JigComponents/JigTab.vue";
+import AssignPerms from "@/Pages/Roles/AssignPerms.vue";
 
 export default {
-    name: "EditRoleForm",
+    name: "Edit{{$modelPlural}}Form",
     props: {
         model: Object,
         permissions: Object,

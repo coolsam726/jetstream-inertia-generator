@@ -145,6 +145,10 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/nette/schema" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/league/config" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/dflydev/dot-access-data" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/innocenzi/laravel-vite" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/spatie/laravel-package-tools" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/guzzlehttp/promises" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/guzzlehttp/guzzle" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

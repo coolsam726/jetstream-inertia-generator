@@ -47,6 +47,7 @@ class {{ $modelBaseName }} extends Authenticatable
     '{{ $f }}',
     @endforeach
 
+        'password',
     ];
     @endif
 

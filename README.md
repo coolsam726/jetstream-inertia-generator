@@ -50,11 +50,11 @@ composer require savannabits/jetstream-inertia-generator
 2. Install the necessary `npm` dev dependencies by running the following command:
 If you are using npm:
 ```shell
-npm install --include=dev --legacy-peer-deps @headlessui/vue pagetables popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo laravel-vite sass sass-loader vite vue vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-pdf mitt "https://github.com/sagalbot/vue-select/tarball/feat/vue-3-compat"
+npm install --include=dev --legacy-peer-deps @headlessui/vue @vitejs/plugin-vue pagetables popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo laravel-vite sass sass-loader vite vue@^3.1 vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-pdf mitt "https://github.com/sagalbot/vue-select/tarball/feat/vue-3-compat"
 ```
 Or if you are using yarn:
 ```shell
-yarn add -D @headlessui/vue pagetables popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo laravel-vite sass sass-loader vite vue vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-pdf mitt "https://github.com/sagalbot/vue-select/tarball/feat/vue-3-compat"
+yarn add -D @headlessui/vue @vitejs/plugin-vue pagetables popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo laravel-vite sass sass-loader vite vue@^3.1 vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-pdf mitt "https://github.com/sagalbot/vue-select/tarball/feat/vue-3-compat"
 ```
 Feel free to configure the color palette to your own preference, but for uniformity be sure to include `primary`,`secondary`, `success` and `danger` variants since they are used in the jig template.
 3.  Publish the Package's assets, configs, templates, components and layouts.
@@ -119,6 +119,14 @@ SANCTUM_STATEFUL_DOMAINS="${APP_BASE_DOMAIN}" #You can add other comma separated
 php artisan storage:link
 ```
 
+9. For `v3` only, set the `scripts` in your `package.json` as follows:
+```json
+"scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "serve": "vite preview"
+    },
+```
 ## Usage
 ### The initial seeded admin user and role
 When you run `php artisan vendor:publish --tag=jig-migrations`, a migration is published that creates an initial default user called `Administrator` and a role with the name `administrator` to enable you gain access to the system with admin privileges. The credentials for the user account are:

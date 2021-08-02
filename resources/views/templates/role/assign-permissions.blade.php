@@ -29,13 +29,13 @@
 </template>
 
 <script>
-import JetLabel from "@/Jetstream/Label";
-import InertiaButton from "@/JigComponents/InertiaButton";
-import JetInputError from "@/Jetstream/InputError";
-import JetCheckbox from "@/Jetstream/Checkbox";
-import JetInput from "@/Jetstream/Input";
+import JetLabel from "@/Jetstream/Label.vue";
+import InertiaButton from "@/JigComponents/InertiaButton.vue";
+import JetInputError from "@/Jetstream/InputError.vue";
+import JetCheckbox from "@/Jetstream/Checkbox.vue";
+import JetInput from "@/Jetstream/Input.vue";
 import Axios from "axios";
-import DisplayMixin from "@/Mixins/DisplayMixin";
+import DisplayMixin from "@/Mixins/DisplayMixin.js";
 export default {
     name: "AssignPerms",
     components: {

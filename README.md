@@ -42,11 +42,24 @@ Other Important dependencies that you MUST configure include:
 ],
 ```
 
+## Before You Install:
+- Ensure you have installed `laravel/jetstream` with `inertia`.
+
 ## Installation
 1. You can install the package via composer:
 ```bash
 composer require savannabits/jetstream-inertia-generator
 ```
+> :warning: 1. Before proceeding, ensure you have installed `laravel/jetstream` with `inertia`.
+> 
+> :warning: 2. Step 1 will install spatie/laravel-permission. Ensure you have published migrations for this package to create roles and permissions tables before proceeding.
+
+```shell
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+```
+> :bulb: NB: The `title` field will be automatically added to the `roles` and `permissions` tables when the first CRUD is generated.
+:::
+
 2. Install the necessary `npm` dev dependencies by running the following command:
 If you are using npm:
 ```shell
@@ -57,6 +70,7 @@ Or if you are using yarn:
 yarn add -D @headlessui/vue @vitejs/plugin-vue pagetables popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral portal-vue postcss postcss-import pusher-js laravel-echo laravel-vite sass sass-loader vite vue@^3.1 vue3-vt-notifications vue-flatpickr-component  vue-numerals vue-pdf mitt "https://github.com/sagalbot/vue-select/tarball/feat/vue-3-compat"
 ```
 Feel free to configure the color palette to your own preference, but for uniformity be sure to include `primary`,`secondary`, `success` and `danger` variants since they are used in the jig template.
+
 3.  Publish the Package's assets, configs, templates, components and layouts.
    This is necessary for you to get the admin layout and all the vue components used in the generated code:
 
@@ -76,15 +90,9 @@ php artisan vendor:publish --tag=jig-scripts #publishes main.ts and Layout files
 php artisan vendor:publish --tag=jig-css #publishes app.css. Use --force to force replace
 php artisan vendor:publish --tag=jig-assets #publishes logos and other assets
 php artisan vendor:publish --tag=jig-compiler-configs #publishes postcss.config.js,vite.config.js, tsconfig.json and tailwind.config.js
-php artisan vendor:publish --tag=jig-migrations #Publish database migrations
+php artisan vendor:publish --tag=jig-seeders #Publish database Seeders
 ```
-4. Then finish installation steps for spatie/laravel-permission by publishing its migrations.
-```shell
-php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
-```
-NB: The `title` field will be automatically added to the `roles` and `permissions` tables when the first CRUD is generated.
-
-5. Add the `JigMiddleware` to the `web` middleware group in `app/Http/Kernel.php`:
+4. Add the `JigMiddleware` to the `web` middleware group in `app/Http/Kernel.php`:
 ```php
 protected $middlewareGroups = [
     'web' => [
@@ -93,7 +101,7 @@ protected $middlewareGroups = [
     ],
 ];
 ```
-6. Allow First-Party access to the Sanctum API by adding the following to the `api` middleware group in `app/Http/Kernel.php`
+5. Allow First-Party access to the Sanctum API by adding the following to the `api` middleware group in `app/Http/Kernel.php`
 ```php
 protected $middlewareGroups = [
     'api' => [
@@ -102,24 +110,28 @@ protected $middlewareGroups = [
     ],
 ];
 ```
-7. Modify the .env to have the following keys:
+6. Modify the .env to have the following keys:
 ```env
 APP_BASE_DOMAIN=mydomain.test
-APP_SCHEME=http #or https
+# or https
+APP_SCHEME=http
 #optional mix_app_uri (The path under which the app will be served. It is recommended to run the app from the root of the domain.
 MIX_APP_URI= 
-APP_URL=${APP_SCHEME}://${APP_BASE_DOMAIN} #If MIX_APP_URI is empty.
-#APP_URL=${APP_SCHEME}://${APP_BASE_DOMAIN}/${MIX_APP_URI} #If MIX_APP_URI is not empty.
+#If MIX_APP_URI is empty.
+APP_URL=${APP_SCHEME}://${APP_BASE_DOMAIN} 
+#If MIX_APP_URI is not empty.
+#APP_URL=${APP_SCHEME}://${APP_BASE_DOMAIN}/${MIX_APP_URI}
 
 # Append the following key to your .env to allow 1st party consumption of your api:
-SANCTUM_STATEFUL_DOMAINS="${APP_BASE_DOMAIN}" #You can add other comma separated domains
+#You can add other comma separated domains
+SANCTUM_STATEFUL_DOMAINS="${APP_BASE_DOMAIN}"
 ```
-8. create the storage:link (See laravel documentation) to allow access to the public disk assets (e.g logos) via web:
+7. create the storage:link (See laravel documentation) to allow access to the public disk assets (e.g logos) via web:
 ```shell
 php artisan storage:link
 ```
 
-9. For `v3` only, set the `scripts` in your `package.json` as follows:
+8. For `v3` only, set the `scripts` in your `package.json` as follows:
 ```json
 "scripts": {
         "dev": "vite",
@@ -127,6 +139,16 @@ php artisan storage:link
         "serve": "vite preview"
     },
 ```
+9. Enable Profile Photos by uncommenting the following line in `config/jetstream.php` under `'features'`:
+```php
+Features::profilePhotos(),
+```
+10. Run Migrations and Seeders
+```shell
+php artisan migrate
+php artisan db:seed --class SeedAdminRoleAndUser
+```
+:rocket: You are now ready to generate your CRUDs!:tada:
 ## Usage
 ### The initial seeded admin user and role
 When you run `php artisan vendor:publish --tag=jig-migrations`, a migration is published that creates an initial default user called `Administrator` and a role with the name `administrator` to enable you gain access to the system with admin privileges. The credentials for the user account are:

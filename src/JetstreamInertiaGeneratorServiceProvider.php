@@ -88,8 +88,12 @@ class JetstreamInertiaGeneratorServiceProvider extends RouteServiceProvider
             ], 'jig-css');
 
             $this->publishes([
-                __DIR__.'/../database/migrations' => database_path('migrations'),
+                /* __DIR__.'/../database/migrations/seed_admin_role_and_user.php' => database_path("migrations/".now()->format("Y_m_d_H_i_s"). "_seed_admin_role_and_user.php"), */
             ], 'jig-migrations');
+
+            $this->publishes([
+                __DIR__.'/../database/Seeders' => database_path("Seeders"),
+            ], 'jig-seeders');
 
             $this->publishes([
                 __DIR__.'/../resources/compiler-configs' => base_path(''),

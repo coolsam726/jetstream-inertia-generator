@@ -18,7 +18,7 @@
                 <show-{{$modelRouteAndViewName}}-form :model="model"></show-{{$modelRouteAndViewName}}-form>
             </div>
         </div>
-        <div v-else class="text-center space-4 px-4 bg-white rounded-md shadow-md text-red-500 font-bold text-lg">
+        <div v-else class="px-4 text-lg font-bold text-center text-red-500 bg-white rounded-md shadow-md space-4">
             You don't have permission to view this resource.
         </div>
     </jig-layout>
@@ -28,7 +28,9 @@
     import JigLayout from "@/Layouts/JigLayout.vue";
     import InertiaButton from "@/JigComponents/InertiaButton.vue";
     import Show{{$modelPlural}}Form from "./ShowForm.vue"
-    export default {
+    import { defineComponent } from "vue";
+
+    export default defineComponent({
         name: "Show{{$modelBaseName}}",
         components: {
             InertiaButton,
@@ -43,7 +45,7 @@
         },
         mounted() {},
         methods: {}
-    };
+    });
 </script>
 
 <style {{'scoped'}}></style>

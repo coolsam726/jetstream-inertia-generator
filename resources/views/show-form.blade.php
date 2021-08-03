@@ -29,7 +29,9 @@
     import JigDd from "@/JigComponents/JigDd.vue";
     import InertiaButton from "@/JigComponents/InertiaButton.vue";
 
-    export default {
+    import { defineComponent } from "vue";
+
+    export default defineComponent({
         name: "Show{{$modelPlural}}Form",
         props: {
             model: Object,
@@ -48,7 +50,7 @@
             }
         },
         methods: {}
-    }
+    });
 </script>
 
 <style scoped>

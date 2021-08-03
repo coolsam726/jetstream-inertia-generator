@@ -27,7 +27,9 @@
     import InertiaButton from "@/JigComponents/InertiaButton.vue";
     import Create{{$modelPlural}}Form from "./CreateForm.vue";
     import DisplayMixin from "@/Mixins/DisplayMixin.js";
-    export default {
+    import { defineComponent } from "vue";
+
+    export default defineComponent({
         name: "Create{{$modelPlural}}",
         components: {
             InertiaButton,
@@ -53,7 +55,7 @@
                 this.displayNotification('error',msg);
             }
         }
-    }
+    });
 </script>
 
 <style scoped>

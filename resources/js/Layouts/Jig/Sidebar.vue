@@ -1,6 +1,6 @@
 <template>
     <nav
-        class="relative z-40 flex no-scrollbar flex-wrap items-center justify-between px-0 bg-primary-800 shadow-xl md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-no-wrap md:overflow-hidden"
+        class="relative z-40 flex flex-wrap items-center justify-between px-0 shadow-xl no-scrollbar bg-primary-800 md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-no-wrap md:overflow-hidden"
         :class="{'md:w-64': !minimized, 'w-16 hover:w-64': minimized}"
     >
         <div
@@ -21,11 +21,11 @@
             </button>
             <!-- Brand -->
             <inertia-link
-                class="inline-flex items-center justify-center text-center p-2 h-16 my-0 mr-0 text-sm border-secondary-600 font-bold text-left overflow-hidden text-white uppercase whitespace-no-wrap"
+                class="inline-flex items-center justify-center h-16 p-2 my-0 mr-0 overflow-hidden text-sm font-bold text-left text-center text-white uppercase whitespace-no-wrap border-secondary-600"
                 :href="route('dashboard')"
             >
                 <span class="text-2xl font-semibold">{{$page.props.app.name}}</span>
-<!--                <application-mark class="h-12 w-12 text-4xl p-1 flex items-center justify-center"/>-->
+<!--                <application-mark class="flex items-center justify-center w-12 h-12 p-1 text-4xl"/>-->
             </inertia-link>
             <!-- User -->
             <!--            <ul class="flex flex-wrap items-center list-none md:hidden">
@@ -38,8 +38,7 @@
                         </ul>-->
             <!-- Collapse -->
             <div
-                class="absolute top-0 left-0 right-0 z-40 items-center bg-white flex-1 h-auto overflow-x-hidden overflow-y-auto
-                 shadow md:flex md:flex-col md:items-stretch md:opacity-100 md:relative md:shadow-none w-full"
+                class="absolute top-0 left-0 right-0 z-40 items-center flex-1 w-full h-auto overflow-x-hidden overflow-y-auto bg-white shadow md:flex md:flex-col md:items-stretch md:opacity-100 md:relative md:shadow-none"
                 v-bind:class="collapseShow"
             >
                 <!-- Collapse header -->
@@ -137,7 +136,9 @@ import JigSidebarLink from "@/JigComponents/JigSidebarLink.vue";
 import ApplicationMark from "@/JigComponents/ApplicationMark.vue";
 import ApplicationLogo from "@/JigComponents/ApplicationLogo.vue";
 import InertiaButton from "@/JigComponents/InertiaButton.vue";
-export default {
+import {defineComponent} from "vue";
+
+export default defineComponent({
     props: {
         menu:{
             type: Object,
@@ -199,7 +200,7 @@ export default {
         NotificationDropdownComponent,
         UserDropdownComponent
     }
-};
+});
 </script>
 <style scoped>
 /* Chrome, Safari and Opera */

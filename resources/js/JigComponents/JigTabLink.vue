@@ -2,26 +2,27 @@
     <button
         v-if="active"
         :id="tab"
-        class="py-4 px-6 transition ease-in-out duration-1000 block focus:outline-none font-medium transition-transform transform translate-x-0"
+        class="block px-6 py-4 font-medium transition transition-transform duration-1000 ease-in-out transform translate-x-0  focus:outline-none"
         :class="activeClasses"
-        @click="$emit('activate',tab)"
+        @click="$emit('activate', tab)"
     >
         <slot></slot>
     </button>
     <button
         v-else
         :id="tab"
-        class="py-4 px-6 block border-b transition ease-in-out duration-1000 focus:outline-none font-medium transition ease-in-out duration-700"
-        @click="$emit('activate',tab)"
+        class="block px-6 py-4 font-medium transition duration-700 duration-1000 ease-in-out border-b  focus:outline-none"
+        @click="$emit('activate', tab)"
     >
         <slot></slot>
     </button>
 </template>
 
 <script>
-export default {
+import { defineComponent } from "vue";
+export default defineComponent({
     name: "JigTabLink",
-    emits: ['activate'],
+    emits: ["activate"],
     props: {
         tab: {
             type: String,
@@ -30,15 +31,16 @@ export default {
             type: String,
         },
         activeClasses: {
-            default: 'text-gray-600 border-t-2 border-l-2 border-r-2 sm:border-b-none border-indigo-500 text-indigo-500 hover:text-indigo-600 translate-x-0',
-        }
+            default:
+                "text-gray-600 border-t-2 border-l-2 border-r-2 sm:border-b-none border-indigo-500 text-indigo-500 hover:text-indigo-600 translate-x-0",
+        },
     },
     computed: {
         active() {
             return this.tab === this.tabController;
-        }
-    }
-}
+        },
+    },
+});
 </script>
 
 <style>
@@ -75,6 +77,6 @@ export default {
     border-top: 10px solid transparent;
     border-bottom: 10px solid transparent;
 
-    border-right:10px solid blue;
+    border-right: 10px solid blue;
 }
 </style>

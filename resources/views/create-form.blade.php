@@ -163,7 +163,9 @@
     import InertiaButton from "@/JigComponents/InertiaButton.vue";
     import JetInputError from "@/Jetstream/InputError.vue"
     import {useForm} from "@inertiajs/inertia-vue3";
-    export default {
+    import { defineComponent } from "vue";
+
+    export default defineComponent({
         name: "Create{{$modelPlural}}Form",
         components: {
             InertiaButton,
@@ -222,7 +224,7 @@
                 },{remember: false, preserveState: true})
             }
         }
-    }
+    });
 </script>
 
 <style scoped>

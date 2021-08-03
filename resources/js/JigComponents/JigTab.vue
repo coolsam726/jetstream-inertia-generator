@@ -1,11 +1,12 @@
 <template>
-    <div class="py-4 transition ease-in-out" v-if="name===tabController">
+    <div class="py-4 transition ease-in-out" v-if="name === tabController">
         <slot></slot>
     </div>
 </template>
 
 <script>
-export default {
+import { defineComponent } from "vue";
+export default defineComponent({
     name: "JigTab",
     props: {
         name: {
@@ -15,11 +16,9 @@ export default {
         tabController: {
             type: String,
             required: true,
-        }
-    }
-}
+        },
+    },
+});
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,19 +1,30 @@
 <template>
-    <inertia-link v-if="href && !fullReload" :href="href" :class="`p-2 shadow-md focus:outline-none focus:ring-0 ${shapeClass} ${classes}`">
+    <inertia-link
+        v-if="href && !fullReload"
+        :href="href"
+        :class="`p-2 shadow-md focus:outline-none focus:ring-0 ${shapeClass} ${classes}`"
+    >
         <slot></slot>
     </inertia-link>
-    <a v-else-if="href && fullReload" :href="href" :class="`p-2 shadow-md focus:outline-none focus:ring-0 ${shapeClass} ${classes}`">
+    <a
+        v-else-if="href && fullReload"
+        :href="href"
+        :class="`p-2 shadow-md focus:outline-none focus:ring-0 ${shapeClass} ${classes}`"
+    >
         <slot></slot>
     </a>
 
-    <button v-else :class="`p-2 focus:outline-none focus:ring-0  shadow-md ${shapeClass} ${classes}`">
+    <button
+        v-else
+        :class="`p-2 focus:outline-none focus:ring-0  shadow-md ${shapeClass} ${classes}`"
+    >
         <slot></slot>
     </button>
-
 </template>
 
 <script>
-export default {
+import { defineComponent } from "vue";
+export default defineComponent({
     name: "InertiaButton",
     props: {
         href: {
@@ -26,40 +37,37 @@ export default {
             default: "a",
         },
         fullReload: {
-          required: false,
-          type: Boolean,
-          default: false,
+            required: false,
+            type: Boolean,
+            default: false,
         },
         classes: {
             required: false,
-            default: "bg-gray-200"
+            default: "bg-gray-200",
         },
         square: {
             required: false,
-            default: false
+            default: false,
         },
         pill: {
             required: false,
-            default: false
+            default: false,
         },
-
     },
     data() {
         return {
-            shapeClass: "rounded-md"
-        }
+            shapeClass: "rounded-md",
+        };
     },
     created() {
-        if (this.square!== false) {
+        if (this.square !== false) {
             this.shapeClass = "rounded-none";
         }
-        if (this.pill !==false) {
-            this.shapeClass = "rounded-3xl"
+        if (this.pill !== false) {
+            this.shapeClass = "rounded-3xl";
         }
-    }
-}
+    },
+});
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

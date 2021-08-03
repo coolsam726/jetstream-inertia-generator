@@ -5,7 +5,11 @@
                 <h5 class="text-sm font-bold text-gray-500 uppercase">
                     <slot name="title"></slot>
                 </h5>
-                <h5 v-if="$slots.subtitle" class="text-xs font-black uppercase" :class="subtitleClasses">
+                <h5
+                    v-if="$slots.subtitle"
+                    class="text-xs font-black uppercase"
+                    :class="subtitleClasses"
+                >
                     <slot name="subtitle"></slot>
                 </h5>
                 <div class="text-2xl font-black" :class="bodyClasses">
@@ -14,8 +18,12 @@
             </div>
             <div class="relative flex-initial w-auto pl-4">
                 <div
-                    class="inline-flex items-center justify-center w-16 h-16 p-3 text-center" :class="iconClasses">
-                    <slot name="icon"><i class="fas fa-2x fa-money-check"></i></slot>
+                    class="inline-flex items-center justify-center w-16 h-16 p-3 text-center "
+                    :class="iconClasses"
+                >
+                    <slot name="icon"
+                        ><i class="fas fa-2x fa-money-check"></i
+                    ></slot>
                 </div>
             </div>
         </div>
@@ -24,26 +32,25 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from "vue";
+export default defineComponent({
     name: "StatsCard",
     props: {
         bgClass: {
             type: String,
-            default: 'bg-primary-100'
+            default: "bg-primary-100",
         },
         bodyClasses: {
-            default: 'text-primary'
+            default: "text-primary",
         },
         iconClasses: {
-            default: 'text-white bg-primary rounded shadow-lg',
+            default: "text-white bg-primary rounded shadow-lg",
         },
         subtitleClasses: {
-            default: 'text-danger'
-        }
-    }
-}
+            default: "text-danger",
+        },
+    },
+});
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

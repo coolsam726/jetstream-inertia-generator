@@ -1,16 +1,15 @@
 <template>
     <!-- component -->
-    <div class="flex flex-col md:grid grid-cols-12 text-indigo-50 mx-auto p-2">
+    <div class="flex flex-col grid-cols-12 p-2 mx-auto md:grid text-indigo-50">
         <slot></slot>
     </div>
 </template>
 
 <script>
-export default {
-    name: "JigTimeline"
-}
+import { defineComponent } from "vue";
+export default defineComponent({
+    name: "JigTimeline",
+});
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

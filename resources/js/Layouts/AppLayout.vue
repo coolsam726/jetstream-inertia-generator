@@ -5,7 +5,7 @@
         </template>
         <!-- Page Heading -->
         <template v-slot:header>
-            <div class="flex w-full justify-center">
+            <div class="flex justify-center w-full">
                 <div class="w-full text-secondary">
                     <slot name="header"></slot>
                 </div>
@@ -23,57 +23,62 @@
 </template>
 
 <script>
-    import JetApplicationMark from '@/Jetstream/ApplicationMark.vue'
-    import JetBanner from '@/Jetstream/Banner.vue'
-    import JetDropdown from '@/Jetstream/Dropdown.vue'
-    import JetDropdownLink from '@/Jetstream/DropdownLink.vue'
-    import JetNavLink from '@/Jetstream/NavLink.vue'
-    import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink.vue'
-    import JigLayout from "./JigLayout.vue";
-    import Sidebar from "./Jig/Sidebar.vue";
-    import menu from "./FrontendSidebarMenu.json"
+import JetApplicationMark from "@/Jetstream/ApplicationMark.vue";
+import JetBanner from "@/Jetstream/Banner.vue";
+import JetDropdown from "@/Jetstream/Dropdown.vue";
+import JetDropdownLink from "@/Jetstream/DropdownLink.vue";
+import JetNavLink from "@/Jetstream/NavLink.vue";
+import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink.vue";
+import JigLayout from "./JigLayout.vue";
+import Sidebar from "./Jig/Sidebar.vue";
+import menu from "./FrontendSidebarMenu.json";
 
-    export default {
-        components: {
-            Sidebar,
-            JigLayout,
-            JetApplicationMark,
-            JetBanner,
-            JetDropdown,
-            JetDropdownLink,
-            JetNavLink,
-            JetResponsiveNavLink,
+import { defineComponent } from "vue";
+export default defineComponent({
+    components: {
+        Sidebar,
+        JigLayout,
+        JetApplicationMark,
+        JetBanner,
+        JetDropdown,
+        JetDropdownLink,
+        JetNavLink,
+        JetResponsiveNavLink,
+    },
+
+    data() {
+        return {
+            showingNavigationDropdown: false,
+            frontendSidebarMenu: menu,
+        };
+    },
+
+    methods: {
+        switchToTeam(team) {
+            this.$inertia.put(
+                route("current-team.update"),
+                {
+                    team_id: team.id,
+                },
+                {
+                    preserveState: false,
+                }
+            );
         },
 
-        data() {
-            return {
-                showingNavigationDropdown: false,
-                frontendSidebarMenu: menu,
+        logout() {
+            let vm = this;
+            if (this.$page.props.user.is_cas) {
+                console.log("Logging out of cas");
+                const win = window.open(this.route("cas.logout"), "_blank");
+                setTimeout(function () {
+                    win.close();
+                    vm.$inertia.reload();
+                }, 1000);
+            } else {
+                this.$inertia.post(route("logout"));
             }
         },
-
-        methods: {
-            switchToTeam(team) {
-                this.$inertia.put(route('current-team.update'), {
-                    'team_id': team.id
-                }, {
-                    preserveState: false
-                })
-            },
-
-            logout() {
-                let vm = this;
-                if (this.$page.props.user.is_cas) {
-                    console.log("Logging out of cas");
-                    const win = window.open(this.route('cas.logout'), "_blank");
-                    setTimeout(function() {
-                        win.close();
-                        vm.$inertia.reload();
-                    },1000)
-                } else {
-                    this.$inertia.post(route('logout'));
-                }
-            },
-        }
-    }
+    },
+});
 </script>

@@ -29,7 +29,9 @@
     import JetButton from "@/Jetstream/Button.vue";
     import Edit{{$modelPlural}}Form from "./EditForm.vue";
     import DisplayMixin from "@/Mixins/DisplayMixin.js";
-    export default {
+    import { defineComponent } from "vue";
+
+    export default defineComponent({
         name: "Edit{{$modelPlural}}",
         props: {
             model: Object,
@@ -60,7 +62,7 @@
                 this.displayNotification('error',msg);
             }
         }
-    }
+    });
 </script>
 
 <style scoped>

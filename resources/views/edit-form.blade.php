@@ -122,7 +122,7 @@
         @endif
 
         <div class="mt-2 text-right">
-            <inertia-button type="submit" class="bg-primary font-semibold text-white" :disabled="form.processing">Submit</inertia-button>
+            <inertia-button type="submit" class="font-semibold text-white bg-primary" :disabled="form.processing">Submit</inertia-button>
         </div>
     </form>
 </template>
@@ -143,7 +143,9 @@
     @if($hasSelect)import InfiniteSelect from '@/JigComponents/InfiniteSelect.vue';
 @endif
 
-    export default {
+    import { defineComponent } from "vue";
+
+    export default defineComponent({
         name: "Edit{{$modelBaseName}}Form",
         props: {
             model: Object,
@@ -200,7 +202,7 @@
                     },{remember: false, preserveState: true})
             }
         }
-    }
+    });
 </script>
 
 <style scoped>

@@ -69,7 +69,9 @@
     import DtComponent from "@/JigComponents/DtComponent.vue";
     import DisplayMixin from "@/Mixins/DisplayMixin.js";
     import Show{{$modelPlural}}Form from "@/Pages/{{$modelPlural}}/ShowForm.vue";
-    export default {
+    import { defineComponent } from "vue";
+
+    export default defineComponent({
         name: "Index",
         components: {
             DtComponent,
@@ -157,7 +159,7 @@
                 })
             }
         }
-    }
+    });
 </script>
 
 <style scoped>

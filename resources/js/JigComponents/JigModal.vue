@@ -12,12 +12,17 @@
                         leave-from="opacity-75"
                         leave-to="opacity-0"
                     >
-                        <DialogOverlay class="fixed inset-0 bg-opacity-60 bg-gray-900"/>
+                        <DialogOverlay
+                            class="fixed inset-0 bg-gray-900 bg-opacity-60"
+                        />
                     </TransitionChild>
 
-                    <span class="inline-block h-screen align-middle" aria-hidden="true">
-            &#8203;
-          </span>
+                    <span
+                        class="inline-block h-screen align-middle"
+                        aria-hidden="true"
+                    >
+                        &#8203;
+                    </span>
 
                     <TransitionChild
                         as="template"
@@ -29,19 +34,31 @@
                         leave-to="opacity-0 scale-95"
                     >
                         <div
-                            class="inline-block w-full p-6 my-8 overflow-hidden text-left
-                             transition-all transform bg-white shadow-xl"
+                            class="inline-block w-full p-6 my-8 overflow-hidden text-left transition-all transform bg-white shadow-xl "
                             :class="`${cornerClass} ${positionClass} ${maxWidthClass}`"
                         >
-                            <DialogTitle as="h3" class="text-lg flex items-center justify-between font-medium leading-6 text-gray-900">
-                                <span class="flex-1"><slot name="title"></slot></span>
-                                <button type="button" class="p-1 px-2" @click="toggleModal(false)"><i class="fas fa-times text-red-500 font-bold"></i></button>
+                            <DialogTitle
+                                as="h3"
+                                class="flex items-center justify-between text-lg font-medium leading-6 text-gray-900 "
+                            >
+                                <span class="flex-1"
+                                    ><slot name="title"></slot
+                                ></span>
+                                <button
+                                    type="button"
+                                    class="p-1 px-2"
+                                    @click="toggleModal(false)"
+                                >
+                                    <i
+                                        class="font-bold text-red-500  fas fa-times"
+                                    ></i>
+                                </button>
                             </DialogTitle>
                             <div class="mt-2">
                                 <slot name="default"></slot>
                             </div>
 
-                            <div class="mt-4 text-right space-x-2">
+                            <div class="mt-4 space-x-2 text-right">
                                 <slot name="footer"></slot>
                             </div>
                         </div>
@@ -53,7 +70,7 @@
 </template>
 
 <script>
-import {ref} from "vue";
+import { ref, defineComponent } from "vue";
 import {
     TransitionRoot,
     TransitionChild,
@@ -62,18 +79,18 @@ import {
     DialogTitle,
 } from "@headlessui/vue";
 
-export default {
+export default defineComponent({
     name: "JigModal",
     props: {
         show: Boolean,
         cornerClass: {
-            default: 'rounded-2xl',
+            default: "rounded-2xl",
         },
         positionClass: {
-            default: 'align-middle',
+            default: "align-middle",
         },
         maxWidthClass: {
-            default: 'max-w-2xl',
+            default: "max-w-2xl",
         },
     },
     components: {
@@ -93,7 +110,7 @@ export default {
             toggleModal(open) {
                 isOpen.value = open;
                 if (!open) {
-                    ctx.emit('close');
+                    ctx.emit("close");
                 }
             },
         };
@@ -101,7 +118,7 @@ export default {
     watch: {
         show(val) {
             this.toggleModal(val);
-        }
-    }
-};
+        },
+    },
+});
 </script>

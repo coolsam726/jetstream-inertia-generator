@@ -1,23 +1,23 @@
 <template>
-    <div class="bg-white border rounded-lg pb-4 p-4">
-        <nav class="flex flex-col sm:flex-row flex-wrap w-full" :class="navClasses">
-            <slot name="nav">
-            </slot>
+    <div class="p-4 pb-4 bg-white border rounded-lg">
+        <nav
+            class="flex flex-col flex-wrap w-full sm:flex-row"
+            :class="navClasses"
+        >
+            <slot name="nav"> </slot>
         </nav>
-        <slot name="content">
-        </slot>
+        <slot name="content"> </slot>
     </div>
 </template>
 
 <script>
-export default {
+import { defineComponent } from "vue";
+export default defineComponent({
     name: "JigTabs",
     props: {
         navClasses: String,
-    }
-}
+    },
+});
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

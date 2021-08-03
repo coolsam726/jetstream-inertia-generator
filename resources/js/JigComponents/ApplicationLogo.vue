@@ -1,14 +1,19 @@
 <template>
     <inertia-link :href="$page.props.app.url">
-        <img :alt="$page.props.app.name" class="text-white max-h-full" :src="logoUrl">
+        <img
+            :alt="$page.props.app.name"
+            class="max-h-full text-white"
+            :src="logoUrl"
+        />
     </inertia-link>
 </template>
 <script>
-export default {
+import { defineComponent } from "vue";
+export default defineComponent({
     data() {
         return {
-            logoUrl: `${this.$page.props.app.url}/vendor/jig/images/savannabits-banner-white.png`
-        }
-    }
-}
+            logoUrl: `${this.$page.props.app.url}/vendor/jig/images/savannabits-banner-white.png`,
+        };
+    },
+});
 </script>

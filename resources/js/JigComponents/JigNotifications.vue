@@ -1,17 +1,37 @@
 <template>
     <div>
         <notificationGroup group="top">
-            <div style="z-index: 60" class="fixed inset-0 flex px-4 py-6 pointer-events-none p-6 items-start justify-end">
-                <div class="max-w-sm w-full">
-                    <notification v-slot="{notifications}">
-                        <div v-for="notification in notifications" :key="notification.id">
+            <div
+                style="z-index: 60"
+                class="fixed inset-0 flex items-start justify-end px-4 py-6 pointer-events-none "
+            >
+                <div class="w-full max-w-sm">
+                    <notification
+                        v-slot="{ notifications, close }"
+                        enter="transform ease-out duration-300 transition"
+                        enter-from="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-4"
+                        enter-to="translate-y-0 opacity-100 sm:translate-x-0"
+                        leave="transition ease-in duration-500"
+                        leave-from="opacity-100"
+                        leave-to="opacity-0"
+                        move="transition duration-500"
+                        move-delay="delay-300"
+                    >
+                        <div
+                            @click="close()"
+                            class="cursor-pointer pointer-events-auto"
+                            v-for="notification in notifications"
+                            :key="notification.id"
+                        >
                             <div
-                                v-if="notification.type==='info'"
-                                class="flex max-w-sm w-full mx-auto bg-white shadow-md rounded-lg overflow-hidden mt-4"
+                                v-if="notification.type === 'info'"
+                                class="flex w-full max-w-sm mx-auto mt-4 overflow-hidden bg-white rounded-lg shadow-md "
                             >
-                                <div class="flex justify-center items-center w-12 bg-blue-500">
+                                <div
+                                    class="flex items-center justify-center w-12 bg-blue-500 "
+                                >
                                     <svg
-                                        class="h-6 w-6 fill-current text-white"
+                                        class="w-6 h-6 text-white fill-current"
                                         viewBox="0 0 40 40"
                                         xmlns="http://www.w3.org/2000/svg"
                                     >
@@ -21,20 +41,29 @@
                                     </svg>
                                 </div>
 
-                                <div class="-mx-3 py-2 px-4">
+                                <div class="px-4 py-2 -mx-3">
                                     <div class="mx-3">
-                                        <span class="text-blue-500 font-black text-2xl">{{notification.title}}</span>
-                                        <p class="text-gray-600 font-semibold text-xl">T{{notification.text}}</p>
+                                        <span
+                                            class="text-2xl font-black text-blue-500 "
+                                            >{{ notification.title }}</span
+                                        >
+                                        <p
+                                            class="text-xl font-semibold text-gray-600 "
+                                        >
+                                            T{{ notification.text }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                             <div
-                                class="flex max-w-sm w-full mx-auto bg-white shadow-md rounded-lg overflow-hidden mt-4"
-                                v-if="notification.type==='warning'"
+                                class="flex w-full max-w-sm mx-auto mt-4 overflow-hidden bg-white rounded-lg shadow-md "
+                                v-if="notification.type === 'warning'"
                             >
-                                <div class="flex justify-center items-center w-12 bg-yellow-500">
+                                <div
+                                    class="flex items-center justify-center w-12 bg-yellow-500 "
+                                >
                                     <svg
-                                        class="h-6 w-6 fill-current text-white"
+                                        class="w-6 h-6 text-white fill-current"
                                         viewBox="0 0 40 40"
                                         xmlns="http://www.w3.org/2000/svg"
                                     >
@@ -44,20 +73,29 @@
                                     </svg>
                                 </div>
 
-                                <div class="-mx-3 py-2 px-4">
+                                <div class="px-4 py-2 -mx-3">
                                     <div class="mx-3">
-                                        <span class="text-yellow-500 font-black text-2xl">{{notification.title}}</span>
-                                        <p class="text-gray-600 font-semibold text-xl">{{notification.text}}</p>
+                                        <span
+                                            class="text-2xl font-black text-yellow-500 "
+                                            >{{ notification.title }}</span
+                                        >
+                                        <p
+                                            class="text-xl font-semibold text-gray-600 "
+                                        >
+                                            {{ notification.text }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                             <div
-                                class="flex max-w-sm w-full mx-auto bg-white shadow-md rounded-lg overflow-hidden mt-4"
-                               v-if="notification.type==='success'"
+                                class="flex w-full max-w-sm mx-auto mt-4 overflow-hidden bg-white rounded-lg shadow-md "
+                                v-if="notification.type === 'success'"
                             >
-                                <div class="flex justify-center items-center w-12 bg-green-500">
+                                <div
+                                    class="flex items-center justify-center w-12 bg-green-500 "
+                                >
                                     <svg
-                                        class="h-6 w-6 fill-current text-white"
+                                        class="w-6 h-6 text-white fill-current"
                                         viewBox="0 0 40 40"
                                         xmlns="http://www.w3.org/2000/svg"
                                     >
@@ -67,27 +105,49 @@
                                     </svg>
                                 </div>
 
-                                <div class="-mx-3 py-2 px-4">
+                                <div class="px-4 py-2 -mx-3">
                                     <div class="mx-3">
-                                        <span class="text-green-500 font-black text-2xl">{{notification.title}}</span>
-                                        <p class="text-gray-600 font-semibold text-xl">{{notification.text}}</p>
+                                        <span
+                                            class="text-2xl font-black text-green-500 "
+                                            >{{ notification.title }}</span
+                                        >
+                                        <p
+                                            class="text-xl font-semibold text-gray-600 "
+                                        >
+                                            {{ notification.text }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                             <div
-                                class="flex max-w-sm w-full mx-auto bg-white shadow-md rounded-lg overflow-hidden mt-4"
-                                v-if="notification.type==='error'"
+                                class="flex w-full max-w-sm mx-auto mt-4 overflow-hidden bg-white rounded-lg shadow-md "
+                                v-if="notification.type === 'error'"
                             >
-                                <div class="flex justify-center items-center w-12 bg-red-500">
-                                    <svg class="h-6 w-6 fill-current text-white" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M20 3.36667C10.8167 3.36667 3.3667 10.8167 3.3667 20C3.3667 29.1833 10.8167 36.6333 20 36.6333C29.1834 36.6333 36.6334 29.1833 36.6334 20C36.6334 10.8167 29.1834 3.36667 20 3.36667ZM19.1334 33.3333V22.9H13.3334L21.6667 6.66667V17.1H27.25L19.1334 33.3333Z"/>
+                                <div
+                                    class="flex items-center justify-center w-12 bg-red-500 "
+                                >
+                                    <svg
+                                        class="w-6 h-6 text-white fill-current"
+                                        viewBox="0 0 40 40"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            d="M20 3.36667C10.8167 3.36667 3.3667 10.8167 3.3667 20C3.3667 29.1833 10.8167 36.6333 20 36.6333C29.1834 36.6333 36.6334 29.1833 36.6334 20C36.6334 10.8167 29.1834 3.36667 20 3.36667ZM19.1334 33.3333V22.9H13.3334L21.6667 6.66667V17.1H27.25L19.1334 33.3333Z"
+                                        />
                                     </svg>
                                 </div>
 
-                                <div class="-mx-3 py-2 px-4">
+                                <div class="px-4 py-2 -mx-3">
                                     <div class="mx-3">
-                                        <span class="text-red-500 font-black text-2xl">{{notification.title}}</span>
-                                        <p class="text-gray-600 font-semibold text-xl">{{notification.text}}</p>
+                                        <span
+                                            class="text-2xl font-black text-red-500 "
+                                            >{{ notification.title }}</span
+                                        >
+                                        <p
+                                            class="text-xl font-semibold text-gray-600 "
+                                        >
+                                            {{ notification.text }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -100,11 +160,10 @@
 </template>
 
 <script>
-export default {
-    name: "JigNotifications"
-}
+import { defineComponent } from "vue";
+export default defineComponent({
+    name: "JigNotifications",
+});
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

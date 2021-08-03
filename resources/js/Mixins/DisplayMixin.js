@@ -6,7 +6,7 @@ export default {
                 type: type,
                 title: title || type,
                 text: message
-            });
+            }, 3500);
         },
     }
 }

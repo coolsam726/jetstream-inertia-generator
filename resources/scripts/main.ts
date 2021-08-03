@@ -14,7 +14,7 @@ import * as JsBootstrap from "@/bootstrap.js"
 import 'vite/dynamic-import-polyfill';
 import "~/css/app.css"
 import { createApp, h } from 'vue';
-import {createInertiaApp} from '@inertiajs/inertia-vue3';
+import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 import Notifications from "vue3-vt-notifications";
 import VueNumerals from "vue-numerals"
@@ -22,7 +22,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime"
 import advancedFormat from "dayjs/plugin/advancedFormat"
 import 'flatpickr/dist/flatpickr.css';
-import {emitter} from "@/JigComponents/eventHub.js";
+import { emitter } from "@/JigComponents/eventHub.js";
 import { Link } from "@inertiajs/inertia-vue3"
 
 dayjs.extend(relativeTime);
@@ -30,9 +30,9 @@ dayjs.extend(advancedFormat)
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 const pages = import.meta.glob('/resources/js/Pages/**/*.vue');
-createInertiaApp( {
+createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    resolve: async (name) =>  {
+    resolve: async (name) => {
         const importPage = pages[`/resources/js/Pages/${name}.vue`];
 
         if (!importPage) {
@@ -41,7 +41,7 @@ createInertiaApp( {
 
         return importPage().then(module => module.default);
     },
-    setup ({ el, app, props, plugin }) {
+    setup({ el, app, props, plugin }) {
         return createApp({ render: () => h(app, props) })
             .use(plugin)
             .mixin({ methods: { route, dayjs } })

@@ -138,7 +138,7 @@
 @endif
 
         <div class="mt-2 text-right">
-            <inertia-button type="submit" class="bg-success font-semibold disabled:opacity-25" :disabled="form.processing">Submit</inertia-button>
+            <inertia-button type="submit" class="font-semibold bg-success disabled:opacity-25" :disabled="form.processing">Submit</inertia-button>
         </div>
     </form>
 </template>
@@ -180,7 +180,11 @@
             return {
                 form: useForm({
                     @foreach($columns as $key => $col)
+@if($col["type"] ==='boolean')
+{{$key}}: false,
+@else
 {{$key}}: null,
+@endif
                     @endforeach
                     @if (count($relations))
 @if(isset($relations['belongsTo']) && count($relations['belongsTo']))

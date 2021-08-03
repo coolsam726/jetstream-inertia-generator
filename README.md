@@ -7,7 +7,8 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/savannabits/jetstream-inertia-generator.svg?style=flat-square)](https://packagist.org/packages/savannabits/jetstream-inertia-generator)
 
 **Jetstream Inertia Generator** a.k.a **jig** allows you to generate code for simple Admin CRUDs (Create, Read, UPdate, Delete) which are fully compatible with a Laravel Project powered by the [Jetstream - Inertia - Vue.js](https://jetstream.laravel.com/2.x/stacks/inertia.html) Stack.
-![](.README_images/jig-preview.gif)
+![Preview](https://user-images.githubusercontent.com/5610289/128055760-efbf0717-bf03-476c-bdfb-e2b8a72b2a69.gif)
+
 ## Scenario
 You are developing a NextGen project. The data model is complex. It requires **Many CRUDS** managed by the admin in order to power the main end-user functionality. You don't want to spend **Days or even Months** writing boilerplate code for all the CRUDs.
 If that is you, this package comes to your rescue. Just follow these simple steps:
@@ -166,7 +167,6 @@ php artisan jig:generate:user -f
 ```
 You can now proceed to generate any other CRUD you want using the steps in the following section.
 ### General Steps to generate a CRUD:
-![](.README_images/jig-generate.gif)
 1. Generate and write a migration for your table with `php artisan make:migration` command.
 2. Run the migration to the database with `php artisan migrate` command
 3. Generate the Whole Admin Scaffold for the module with `php artisan jig:generate` command
@@ -177,6 +177,9 @@ Assuming you want to generate a `books` table:
 ```shell
 php artisan make:migration create_books_table
 ```
+![books-crud](https://user-images.githubusercontent.com/5610289/128055907-116a5ad3-3359-4513-bd05-06c5003f3b63.gif)
+
+
 * Open your migration and modify it as necessary, adding your fields. After that, run the migration.
 ```shell
 php artisan migrate

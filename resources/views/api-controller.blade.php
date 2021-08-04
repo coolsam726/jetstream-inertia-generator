@@ -31,7 +31,7 @@ class {{ $controllerBaseName }}  extends Controller
 
     /**
      * Display a listing of the resource (paginated).
-     * {{"@"}}retcolumnsToQueryurn \Illuminate\Http\JsonResponse
+     * {{"@"}}return columnsToQuery \Illuminate\Http\JsonResponse
      */
     public function index(Index{{ $modelBaseName }} $request)
     {

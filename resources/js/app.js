@@ -2,7 +2,7 @@ require('./bootstrap');
 
 // Import modules...
 import { createApp, h } from 'vue';
-import { App as InertiaApp, plugin as InertiaPlugin } from '@inertiajs/inertia-vue3';
+import { createInertiaApp, Link } from '@inertiajs/inertia-vue3'
 import { InertiaProgress } from '@inertiajs/progress';
 import Notifications from "vue3-vt-notifications";
 import VueNumerals from "vue-numerals"
@@ -12,27 +12,27 @@ import advancedFormat from "dayjs/plugin/advancedFormat"
 import 'flatpickr/dist/flatpickr.css';
 import {emitter} from "./JigComponents/eventHub";
 
+
 dayjs.extend(relativeTime);
 dayjs.extend(advancedFormat)
-
-const el = document.getElementById('app');
-
-createApp({
-    render: () =>
-        h(InertiaApp, {
-            initialPage: JSON.parse(el.dataset.page),
-            resolveComponent: (name) => import(`./Pages/${name}`).then(module => module.default),
-        }),
-})
-    .mixin({ methods: { route } })
-    .use(InertiaPlugin)
-    .use(Notifications)
-    .use(VueNumerals)
-    .component('datepicker',() => import('vue-flatpickr-component'))
-    .provide("$refreshDt",function(tableId) {
-        emitter.emit('refresh-dt',{tableId: tableId});
-    })
-    .provide("$dayjs",dayjs)
-    .mount(el);
+const refreshDt = tableId => {
+    emitter.emit('refresh-dt', { tableId: tableId });
+}
+createInertiaApp({
+    resolve: name => import(`./Pages/${name}`).then(module => module.default),
+    setup({ el, App, props, plugin }) {
+        createApp({ render: () => h(App, props) })
+            .use(plugin)
+            .mixin({ methods: { route, dayjs, refreshDt } })
+            .use(InertiaPlugin)
+            .use(Notifications)
+            .use(VueNumerals)
+            .component('datepicker', () => import('vue-flatpickr-component'))
+            .component("inertia-link", Link)
+            .provide("$refreshDt", refreshDt)
+            .provide("$dayjs", dayjs)
+            .mount(el)
+    },
+});
 
 InertiaProgress.init({ color: '#F59E0B' });

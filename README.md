@@ -1,4 +1,4 @@
-# Jetstream Powered Admin CRUD Generator
+# JIG v3.x - Jetstream Powered Admin CRUD Generator
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/savannabits/jetstream-inertia-generator.svg?style=flat-square)](https://packagist.org/packages/savannabits/jetstream-inertia-generator)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/coolsam726/jetstream-inertia-generator)
@@ -44,7 +44,7 @@ Other Important dependencies that you MUST configure include:
 ```
 ## If you are using v2.x
 
-> NB: This documentation is for v3.x of JIG. If you are using **v2.x**, [**Access v2.x Docs Here**](../../tree/v2)
+> NB: This documentation is for v3.x of JIG. If you are using **v2.x**, [**Access v2.x Docs Here**](../v2/README.md)
 
 ## Before You Install:
 - Ensure you have installed `laravel/jetstream` with `inertia`.

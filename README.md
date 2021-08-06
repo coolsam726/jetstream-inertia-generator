@@ -44,7 +44,7 @@ Other Important dependencies that you MUST configure include:
 ```
 ## If you are using v2.x
 
-> NB: This documentation is for v3.x of JIG. If you are using **v2.x**, [**Access v2.x Docs Here**](/v2/README.md)
+> NB: This documentation is for v3.x of JIG. If you are using **v2.x**, [**Access v2.x Docs Here**](/coolsam726/jetstream-inertia-generator/tree/v2/README.md)
 
 ## Before You Install:
 - Ensure you have installed `laravel/jetstream` with `inertia`.

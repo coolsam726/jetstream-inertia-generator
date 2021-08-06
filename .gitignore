@@ -2,3 +2,6 @@ build
 docs
 vendor
 coverage
+node_modules
+vendor
+.idea/*

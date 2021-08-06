@@ -44,7 +44,7 @@ Other Important dependencies that you MUST configure include:
 ```
 ## If you are using v2.x
 
-> NB: This documentation is for v3.x of JIG. If you are using **v2.x**, [**Access v2.x Docs Here**](../v2)
+> NB: This documentation is for v3.x of JIG. If you are using **v2.x**, [**Access v2.x Docs Here**](../../tree/v2)
 
 ## Before You Install:
 - Ensure you have installed `laravel/jetstream` with `inertia`.

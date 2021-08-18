@@ -152,6 +152,12 @@ Features::profilePhotos(),
 php artisan migrate
 php artisan db:seed --class SeedAdminRoleAndUser
 ```
+11. Now build the npm dependencies using `vitejs`:
+```sh
+yarn dev #Start the vitejs development server
+yarn build #build assets for production
+
+```
 :rocket: You are now ready to generate your CRUDs!:tada:
 ## Usage
 ### The initial seeded admin user and role
@@ -199,7 +205,7 @@ php artisan jig:generate --help
 The command above will generate a number of files and add routes to both your `api.php` and `web.php` route files. It will also append menu entries to the published `Menus.json` file.
 The generated vue files are placed under the Pages/Books folder in the js folder.
 
-* Finally, run `yarn watch, yarn dev or yarn prod` to compile the assets. There you have your CRUD.
+* Finally, run `yarn dev or yarn build` to compile the assets. There you have your CRUD.
 ## Roles, permissions and Sidebar Menu:
 * By Default, generation of a module generates the following permissions:
     - index

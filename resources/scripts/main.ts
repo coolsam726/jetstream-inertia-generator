@@ -10,8 +10,7 @@
 */
 
 // Import modules...
-import * as JsBootstrap from "@/bootstrap.js"
-import 'vite/dynamic-import-polyfill';
+import 'dynamic-import-polyfill';
 import "~/css/app.css"
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
@@ -24,6 +23,9 @@ import advancedFormat from "dayjs/plugin/advancedFormat"
 import 'flatpickr/dist/flatpickr.css';
 import { emitter } from "@/JigComponents/eventHub.js";
 import { Link } from "@inertiajs/inertia-vue3"
+
+const JsBootstrap = import("@/bootstrap");
+
 
 dayjs.extend(relativeTime);
 dayjs.extend(advancedFormat)

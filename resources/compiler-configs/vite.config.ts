@@ -1,5 +1,11 @@
 import { defineConfig } from "laravel-vite";
 import vue from "@vitejs/plugin-vue";
-import tailwind from "tailwindcss";
-export default defineConfig()
-	.withPlugin(vue);
+export default defineConfig({
+	    server: {
+		    hmr: {
+			    host: 'localhost',
+			    protocol: 'ws'
+		    }
+	    }
+    })
+    .withPlugin(vue);

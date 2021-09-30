@@ -225,6 +225,50 @@ The generated vue files are placed under the Pages/Books folder in the js folder
       Then the menu for payments must have `payments` as the json key.
     - For parent menus and any other menus which may not match any module, you have to create a permission with the key name to control its access. For example, if you have a parent menu called `master-data` you have to generate a permission with the same name.
 
+## Components Documentation
+### Datatables
+JIG is built on top of datatables.net and is fully server-side rendered using [Yajra Datatables](https://yajrabox.com/docs/laravel-datatables/master/introduction). Most of the logic resides inside `App\Repositories` and in the respective Repository file, there is a method called `dtColumns` which is used to fully control the columns shown in the Index page.
+
+For example, in order to control the columns shown for the Users Datatable, the following is the `dtColumns` method under `App\Repositories\Users.php`:
+```php
+public static function dtColumns(): array
+    {
+        return [
+            Column::make('id')->title('ID')->className('all text-right'),
+            Column::make("name")->className('all'),
+            Column::make("first_name")->className('none'),
+            Column::make("last_name")->className('none'),
+            Column::make("middle_name")->className('none'),
+            Column::make("username")->className('min-desktop-lg'),
+            Column::make("email")->className('min-desktop-lg'),
+            Column::make("gender")->className('min-desktop-lg'),
+            Column::make("dob")->className('none'),
+            //Column::make("email_verified_at")->className('min-desktop-lg'),
+            Column::make("activated")->className('min-desktop-lg'),
+            Column::make("created_at")->className('min-tv'),
+            Column::make("updated_at")->className('min-tv'),
+            Column::make('actions')->className('min-desktop text-right')->orderable(false)->searchable(false),
+        ];
+    }
+```
+**NOTE: In order to omit the `email_verified_at` class from my Index columns all I had to do is comment it out (or better yet, just remove it from the list of columns!)**
+
+The datatables are also responsive by default (Checkout https://datatables.net/extensions/responsive/ for more details). For this purpose, you can use one of the following jig-provided responsive breakpoints to automatically collapse the column below a given screen size. For info on how to use the class logic, checkout the [Class Logic Documentation](https://datatables.net/extensions/responsive/classes). Most of the time I only use `min-`, e.g `min-desktop-l`
+```ts
+breakpoints: [
+        { name: "tv", width: Infinity },
+        { name: "desktop-l", width: 1536 },
+        { name: "desktop", width: 1280 },
+        { name: "tablet-l", width: 1024 },
+        { name: "tablet-p", width: 768 },
+        { name: "mobile-l", width: 480 },
+        { name: "mobile-p", width: 320 },
+    ],
+}
+```
+Checkout the first snippet on how I have used the responsive classes!
+
+
 ### Testing
 
 ``` bash

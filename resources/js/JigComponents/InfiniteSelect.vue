@@ -170,7 +170,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "~vue-select/src/scss/vue-select.scss";
+@import "vue-select/src/scss/vue-select.scss";
 
 .loader {
     text-align: center;

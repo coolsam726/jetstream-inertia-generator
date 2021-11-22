@@ -31,6 +31,8 @@ DONE! In about **2 and a half minutes**, you get a fully working module consisti
 
 What more could you ask for? Cut a day's work down to less than 3 minutes.
 
+## I don't like configurations, give me a working code!
+No worries. If the steps below are too much, we have a starter template for near-zero setup which you can use to start your project without the initial config below. Checkout the [JIG Template Here](https://github.com/savannabits/jig) to get started. Simply click **Use This Template**.
 ## Dependencies
 If you have followed the [Jetstream - Inertia - Vue.js Installation](https://jetstream.laravel.com/2.x/stacks/inertia.html) instructions, then the project will work with minimal configuration.
 Other Important dependencies that you MUST configure include:

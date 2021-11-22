@@ -67,11 +67,11 @@ php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvid
 2. Install the necessary `npm` dev dependencies by running the following command:
 If you are using npm:
 ```shell
-npm install --include=dev --legacy-peer-deps @headlessui/vue @inertiajs/inertia @inertiajs/inertia-vue3 @vitejs/plugin-vue popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral postcss postcss-import pusher-js laravel-echo laravel-vite sass sass-loader vite vue@^3.1 vue3-vt-notifications vue-flatpickr-component  vue-numerals mitt vue-select:^4 dynamic-import-polyfill
+npm install --include=dev --legacy-peer-deps @headlessui/vue @inertiajs/inertia @inertiajs/inertia-vue3 @vitejs/plugin-vue popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral postcss postcss-import pusher-js laravel-echo laravel-vite sass sass-loader vite vue@^3.1 vue3-vt-notifications vue-flatpickr-component  vue-numerals mitt vue-select@^4 dynamic-import-polyfill
 ```
 Or if you are using yarn:
 ```shell
-yarn add -D @headlessui/vue @vitejs/plugin-vue @inertiajs/inertia @inertiajs/inertia-vue3 popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral postcss postcss-import pusher-js laravel-echo laravel-vite sass sass-loader vite vue@^3.1 vue3-vt-notifications vue-flatpickr-component  vue-numerals mitt vue-select:^4 dynamic-import-polyfill
+yarn add -D @headlessui/vue @vitejs/plugin-vue @inertiajs/inertia @inertiajs/inertia-vue3 popper.js @babel/plugin-syntax-dynamic-import dayjs dotenv numeral postcss postcss-import pusher-js laravel-echo laravel-vite sass sass-loader vite vue@^3.1 vue3-vt-notifications vue-flatpickr-component  vue-numerals mitt vue-select@^4 dynamic-import-polyfill
 ```
 Feel free to configure the color palette to your own preference, but for uniformity be sure to include `primary`,`secondary`, `success` and `danger` variants since they are used in the jig template.
 

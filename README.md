@@ -6,7 +6,7 @@
 [![Scrutinizer build ](https://img.shields.io/scrutinizer/build/g/coolsam726/jetstream-inertia-generator/master?label=scrutnizer-build)](https://scrutinizer-ci.com/g/coolsam726/jetstream-inertia-generator)
 [![Total Downloads](https://img.shields.io/packagist/dt/savannabits/jetstream-inertia-generator.svg?style=flat-square)](https://packagist.org/packages/savannabits/jetstream-inertia-generator)
 
-> :warning: **This repository is no longer supported However it has an even better successor: Its Sister Project, [Savannabits/Acacia](https://github.com/savannabits/acacia) which is more manageable, modular and totally separate from your main application. Check it out, and please give a star if you like it. That's all I would ever ask for. Thank you for your support!**
+> :warning: **We will maintain this repository up to Laravel 9, as we continue improving its successor, [Savannabits/Acacia](https://github.com/savannabits/acacia) which is more manageable, modular and totally separate from your main application. Check it out, and please give a star if you like it. Thank you for your support!**
 
 **Jetstream Inertia Generator** a.k.a **jig** allows you to generate code for simple Admin CRUDs (Create, Read, UPdate, Delete) which are fully compatible with a Laravel Project powered by the [Jetstream - Inertia - Vue.js](https://jetstream.laravel.com/2.x/stacks/inertia.html) Stack.
 ![Preview](https://user-images.githubusercontent.com/5610289/128055760-efbf0717-bf03-476c-bdfb-e2b8a72b2a69.gif)

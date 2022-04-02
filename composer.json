@@ -19,7 +19,7 @@
         "php": "^7.4|^8.0",
         "ext-json": "*",
         "doctrine/dbal": "^3.1",
-        "illuminate/support": "^8|^9",
+        "laravel/framework": "^8|^9",
         "inertiajs/inertia-laravel": "^0.5",
         "innocenzi/laravel-vite": "^0.1.7",
         "laravel/helpers": "^1.4",

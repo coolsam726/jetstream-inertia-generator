@@ -16,6 +16,7 @@ class JetstreamInertiaGeneratorServiceProvider extends RouteServiceProvider
     public function boot()
     {
         parent::boot();
+        \DB::getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
         $this->commands([
             JetstreamInertiaGenerator::class,
             RoleGenerator::class,

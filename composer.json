@@ -5,7 +5,7 @@
         "savannabits",
         "jetstream-inertia-generator"
     ],
-    "homepage": "https://github.com/savannabits/jetstream-inertia-generator",
+    "homepage": "https://github.com/LibbyJax/jetstream-inertia-generator",
     "license": "MIT",
     "type": "library",
     "authors": [
@@ -13,23 +13,26 @@
             "name": "Sam Maosa",
             "email": "maosa.sam@gmail.com",
             "role": "Developer"
+        },
+        {
+            "name": "Matthew Libby",
+            "email": "libbyjax@hotmail.com",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php": "^7.4|^8.0",
+        "php": "^8.1",
         "ext-json": "*",
-        "doctrine/dbal": "^3.1",
-        "laravel/framework": ">=8",
+        "doctrine/dbal": "^3.5",
+        "laravel/framework": "^10.10",
         "inertiajs/inertia-laravel": ">=0.6",
-        "innocenzi/laravel-vite": ">=0.3",
-        "laravel/helpers": "^1.4",
-        "laravel/jetstream": "^2.3",
-        "spatie/laravel-permission": "^4.2|^5",
-        "yajra/laravel-datatables": "^1.5"
+        "laravel/jetstream": "^3.2",
+        "spatie/laravel-permission": "^5.8",
+        "yajra/laravel-datatables": "^10.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^v6.0",
-        "phpunit/phpunit": "^9.4"
+        "orchestra/testbench": "^v7.14",
+        "phpunit/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {
